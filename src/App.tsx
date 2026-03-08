@@ -3,7 +3,12 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
+import { AppLayout } from "@/components/AppLayout";
+import Dashboard from "./pages/Dashboard";
+import Patients from "./pages/Patients";
+import AIInsights from "./pages/AIInsights";
+import SmartTriage from "./pages/SmartTriage";
+import PlaceholderPage from "./pages/PlaceholderPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -15,8 +20,26 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route element={<AppLayout />}>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/patients" element={<Patients />} />
+            <Route path="/ai-insights" element={<AIInsights />} />
+            <Route path="/triage" element={<SmartTriage />} />
+            <Route path="/appointments" element={<PlaceholderPage />} />
+            <Route path="/doctors" element={<PlaceholderPage />} />
+            <Route path="/nurses" element={<PlaceholderPage />} />
+            <Route path="/laboratory" element={<PlaceholderPage />} />
+            <Route path="/pharmacy" element={<PlaceholderPage />} />
+            <Route path="/inpatients" element={<PlaceholderPage />} />
+            <Route path="/icu" element={<PlaceholderPage />} />
+            <Route path="/telemedicine" element={<PlaceholderPage />} />
+            <Route path="/analytics" element={<PlaceholderPage />} />
+            <Route path="/billing" element={<PlaceholderPage />} />
+            <Route path="/inventory" element={<PlaceholderPage />} />
+            <Route path="/staff" element={<PlaceholderPage />} />
+            <Route path="/security" element={<PlaceholderPage />} />
+            <Route path="/settings" element={<PlaceholderPage />} />
+          </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
