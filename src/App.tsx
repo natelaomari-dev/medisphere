@@ -10,6 +10,7 @@ import Patients from "./pages/Patients";
 import AIInsights from "./pages/AIInsights";
 import SmartTriage from "./pages/SmartTriage";
 import Appointments from "./pages/Appointments";
+import AuthPage from "./pages/AuthPage";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import NotFound from "./pages/NotFound";
 
