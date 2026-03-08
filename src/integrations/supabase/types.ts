@@ -21,6 +21,7 @@ export type Database = {
           alert_type: string
           confidence: number | null
           created_at: string
+          hospital_id: string | null
           id: string
           is_acknowledged: boolean | null
           message: string
@@ -34,6 +35,7 @@ export type Database = {
           alert_type: string
           confidence?: number | null
           created_at?: string
+          hospital_id?: string | null
           id?: string
           is_acknowledged?: boolean | null
           message: string
@@ -47,6 +49,7 @@ export type Database = {
           alert_type?: string
           confidence?: number | null
           created_at?: string
+          hospital_id?: string | null
           id?: string
           is_acknowledged?: boolean | null
           message?: string
@@ -55,6 +58,13 @@ export type Database = {
           title?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "ai_alerts_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "ai_alerts_patient_id_fkey"
             columns: ["patient_id"]
@@ -71,6 +81,7 @@ export type Database = {
           created_by: string | null
           doctor_id: string
           duration_minutes: number | null
+          hospital_id: string | null
           id: string
           notes: string | null
           patient_id: string
@@ -85,6 +96,7 @@ export type Database = {
           created_by?: string | null
           doctor_id: string
           duration_minutes?: number | null
+          hospital_id?: string | null
           id?: string
           notes?: string | null
           patient_id: string
@@ -99,6 +111,7 @@ export type Database = {
           created_by?: string | null
           doctor_id?: string
           duration_minutes?: number | null
+          hospital_id?: string | null
           id?: string
           notes?: string | null
           patient_id?: string
@@ -113,6 +126,13 @@ export type Database = {
             columns: ["doctor_id"]
             isOneToOne: false
             referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointments_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
             referencedColumns: ["id"]
           },
           {
@@ -131,6 +151,7 @@ export type Database = {
           department: string | null
           email: string | null
           full_name: string
+          hospital_id: string | null
           id: string
           is_available: boolean | null
           license_number: string | null
@@ -145,6 +166,7 @@ export type Database = {
           department?: string | null
           email?: string | null
           full_name: string
+          hospital_id?: string | null
           id?: string
           is_available?: boolean | null
           license_number?: string | null
@@ -159,6 +181,7 @@ export type Database = {
           department?: string | null
           email?: string | null
           full_name?: string
+          hospital_id?: string | null
           id?: string
           is_available?: boolean | null
           license_number?: string | null
@@ -166,6 +189,103 @@ export type Database = {
           specialization?: string
           updated_at?: string
           user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "doctors_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hospital_members: {
+        Row: {
+          hospital_id: string
+          id: string
+          invited_by: string | null
+          is_active: boolean | null
+          joined_at: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          hospital_id: string
+          id?: string
+          invited_by?: string | null
+          is_active?: boolean | null
+          joined_at?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          hospital_id?: string
+          id?: string
+          invited_by?: string | null
+          is_active?: boolean | null
+          joined_at?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hospital_members_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hospitals: {
+        Row: {
+          address: string | null
+          bed_capacity: number | null
+          city: string | null
+          country: string | null
+          created_at: string
+          created_by: string | null
+          email: string | null
+          id: string
+          is_active: boolean | null
+          logo_url: string | null
+          name: string
+          phone: string | null
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          bed_capacity?: number | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          created_by?: string | null
+          email?: string | null
+          id?: string
+          is_active?: boolean | null
+          logo_url?: string | null
+          name: string
+          phone?: string | null
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          bed_capacity?: number | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          created_by?: string | null
+          email?: string | null
+          id?: string
+          is_active?: boolean | null
+          logo_url?: string | null
+          name?: string
+          phone?: string | null
+          slug?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -185,6 +305,7 @@ export type Database = {
           emergency_contact_phone: string | null
           first_name: string
           gender: string
+          hospital_id: string | null
           id: string
           insurance_number: string | null
           insurance_provider: string | null
@@ -212,6 +333,7 @@ export type Database = {
           emergency_contact_phone?: string | null
           first_name: string
           gender: string
+          hospital_id?: string | null
           id?: string
           insurance_number?: string | null
           insurance_provider?: string | null
@@ -239,6 +361,7 @@ export type Database = {
           emergency_contact_phone?: string | null
           first_name?: string
           gender?: string
+          hospital_id?: string | null
           id?: string
           insurance_number?: string | null
           insurance_provider?: string | null
@@ -251,7 +374,15 @@ export type Database = {
           updated_at?: string
           ward?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "patients_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -259,6 +390,7 @@ export type Database = {
           created_at: string
           department: string | null
           full_name: string
+          hospital_id: string | null
           id: string
           phone: string | null
           updated_at: string
@@ -269,6 +401,7 @@ export type Database = {
           created_at?: string
           department?: string | null
           full_name: string
+          hospital_id?: string | null
           id?: string
           phone?: string | null
           updated_at?: string
@@ -279,12 +412,62 @@ export type Database = {
           created_at?: string
           department?: string | null
           full_name?: string
+          hospital_id?: string | null
           id?: string
           phone?: string | null
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      staff_invitations: {
+        Row: {
+          accepted_at: string | null
+          created_at: string
+          email: string
+          expires_at: string
+          hospital_id: string
+          id: string
+          invited_by: string
+          role: Database["public"]["Enums"]["app_role"]
+        }
+        Insert: {
+          accepted_at?: string | null
+          created_at?: string
+          email: string
+          expires_at?: string
+          hospital_id: string
+          id?: string
+          invited_by: string
+          role?: Database["public"]["Enums"]["app_role"]
+        }
+        Update: {
+          accepted_at?: string | null
+          created_at?: string
+          email?: string
+          expires_at?: string
+          hospital_id?: string
+          id?: string
+          invited_by?: string
+          role?: Database["public"]["Enums"]["app_role"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "staff_invitations_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       triage_records: {
         Row: {
@@ -292,6 +475,7 @@ export type Database = {
           ai_risk_score: number | null
           assessed_by: string | null
           created_at: string
+          hospital_id: string | null
           id: string
           patient_id: string | null
           priority: Database["public"]["Enums"]["triage_priority"] | null
@@ -305,6 +489,7 @@ export type Database = {
           ai_risk_score?: number | null
           assessed_by?: string | null
           created_at?: string
+          hospital_id?: string | null
           id?: string
           patient_id?: string | null
           priority?: Database["public"]["Enums"]["triage_priority"] | null
@@ -318,6 +503,7 @@ export type Database = {
           ai_risk_score?: number | null
           assessed_by?: string | null
           created_at?: string
+          hospital_id?: string | null
           id?: string
           patient_id?: string | null
           priority?: Database["public"]["Enums"]["triage_priority"] | null
@@ -327,6 +513,13 @@ export type Database = {
           vitals?: Json | null
         }
         Relationships: [
+          {
+            foreignKeyName: "triage_records_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "triage_records_patient_id_fkey"
             columns: ["patient_id"]
@@ -366,11 +559,20 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_user_hospital_id: { Args: { _user_id: string }; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
+        Returns: boolean
+      }
+      is_hospital_admin: {
+        Args: { _hospital_id: string; _user_id: string }
+        Returns: boolean
+      }
+      is_hospital_member: {
+        Args: { _hospital_id: string; _user_id: string }
         Returns: boolean
       }
     }
