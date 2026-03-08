@@ -101,14 +101,18 @@ export function AppSidebar() {
 
       <SidebarFooter className="px-4 py-3 border-t border-sidebar-border">
         {!collapsed && (
-          <div className="flex items-center gap-2.5">
-            <div className="h-7 w-7 rounded-full bg-sidebar-accent flex items-center justify-center text-xs font-medium text-sidebar-accent-foreground">
-              Dr
+          <div className="space-y-3">
+            <div className="flex items-center gap-2.5">
+              <div className="h-7 w-7 rounded-full bg-sidebar-accent flex items-center justify-center text-xs font-medium text-sidebar-accent-foreground">
+                {user?.email?.[0]?.toUpperCase() || "U"}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-medium text-sidebar-accent-foreground truncate">{user?.email}</p>
+              </div>
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-xs font-medium text-sidebar-accent-foreground truncate">Dr. Amara Osei</p>
-              <p className="text-[10px] text-sidebar-muted">Chief Medical Officer</p>
-            </div>
+            <button onClick={signOut} className="flex items-center gap-2 w-full px-2 py-1.5 rounded-md text-xs text-sidebar-muted hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors">
+              <LogOut className="h-3.5 w-3.5" /> Sign out
+            </button>
           </div>
         )}
       </SidebarFooter>
