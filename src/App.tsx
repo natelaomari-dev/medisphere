@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
 import { HospitalProvider, useHospital } from "@/hooks/useHospital";
 import { AppLayout } from "@/components/AppLayout";
+import LandingPage from "./pages/LandingPage";
 import Dashboard from "./pages/Dashboard";
 import Patients from "./pages/Patients";
 import AIInsights from "./pages/AIInsights";
@@ -34,17 +35,25 @@ function OnboardingRoute() {
 
   if (authLoading || hospLoading) return null;
   if (!user) return <Navigate to="/auth" replace />;
-  if (!needsOnboarding) return <Navigate to="/" replace />;
+  if (!needsOnboarding) return <Navigate to="/dashboard" replace />;
   return <Onboarding />;
+}
+
+function PublicOnly({ children }: { children: React.ReactNode }) {
+  const { user, loading } = useAuth();
+  if (loading) return null;
+  if (user) return <Navigate to="/dashboard" replace />;
+  return <>{children}</>;
 }
 
 const AppRoutes = () => (
   <BrowserRouter>
     <Routes>
+      <Route path="/" element={<PublicOnly><LandingPage /></PublicOnly>} />
       <Route path="/auth" element={<AuthPage />} />
       <Route path="/onboarding" element={<OnboardingRoute />} />
       <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/patients" element={<Patients />} />
         <Route path="/ai-insights" element={<AIInsights />} />
         <Route path="/triage" element={<SmartTriage />} />

@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/sidebar";
 
 const mainModules = [
-  { title: "Dashboard", url: "/", icon: LayoutDashboard },
+  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { title: "Patients", url: "/patients", icon: Users },
   { title: "Appointments", url: "/appointments", icon: Calendar },
   { title: "Doctors", url: "/doctors", icon: Stethoscope },
@@ -56,7 +56,7 @@ function NavSection({ label, items, collapsed }: { label: string; items: typeof 
               <SidebarMenuButton asChild>
                 <NavLink
                   to={item.url}
-                  end={item.url === "/"}
+                  end={item.url === "/dashboard"}
                   className="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors"
                   activeClassName="sidebar-item-active"
                 >
