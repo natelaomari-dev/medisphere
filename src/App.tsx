@@ -17,6 +17,7 @@ import AuthPage from "./pages/AuthPage";
 import Onboarding from "./pages/Onboarding";
 import StaffManagement from "./pages/StaffManagement";
 import Nurses from "./pages/Nurses";
+import Laboratory from "./pages/Laboratory";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import NotFound from "./pages/NotFound";
 
@@ -63,7 +64,7 @@ const AppRoutes = () => (
         <Route path="/appointments" element={<Appointments />} />
         <Route path="/doctors" element={<Doctors />} />
         <Route path="/nurses" element={<Nurses />} />
-        <Route path="/laboratory" element={<PlaceholderPage />} />
+        <Route path="/laboratory" element={<Laboratory />} />
         <Route path="/pharmacy" element={<PlaceholderPage />} />
         <Route path="/inpatients" element={<PlaceholderPage />} />
         <Route path="/icu" element={<PlaceholderPage />} />

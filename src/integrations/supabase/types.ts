@@ -289,6 +289,81 @@ export type Database = {
         }
         Relationships: []
       }
+      lab_orders: {
+        Row: {
+          completed_at: string | null
+          completed_by: string | null
+          created_at: string
+          hospital_id: string | null
+          id: string
+          notes: string | null
+          ordered_by: string
+          patient_id: string
+          priority: string
+          reference_range: string | null
+          result_notes: string | null
+          result_unit: string | null
+          result_value: string | null
+          status: Database["public"]["Enums"]["lab_order_status"]
+          test_category: string
+          test_name: string
+          updated_at: string
+        }
+        Insert: {
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string
+          hospital_id?: string | null
+          id?: string
+          notes?: string | null
+          ordered_by: string
+          patient_id: string
+          priority?: string
+          reference_range?: string | null
+          result_notes?: string | null
+          result_unit?: string | null
+          result_value?: string | null
+          status?: Database["public"]["Enums"]["lab_order_status"]
+          test_category?: string
+          test_name: string
+          updated_at?: string
+        }
+        Update: {
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string
+          hospital_id?: string | null
+          id?: string
+          notes?: string | null
+          ordered_by?: string
+          patient_id?: string
+          priority?: string
+          reference_range?: string | null
+          result_notes?: string | null
+          result_unit?: string | null
+          result_value?: string | null
+          status?: Database["public"]["Enums"]["lab_order_status"]
+          test_category?: string
+          test_name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lab_orders_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lab_orders_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       patients: {
         Row: {
           address: string | null
@@ -591,6 +666,12 @@ export type Database = {
         | "completed"
         | "cancelled"
         | "no_show"
+      lab_order_status:
+        | "pending"
+        | "sample_collected"
+        | "processing"
+        | "completed"
+        | "cancelled"
       risk_level: "low" | "medium" | "high" | "critical"
       triage_priority:
         | "non_urgent"
@@ -740,6 +821,13 @@ export const Constants = {
         "completed",
         "cancelled",
         "no_show",
+      ],
+      lab_order_status: [
+        "pending",
+        "sample_collected",
+        "processing",
+        "completed",
+        "cancelled",
       ],
       risk_level: ["low", "medium", "high", "critical"],
       triage_priority: [
