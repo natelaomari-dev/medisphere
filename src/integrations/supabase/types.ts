@@ -458,6 +458,68 @@ export type Database = {
           },
         ]
       }
+      medications: {
+        Row: {
+          category: string
+          created_at: string
+          dosage_form: string
+          expiry_date: string | null
+          generic_name: string | null
+          hospital_id: string | null
+          id: string
+          is_active: boolean
+          manufacturer: string | null
+          name: string
+          reorder_level: number
+          stock_quantity: number
+          strength: string | null
+          unit_price: number | null
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          dosage_form?: string
+          expiry_date?: string | null
+          generic_name?: string | null
+          hospital_id?: string | null
+          id?: string
+          is_active?: boolean
+          manufacturer?: string | null
+          name: string
+          reorder_level?: number
+          stock_quantity?: number
+          strength?: string | null
+          unit_price?: number | null
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          dosage_form?: string
+          expiry_date?: string | null
+          generic_name?: string | null
+          hospital_id?: string | null
+          id?: string
+          is_active?: boolean
+          manufacturer?: string | null
+          name?: string
+          reorder_level?: number
+          stock_quantity?: number
+          strength?: string | null
+          unit_price?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "medications_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       patients: {
         Row: {
           address: string | null
@@ -549,6 +611,89 @@ export type Database = {
             columns: ["hospital_id"]
             isOneToOne: false
             referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      prescriptions: {
+        Row: {
+          created_at: string
+          dispensed_at: string | null
+          dispensed_by: string | null
+          doctor_id: string | null
+          dosage: string
+          duration: string | null
+          frequency: string
+          hospital_id: string | null
+          id: string
+          medication_id: string
+          notes: string | null
+          patient_id: string
+          quantity: number
+          status: Database["public"]["Enums"]["prescription_status"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          dispensed_at?: string | null
+          dispensed_by?: string | null
+          doctor_id?: string | null
+          dosage: string
+          duration?: string | null
+          frequency: string
+          hospital_id?: string | null
+          id?: string
+          medication_id: string
+          notes?: string | null
+          patient_id: string
+          quantity?: number
+          status?: Database["public"]["Enums"]["prescription_status"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          dispensed_at?: string | null
+          dispensed_by?: string | null
+          doctor_id?: string | null
+          dosage?: string
+          duration?: string | null
+          frequency?: string
+          hospital_id?: string | null
+          id?: string
+          medication_id?: string
+          notes?: string | null
+          patient_id?: string
+          quantity?: number
+          status?: Database["public"]["Enums"]["prescription_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prescriptions_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "prescriptions_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "prescriptions_medication_id_fkey"
+            columns: ["medication_id"]
+            isOneToOne: false
+            referencedRelation: "medications"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "prescriptions_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
             referencedColumns: ["id"]
           },
         ]
@@ -766,6 +911,11 @@ export type Database = {
         | "processing"
         | "completed"
         | "cancelled"
+      prescription_status:
+        | "pending"
+        | "dispensed"
+        | "partially_dispensed"
+        | "cancelled"
       risk_level: "low" | "medium" | "high" | "critical"
       triage_priority:
         | "non_urgent"
@@ -921,6 +1071,12 @@ export const Constants = {
         "sample_collected",
         "processing",
         "completed",
+        "cancelled",
+      ],
+      prescription_status: [
+        "pending",
+        "dispensed",
+        "partially_dispensed",
         "cancelled",
       ],
       risk_level: ["low", "medium", "high", "critical"],
