@@ -70,7 +70,7 @@ const AppRoutes = () => (
         <Route path="/analytics" element={<PlaceholderPage />} />
         <Route path="/billing" element={<PlaceholderPage />} />
         <Route path="/inventory" element={<PlaceholderPage />} />
-        <Route path="/staff" element={<PlaceholderPage />} />
+        <Route path="/staff" element={<StaffManagement />} />
         <Route path="/security" element={<PlaceholderPage />} />
         <Route path="/settings" element={<PlaceholderPage />} />
       </Route>
