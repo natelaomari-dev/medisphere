@@ -8,6 +8,7 @@ import { HospitalProvider, useHospital } from "@/hooks/useHospital";
 import { AppLayout } from "@/components/AppLayout";
 import LandingPage from "./pages/LandingPage";
 import Dashboard from "./pages/Dashboard";
+import Doctors from "./pages/Doctors";
 import Patients from "./pages/Patients";
 import AIInsights from "./pages/AIInsights";
 import SmartTriage from "./pages/SmartTriage";
@@ -58,7 +59,7 @@ const AppRoutes = () => (
         <Route path="/ai-insights" element={<AIInsights />} />
         <Route path="/triage" element={<SmartTriage />} />
         <Route path="/appointments" element={<Appointments />} />
-        <Route path="/doctors" element={<PlaceholderPage />} />
+        <Route path="/doctors" element={<Doctors />} />
         <Route path="/nurses" element={<PlaceholderPage />} />
         <Route path="/laboratory" element={<PlaceholderPage />} />
         <Route path="/pharmacy" element={<PlaceholderPage />} />

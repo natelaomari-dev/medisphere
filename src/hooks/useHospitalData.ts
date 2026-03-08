@@ -34,6 +34,9 @@ export function useAddPatient() {
   });
 }
 
+type DoctorInsert = Database["public"]["Tables"]["doctors"]["Insert"];
+type DoctorUpdate = Database["public"]["Tables"]["doctors"]["Update"];
+
 export function useDoctors() {
   return useQuery({
     queryKey: ["doctors"],
@@ -42,6 +45,41 @@ export function useDoctors() {
       if (error) throw error;
       return data as Doctor[];
     },
+  });
+}
+
+export function useAddDoctor() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (doctor: DoctorInsert) => {
+      const { data, error } = await supabase.from("doctors").insert(doctor).select().single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["doctors"] }),
+  });
+}
+
+export function useUpdateDoctor() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, ...updates }: DoctorUpdate & { id: string }) => {
+      const { data, error } = await supabase.from("doctors").update(updates).eq("id", id).select().single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["doctors"] }),
+  });
+}
+
+export function useToggleDoctorAvailability() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, is_available }: { id: string; is_available: boolean }) => {
+      const { error } = await supabase.from("doctors").update({ is_available }).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["doctors"] }),
   });
 }
 
