@@ -68,7 +68,7 @@ const AppRoutes = () => (
         <Route path="/laboratory" element={<Laboratory />} />
         <Route path="/pharmacy" element={<PlaceholderPage />} />
         <Route path="/inpatients" element={<PlaceholderPage />} />
-        <Route path="/icu" element={<PlaceholderPage />} />
+        <Route path="/icu" element={<ICUMonitoring />} />
         <Route path="/telemedicine" element={<PlaceholderPage />} />
         <Route path="/analytics" element={<PlaceholderPage />} />
         <Route path="/billing" element={<PlaceholderPage />} />
