@@ -8,6 +8,7 @@ import { HospitalProvider, useHospital } from "@/hooks/useHospital";
 import { AppLayout } from "@/components/AppLayout";
 import LandingPage from "./pages/LandingPage";
 import Dashboard from "./pages/Dashboard";
+import Doctors from "./pages/Doctors";
 import Patients from "./pages/Patients";
 import AIInsights from "./pages/AIInsights";
 import SmartTriage from "./pages/SmartTriage";
