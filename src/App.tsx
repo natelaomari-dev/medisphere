@@ -32,7 +32,7 @@ const AppRoutes = () => (
         <Route path="/patients" element={<Patients />} />
         <Route path="/ai-insights" element={<AIInsights />} />
         <Route path="/triage" element={<SmartTriage />} />
-        <Route path="/appointments" element={<PlaceholderPage />} />
+        <Route path="/appointments" element={<Appointments />} />
         <Route path="/doctors" element={<PlaceholderPage />} />
         <Route path="/nurses" element={<PlaceholderPage />} />
         <Route path="/laboratory" element={<PlaceholderPage />} />
