@@ -15,6 +15,7 @@ import SmartTriage from "./pages/SmartTriage";
 import Appointments from "./pages/Appointments";
 import AuthPage from "./pages/AuthPage";
 import Onboarding from "./pages/Onboarding";
+import StaffManagement from "./pages/StaffManagement";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import NotFound from "./pages/NotFound";
 
@@ -69,7 +70,7 @@ const AppRoutes = () => (
         <Route path="/analytics" element={<PlaceholderPage />} />
         <Route path="/billing" element={<PlaceholderPage />} />
         <Route path="/inventory" element={<PlaceholderPage />} />
-        <Route path="/staff" element={<PlaceholderPage />} />
+        <Route path="/staff" element={<StaffManagement />} />
         <Route path="/security" element={<PlaceholderPage />} />
         <Route path="/settings" element={<PlaceholderPage />} />
       </Route>
