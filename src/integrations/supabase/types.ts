@@ -289,6 +289,100 @@ export type Database = {
         }
         Relationships: []
       }
+      icu_beds: {
+        Row: {
+          admission_date: string | null
+          attending_doctor_id: string | null
+          bed_number: string
+          blood_pressure_diastolic: number | null
+          blood_pressure_systolic: number | null
+          created_at: string
+          gcs_score: number | null
+          heart_rate: number | null
+          hospital_id: string | null
+          id: string
+          is_occupied: boolean
+          isolation: boolean
+          last_vitals_at: string | null
+          notes: string | null
+          patient_id: string | null
+          respiratory_rate: number | null
+          risk_score: number | null
+          spo2: number | null
+          temperature: number | null
+          updated_at: string
+          ventilator: boolean
+        }
+        Insert: {
+          admission_date?: string | null
+          attending_doctor_id?: string | null
+          bed_number: string
+          blood_pressure_diastolic?: number | null
+          blood_pressure_systolic?: number | null
+          created_at?: string
+          gcs_score?: number | null
+          heart_rate?: number | null
+          hospital_id?: string | null
+          id?: string
+          is_occupied?: boolean
+          isolation?: boolean
+          last_vitals_at?: string | null
+          notes?: string | null
+          patient_id?: string | null
+          respiratory_rate?: number | null
+          risk_score?: number | null
+          spo2?: number | null
+          temperature?: number | null
+          updated_at?: string
+          ventilator?: boolean
+        }
+        Update: {
+          admission_date?: string | null
+          attending_doctor_id?: string | null
+          bed_number?: string
+          blood_pressure_diastolic?: number | null
+          blood_pressure_systolic?: number | null
+          created_at?: string
+          gcs_score?: number | null
+          heart_rate?: number | null
+          hospital_id?: string | null
+          id?: string
+          is_occupied?: boolean
+          isolation?: boolean
+          last_vitals_at?: string | null
+          notes?: string | null
+          patient_id?: string | null
+          respiratory_rate?: number | null
+          risk_score?: number | null
+          spo2?: number | null
+          temperature?: number | null
+          updated_at?: string
+          ventilator?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "icu_beds_attending_doctor_id_fkey"
+            columns: ["attending_doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "icu_beds_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "icu_beds_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lab_orders: {
         Row: {
           completed_at: string | null
