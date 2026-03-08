@@ -88,7 +88,7 @@ export function AppSidebar() {
           {!collapsed && (
             <div>
               <h1 className="text-sm font-semibold text-sidebar-accent-foreground tracking-tight">MediSphere AI</h1>
-              <p className="text-[11px] text-sidebar-muted">Hospital Intelligence</p>
+              <p className="text-[11px] text-sidebar-muted truncate max-w-[140px]">{hospitalName || "Hospital Intelligence"}</p>
             </div>
           )}
         </div>
