@@ -19,6 +19,7 @@ import StaffManagement from "./pages/StaffManagement";
 import Nurses from "./pages/Nurses";
 import Laboratory from "./pages/Laboratory";
 import ICUMonitoring from "./pages/ICUMonitoring";
+import Pharmacy from "./pages/Pharmacy";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import NotFound from "./pages/NotFound";
 
