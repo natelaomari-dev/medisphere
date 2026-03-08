@@ -18,6 +18,7 @@ import Onboarding from "./pages/Onboarding";
 import StaffManagement from "./pages/StaffManagement";
 import Nurses from "./pages/Nurses";
 import Laboratory from "./pages/Laboratory";
+import ICUMonitoring from "./pages/ICUMonitoring";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import NotFound from "./pages/NotFound";
 
