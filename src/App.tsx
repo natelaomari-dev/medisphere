@@ -21,6 +21,7 @@ import Laboratory from "./pages/Laboratory";
 import ICUMonitoring from "./pages/ICUMonitoring";
 import Pharmacy from "./pages/Pharmacy";
 import Telemedicine from "./pages/Telemedicine";
+import Billing from "./pages/Billing";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import NotFound from "./pages/NotFound";
 
@@ -73,7 +74,7 @@ const AppRoutes = () => (
         <Route path="/icu" element={<ICUMonitoring />} />
         <Route path="/telemedicine" element={<Telemedicine />} />
         <Route path="/analytics" element={<PlaceholderPage />} />
-        <Route path="/billing" element={<PlaceholderPage />} />
+        <Route path="/billing" element={<Billing />} />
         <Route path="/inventory" element={<PlaceholderPage />} />
         <Route path="/staff" element={<StaffManagement />} />
         <Route path="/security" element={<PlaceholderPage />} />
