@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
+import { HospitalProvider, useHospital } from "@/hooks/useHospital";
 import { AppLayout } from "@/components/AppLayout";
 import Dashboard from "./pages/Dashboard";
 import Patients from "./pages/Patients";
@@ -11,22 +12,37 @@ import AIInsights from "./pages/AIInsights";
 import SmartTriage from "./pages/SmartTriage";
 import Appointments from "./pages/Appointments";
 import AuthPage from "./pages/AuthPage";
+import Onboarding from "./pages/Onboarding";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth();
-  if (loading) return null;
+  const { user, loading: authLoading } = useAuth();
+  const { needsOnboarding, loading: hospLoading } = useHospital();
+
+  if (authLoading || hospLoading) return null;
   if (!user) return <Navigate to="/auth" replace />;
+  if (needsOnboarding) return <Navigate to="/onboarding" replace />;
   return <>{children}</>;
+}
+
+function OnboardingRoute() {
+  const { user, loading: authLoading } = useAuth();
+  const { needsOnboarding, loading: hospLoading } = useHospital();
+
+  if (authLoading || hospLoading) return null;
+  if (!user) return <Navigate to="/auth" replace />;
+  if (!needsOnboarding) return <Navigate to="/" replace />;
+  return <Onboarding />;
 }
 
 const AppRoutes = () => (
   <BrowserRouter>
     <Routes>
       <Route path="/auth" element={<AuthPage />} />
+      <Route path="/onboarding" element={<OnboardingRoute />} />
       <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
         <Route path="/" element={<Dashboard />} />
         <Route path="/patients" element={<Patients />} />
@@ -55,11 +71,13 @@ const AppRoutes = () => (
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <AppRoutes />
-      </TooltipProvider>
+      <HospitalProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <AppRoutes />
+        </TooltipProvider>
+      </HospitalProvider>
     </AuthProvider>
   </QueryClientProvider>
 );

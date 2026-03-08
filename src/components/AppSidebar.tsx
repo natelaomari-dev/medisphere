@@ -7,6 +7,7 @@ import {
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useHospital } from "@/hooks/useHospital";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
   SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem,
@@ -75,6 +76,7 @@ export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const { user, signOut } = useAuth();
+  const { hospitalName } = useHospital();
 
   return (
     <Sidebar collapsible="icon" className="border-r border-sidebar-border">
@@ -86,7 +88,7 @@ export function AppSidebar() {
           {!collapsed && (
             <div>
               <h1 className="text-sm font-semibold text-sidebar-accent-foreground tracking-tight">MediSphere AI</h1>
-              <p className="text-[11px] text-sidebar-muted">Hospital Intelligence</p>
+              <p className="text-[11px] text-sidebar-muted truncate max-w-[140px]">{hospitalName || "Hospital Intelligence"}</p>
             </div>
           )}
         </div>
