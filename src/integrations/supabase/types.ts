@@ -783,6 +783,82 @@ export type Database = {
           },
         ]
       }
+      teleconsultations: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          doctor_id: string
+          duration_minutes: number
+          ended_at: string | null
+          hospital_id: string | null
+          id: string
+          meeting_link: string | null
+          notes: string | null
+          patient_id: string
+          reason: string | null
+          scheduled_at: string
+          started_at: string | null
+          status: Database["public"]["Enums"]["teleconsult_status"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          doctor_id: string
+          duration_minutes?: number
+          ended_at?: string | null
+          hospital_id?: string | null
+          id?: string
+          meeting_link?: string | null
+          notes?: string | null
+          patient_id: string
+          reason?: string | null
+          scheduled_at: string
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["teleconsult_status"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          doctor_id?: string
+          duration_minutes?: number
+          ended_at?: string | null
+          hospital_id?: string | null
+          id?: string
+          meeting_link?: string | null
+          notes?: string | null
+          patient_id?: string
+          reason?: string | null
+          scheduled_at?: string
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["teleconsult_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "teleconsultations_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "teleconsultations_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "teleconsultations_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       triage_records: {
         Row: {
           ai_recommendation: string | null
@@ -917,6 +993,12 @@ export type Database = {
         | "partially_dispensed"
         | "cancelled"
       risk_level: "low" | "medium" | "high" | "critical"
+      teleconsult_status:
+        | "scheduled"
+        | "in_progress"
+        | "completed"
+        | "cancelled"
+        | "no_show"
       triage_priority:
         | "non_urgent"
         | "semi_urgent"
@@ -1080,6 +1162,13 @@ export const Constants = {
         "cancelled",
       ],
       risk_level: ["low", "medium", "high", "critical"],
+      teleconsult_status: [
+        "scheduled",
+        "in_progress",
+        "completed",
+        "cancelled",
+        "no_show",
+      ],
       triage_priority: [
         "non_urgent",
         "semi_urgent",

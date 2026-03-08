@@ -20,6 +20,7 @@ import Nurses from "./pages/Nurses";
 import Laboratory from "./pages/Laboratory";
 import ICUMonitoring from "./pages/ICUMonitoring";
 import Pharmacy from "./pages/Pharmacy";
+import Telemedicine from "./pages/Telemedicine";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import NotFound from "./pages/NotFound";
 
@@ -70,7 +71,7 @@ const AppRoutes = () => (
         <Route path="/pharmacy" element={<Pharmacy />} />
         <Route path="/inpatients" element={<PlaceholderPage />} />
         <Route path="/icu" element={<ICUMonitoring />} />
-        <Route path="/telemedicine" element={<PlaceholderPage />} />
+        <Route path="/telemedicine" element={<Telemedicine />} />
         <Route path="/analytics" element={<PlaceholderPage />} />
         <Route path="/billing" element={<PlaceholderPage />} />
         <Route path="/inventory" element={<PlaceholderPage />} />
