@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import Patients from "./pages/Patients";
 import AIInsights from "./pages/AIInsights";
 import SmartTriage from "./pages/SmartTriage";
+import Appointments from "./pages/Appointments";
 import AuthPage from "./pages/AuthPage";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import NotFound from "./pages/NotFound";
@@ -31,7 +32,7 @@ const AppRoutes = () => (
         <Route path="/patients" element={<Patients />} />
         <Route path="/ai-insights" element={<AIInsights />} />
         <Route path="/triage" element={<SmartTriage />} />
-        <Route path="/appointments" element={<PlaceholderPage />} />
+        <Route path="/appointments" element={<Appointments />} />
         <Route path="/doctors" element={<PlaceholderPage />} />
         <Route path="/nurses" element={<PlaceholderPage />} />
         <Route path="/laboratory" element={<PlaceholderPage />} />
