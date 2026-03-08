@@ -74,6 +74,7 @@ function NavSection({ label, items, collapsed }: { label: string; items: typeof 
 export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
+  const { user, signOut } = useAuth();
 
   return (
     <Sidebar collapsible="icon" className="border-r border-sidebar-border">
