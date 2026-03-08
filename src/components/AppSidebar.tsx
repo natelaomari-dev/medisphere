@@ -2,9 +2,11 @@ import {
   LayoutDashboard, Users, Calendar, Stethoscope, HeartPulse,
   FlaskConical, Pill, Receipt, Package, BedDouble, Activity,
   Video, Brain, BarChart3, UserCog, Plug, Shield, Settings,
-  Search, Bell, ChevronDown, Sparkles,
+  Search, Bell, ChevronDown, Sparkles, LogOut,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
+import { useLocation } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 import { useLocation } from "react-router-dom";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
