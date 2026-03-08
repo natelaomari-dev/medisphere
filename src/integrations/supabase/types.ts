@@ -383,6 +383,63 @@ export type Database = {
           },
         ]
       }
+      invoices: {
+        Row: {
+          amount: number
+          created_at: string
+          due_date: string
+          hospital_id: string | null
+          id: string
+          invoice_number: string
+          issue_date: string
+          notes: string | null
+          patient_id: string
+          status: Database["public"]["Enums"]["invoice_status"]
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          due_date: string
+          hospital_id?: string | null
+          id?: string
+          invoice_number: string
+          issue_date?: string
+          notes?: string | null
+          patient_id: string
+          status?: Database["public"]["Enums"]["invoice_status"]
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          due_date?: string
+          hospital_id?: string | null
+          id?: string
+          invoice_number?: string
+          issue_date?: string
+          notes?: string | null
+          patient_id?: string
+          status?: Database["public"]["Enums"]["invoice_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoices_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lab_orders: {
         Row: {
           completed_at: string | null
@@ -981,6 +1038,7 @@ export type Database = {
         | "completed"
         | "cancelled"
         | "no_show"
+      invoice_status: "pending" | "paid" | "overdue" | "cancelled"
       lab_order_status:
         | "pending"
         | "sample_collected"
@@ -1148,6 +1206,7 @@ export const Constants = {
         "cancelled",
         "no_show",
       ],
+      invoice_status: ["pending", "paid", "overdue", "cancelled"],
       lab_order_status: [
         "pending",
         "sample_collected",
