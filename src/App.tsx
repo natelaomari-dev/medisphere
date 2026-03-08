@@ -9,7 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import Patients from "./pages/Patients";
 import AIInsights from "./pages/AIInsights";
 import SmartTriage from "./pages/SmartTriage";
-import AuthPage from "./pages/AuthPage";
+import Appointments from "./pages/Appointments";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import NotFound from "./pages/NotFound";
 
