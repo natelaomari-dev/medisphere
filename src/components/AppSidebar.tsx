@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/sidebar";
 
 const mainModules = [
-  { title: "Dashboard", url: "/", icon: LayoutDashboard },
+  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { title: "Patients", url: "/patients", icon: Users },
   { title: "Appointments", url: "/appointments", icon: Calendar },
   { title: "Doctors", url: "/doctors", icon: Stethoscope },
