@@ -16,6 +16,7 @@ import Appointments from "./pages/Appointments";
 import AuthPage from "./pages/AuthPage";
 import Onboarding from "./pages/Onboarding";
 import StaffManagement from "./pages/StaffManagement";
+import Nurses from "./pages/Nurses";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import NotFound from "./pages/NotFound";
 
