@@ -57,7 +57,7 @@ export function useAdmissions(status?: string) {
         .from("admissions")
         .select("*, patients(first_name, last_name, patient_id), wards(name, ward_type), beds(bed_number), doctors:admitting_doctor_id(full_name)")
         .order("admission_date", { ascending: false });
-      if (status) query = query.eq("status", status);
+      if (status) query = query.eq("status", status as "admitted" | "discharged" | "transferred" | "deceased");
       const { data, error } = await query;
       if (error) throw error;
       return data;
