@@ -14,6 +14,112 @@ export type Database = {
   }
   public: {
     Tables: {
+      admissions: {
+        Row: {
+          actual_discharge_date: string | null
+          admission_date: string
+          admission_reason: string
+          admission_type: string
+          admitting_doctor_id: string | null
+          attending_doctor_id: string | null
+          bed_id: string | null
+          created_at: string
+          discharge_diagnosis: string | null
+          discharge_summary: string | null
+          discharged_by: string | null
+          expected_discharge_date: string | null
+          hospital_id: string
+          id: string
+          patient_id: string
+          status: Database["public"]["Enums"]["admission_status"]
+          updated_at: string
+          ward_id: string
+        }
+        Insert: {
+          actual_discharge_date?: string | null
+          admission_date?: string
+          admission_reason: string
+          admission_type?: string
+          admitting_doctor_id?: string | null
+          attending_doctor_id?: string | null
+          bed_id?: string | null
+          created_at?: string
+          discharge_diagnosis?: string | null
+          discharge_summary?: string | null
+          discharged_by?: string | null
+          expected_discharge_date?: string | null
+          hospital_id: string
+          id?: string
+          patient_id: string
+          status?: Database["public"]["Enums"]["admission_status"]
+          updated_at?: string
+          ward_id: string
+        }
+        Update: {
+          actual_discharge_date?: string | null
+          admission_date?: string
+          admission_reason?: string
+          admission_type?: string
+          admitting_doctor_id?: string | null
+          attending_doctor_id?: string | null
+          bed_id?: string | null
+          created_at?: string
+          discharge_diagnosis?: string | null
+          discharge_summary?: string | null
+          discharged_by?: string | null
+          expected_discharge_date?: string | null
+          hospital_id?: string
+          id?: string
+          patient_id?: string
+          status?: Database["public"]["Enums"]["admission_status"]
+          updated_at?: string
+          ward_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "admissions_admitting_doctor_id_fkey"
+            columns: ["admitting_doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "admissions_attending_doctor_id_fkey"
+            columns: ["attending_doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "admissions_bed_id_fkey"
+            columns: ["bed_id"]
+            isOneToOne: false
+            referencedRelation: "beds"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "admissions_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "admissions_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "admissions_ward_id_fkey"
+            columns: ["ward_id"]
+            isOneToOne: false
+            referencedRelation: "wards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_alerts: {
         Row: {
           acknowledged_at: string | null
@@ -140,6 +246,105 @@ export type Database = {
             columns: ["patient_id"]
             isOneToOne: false
             referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      beds: {
+        Row: {
+          bed_number: string
+          bed_type: string
+          created_at: string
+          hospital_id: string
+          id: string
+          is_active: boolean
+          is_available: boolean
+          updated_at: string
+          ward_id: string
+        }
+        Insert: {
+          bed_number: string
+          bed_type?: string
+          created_at?: string
+          hospital_id: string
+          id?: string
+          is_active?: boolean
+          is_available?: boolean
+          updated_at?: string
+          ward_id: string
+        }
+        Update: {
+          bed_number?: string
+          bed_type?: string
+          created_at?: string
+          hospital_id?: string
+          id?: string
+          is_active?: boolean
+          is_available?: boolean
+          updated_at?: string
+          ward_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "beds_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "beds_ward_id_fkey"
+            columns: ["ward_id"]
+            isOneToOne: false
+            referencedRelation: "wards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      diagnoses: {
+        Row: {
+          created_at: string
+          diagnosis_type: string
+          hospital_id: string | null
+          icd_code: string
+          icd_description: string
+          id: string
+          medical_record_id: string
+          notes: string | null
+        }
+        Insert: {
+          created_at?: string
+          diagnosis_type?: string
+          hospital_id?: string | null
+          icd_code: string
+          icd_description: string
+          id?: string
+          medical_record_id: string
+          notes?: string | null
+        }
+        Update: {
+          created_at?: string
+          diagnosis_type?: string
+          hospital_id?: string | null
+          icd_code?: string
+          icd_description?: string
+          id?: string
+          medical_record_id?: string
+          notes?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "diagnoses_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "diagnoses_medical_record_id_fkey"
+            columns: ["medical_record_id"]
+            isOneToOne: false
+            referencedRelation: "medical_records"
             referencedColumns: ["id"]
           },
         ]
@@ -515,6 +720,95 @@ export type Database = {
           },
         ]
       }
+      medical_records: {
+        Row: {
+          appointment_id: string | null
+          assessment: string | null
+          chief_complaint: string | null
+          created_at: string
+          doctor_id: string | null
+          follow_up_date: string | null
+          follow_up_notes: string | null
+          history_of_present_illness: string | null
+          hospital_id: string | null
+          id: string
+          past_medical_history: string | null
+          patient_id: string
+          physical_examination: string | null
+          status: string
+          treatment_plan: string | null
+          updated_at: string
+          visit_type: string
+        }
+        Insert: {
+          appointment_id?: string | null
+          assessment?: string | null
+          chief_complaint?: string | null
+          created_at?: string
+          doctor_id?: string | null
+          follow_up_date?: string | null
+          follow_up_notes?: string | null
+          history_of_present_illness?: string | null
+          hospital_id?: string | null
+          id?: string
+          past_medical_history?: string | null
+          patient_id: string
+          physical_examination?: string | null
+          status?: string
+          treatment_plan?: string | null
+          updated_at?: string
+          visit_type?: string
+        }
+        Update: {
+          appointment_id?: string | null
+          assessment?: string | null
+          chief_complaint?: string | null
+          created_at?: string
+          doctor_id?: string | null
+          follow_up_date?: string | null
+          follow_up_notes?: string | null
+          history_of_present_illness?: string | null
+          hospital_id?: string | null
+          id?: string
+          past_medical_history?: string | null
+          patient_id?: string
+          physical_examination?: string | null
+          status?: string
+          treatment_plan?: string | null
+          updated_at?: string
+          visit_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "medical_records_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "medical_records_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "medical_records_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "medical_records_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       medications: {
         Row: {
           category: string
@@ -573,6 +867,67 @@ export type Database = {
             columns: ["hospital_id"]
             isOneToOne: false
             referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      nurse_notes: {
+        Row: {
+          admission_id: string
+          content: string
+          created_at: string
+          hospital_id: string
+          id: string
+          note_type: string
+          nurse_id: string | null
+          patient_id: string
+          shift: string | null
+          vitals_snapshot: Json | null
+        }
+        Insert: {
+          admission_id: string
+          content: string
+          created_at?: string
+          hospital_id: string
+          id?: string
+          note_type?: string
+          nurse_id?: string | null
+          patient_id: string
+          shift?: string | null
+          vitals_snapshot?: Json | null
+        }
+        Update: {
+          admission_id?: string
+          content?: string
+          created_at?: string
+          hospital_id?: string
+          id?: string
+          note_type?: string
+          nurse_id?: string | null
+          patient_id?: string
+          shift?: string | null
+          vitals_snapshot?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "nurse_notes_admission_id_fkey"
+            columns: ["admission_id"]
+            isOneToOne: false
+            referencedRelation: "admissions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "nurse_notes_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "nurse_notes_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
             referencedColumns: ["id"]
           },
         ]
@@ -1001,6 +1356,132 @@ export type Database = {
         }
         Relationships: []
       }
+      vitals: {
+        Row: {
+          blood_pressure_diastolic: number | null
+          blood_pressure_systolic: number | null
+          bmi: number | null
+          created_at: string
+          heart_rate: number | null
+          height: number | null
+          hospital_id: string | null
+          id: string
+          medical_record_id: string | null
+          notes: string | null
+          pain_level: number | null
+          patient_id: string
+          recorded_by: string | null
+          respiratory_rate: number | null
+          spo2: number | null
+          temperature: number | null
+          weight: number | null
+        }
+        Insert: {
+          blood_pressure_diastolic?: number | null
+          blood_pressure_systolic?: number | null
+          bmi?: number | null
+          created_at?: string
+          heart_rate?: number | null
+          height?: number | null
+          hospital_id?: string | null
+          id?: string
+          medical_record_id?: string | null
+          notes?: string | null
+          pain_level?: number | null
+          patient_id: string
+          recorded_by?: string | null
+          respiratory_rate?: number | null
+          spo2?: number | null
+          temperature?: number | null
+          weight?: number | null
+        }
+        Update: {
+          blood_pressure_diastolic?: number | null
+          blood_pressure_systolic?: number | null
+          bmi?: number | null
+          created_at?: string
+          heart_rate?: number | null
+          height?: number | null
+          hospital_id?: string | null
+          id?: string
+          medical_record_id?: string | null
+          notes?: string | null
+          pain_level?: number | null
+          patient_id?: string
+          recorded_by?: string | null
+          respiratory_rate?: number | null
+          spo2?: number | null
+          temperature?: number | null
+          weight?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vitals_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vitals_medical_record_id_fkey"
+            columns: ["medical_record_id"]
+            isOneToOne: false
+            referencedRelation: "medical_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vitals_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      wards: {
+        Row: {
+          created_at: string
+          floor: string | null
+          hospital_id: string
+          id: string
+          is_active: boolean
+          name: string
+          total_beds: number
+          updated_at: string
+          ward_type: string
+        }
+        Insert: {
+          created_at?: string
+          floor?: string | null
+          hospital_id: string
+          id?: string
+          is_active?: boolean
+          name: string
+          total_beds?: number
+          updated_at?: string
+          ward_type?: string
+        }
+        Update: {
+          created_at?: string
+          floor?: string | null
+          hospital_id?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          total_beds?: number
+          updated_at?: string
+          ward_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wards_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -1024,6 +1505,7 @@ export type Database = {
       }
     }
     Enums: {
+      admission_status: "admitted" | "discharged" | "transferred" | "deceased"
       app_role:
         | "admin"
         | "doctor"
@@ -1190,6 +1672,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      admission_status: ["admitted", "discharged", "transferred", "deceased"],
       app_role: [
         "admin",
         "doctor",

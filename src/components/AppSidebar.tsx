@@ -2,7 +2,7 @@ import {
   LayoutDashboard, Users, Calendar, Stethoscope, HeartPulse,
   FlaskConical, Pill, Receipt, Package, BedDouble, Activity,
   Video, Brain, BarChart3, UserCog, Plug, Shield, Settings,
-  Search, Bell, ChevronDown, Sparkles, LogOut,
+  Search, Bell, ChevronDown, Sparkles, LogOut, FileText,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -23,6 +23,7 @@ const mainModules = [
 ];
 
 const clinicalModules = [
+  { title: "Medical Records", url: "/medical-records", icon: FileText },
   { title: "Laboratory", url: "/laboratory", icon: FlaskConical },
   { title: "Pharmacy", url: "/pharmacy", icon: Pill },
   { title: "Inpatients", url: "/inpatients", icon: BedDouble },
