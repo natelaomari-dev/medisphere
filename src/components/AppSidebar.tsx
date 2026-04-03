@@ -23,7 +23,7 @@ const mainModules = [
 ];
 
 const clinicalModules = [
-  { title: "Medical Records", url: "/medical-records", icon: FlaskConical },
+  { title: "Medical Records", url: "/medical-records", icon: FileText },
   { title: "Laboratory", url: "/laboratory", icon: FlaskConical },
   { title: "Pharmacy", url: "/pharmacy", icon: Pill },
   { title: "Inpatients", url: "/inpatients", icon: BedDouble },
