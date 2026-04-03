@@ -72,7 +72,8 @@ const AppRoutes = () => (
         <Route path="/nurses" element={<Nurses />} />
         <Route path="/laboratory" element={<Laboratory />} />
         <Route path="/pharmacy" element={<Pharmacy />} />
-        <Route path="/inpatients" element={<PlaceholderPage />} />
+        <Route path="/inpatients" element={<InpatientManagement />} />
+        <Route path="/medical-records" element={<MedicalRecords />} />
         <Route path="/icu" element={<ICUMonitoring />} />
         <Route path="/telemedicine" element={<Telemedicine />} />
         <Route path="/analytics" element={<PlaceholderPage />} />
