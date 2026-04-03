@@ -22,6 +22,8 @@ import ICUMonitoring from "./pages/ICUMonitoring";
 import Pharmacy from "./pages/Pharmacy";
 import Telemedicine from "./pages/Telemedicine";
 import Billing from "./pages/Billing";
+import MedicalRecords from "./pages/MedicalRecords";
+import InpatientManagement from "./pages/InpatientManagement";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import NotFound from "./pages/NotFound";
 
