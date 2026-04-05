@@ -80,6 +80,29 @@ export default function Billing() {
     }
   };
 
+  const handleMpesaPayment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!mpesaPayment.patient_id || !mpesaPayment.phone_number || !mpesaPayment.amount) return;
+    try {
+      const result = await initiateMpesa.mutateAsync({
+        patient_id: mpesaPayment.patient_id,
+        phone_number: mpesaPayment.phone_number,
+        amount: parseFloat(mpesaPayment.amount),
+        invoice_id: mpesaPayment.invoice_id || undefined,
+      });
+      setIsMpesaDialogOpen(false);
+      setMpesaPayment({ patient_id: "", phone_number: "", amount: "", invoice_id: "" });
+      toast({
+        title: result.demo_mode ? "M-Pesa (Demo)" : "STK Push Sent",
+        description: result.demo_mode 
+          ? "Running in demo mode. Configure M-Pesa API keys for live payments."
+          : "Enter your M-Pesa PIN on your phone to complete payment.",
+      });
+    } catch {
+      toast({ title: "Error", description: "Failed to initiate M-Pesa payment", variant: "destructive" });
+    }
+  };
+
   const handleStatusChange = async (id: string, status: InvoiceStatus) => {
     try {
       await updateStatus.mutateAsync({ id, status });
