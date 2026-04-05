@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, Search, FileText, CheckCircle, AlertCircle, Clock } from "lucide-react";
+import { Plus, Search, FileText, CheckCircle, AlertCircle, Clock, Smartphone, Banknote, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,7 +8,9 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useInvoices, useCreateInvoice, useUpdateInvoiceStatus, InvoiceStatus } from "@/hooks/useBilling";
+import { usePayments, useInitiateMpesa, useRecordPayment } from "@/hooks/usePayments";
 import { usePatients } from "@/hooks/useHospitalData";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -19,14 +21,27 @@ const statusColors: Record<string, string> = {
   cancelled: "bg-gray-100 text-gray-800",
 };
 
+const paymentStatusColors: Record<string, string> = {
+  pending: "bg-yellow-100 text-yellow-800",
+  processing: "bg-blue-100 text-blue-800",
+  completed: "bg-green-100 text-green-800",
+  failed: "bg-red-100 text-red-800",
+  cancelled: "bg-gray-100 text-gray-800",
+  refunded: "bg-purple-100 text-purple-800",
+};
+
 export default function Billing() {
   const { data: invoices, isLoading } = useInvoices();
   const { data: patients } = usePatients();
+  const { data: payments, isLoading: paymentsLoading } = usePayments();
   const createInvoice = useCreateInvoice();
   const updateStatus = useUpdateInvoiceStatus();
+  const initiateMpesa = useInitiateMpesa();
+  const recordPayment = useRecordPayment();
   const { toast } = useToast();
   
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isMpesaDialogOpen, setIsMpesaDialogOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
 
@@ -35,6 +50,13 @@ export default function Billing() {
     amount: "",
     due_date: "",
     notes: "",
+  });
+
+  const [mpesaPayment, setMpesaPayment] = useState({
+    patient_id: "",
+    phone_number: "",
+    amount: "",
+    invoice_id: "",
   });
 
   const handleCreateInvoice = async (e: React.FormEvent) => {
