@@ -2,7 +2,7 @@ import {
   LayoutDashboard, Users, Calendar, Stethoscope, HeartPulse,
   FlaskConical, Pill, Receipt, Package, BedDouble, Activity,
   Video, Brain, BarChart3, UserCog, Plug, Shield, Settings,
-  Search, Bell, ChevronDown, Sparkles, LogOut, FileText,
+  Search, Bell, ChevronDown, Sparkles, LogOut, FileText, ShieldCheck, FileBarChart,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -39,6 +39,8 @@ const intelligenceModules = [
 
 const adminModules = [
   { title: "Billing", url: "/billing", icon: Receipt },
+  { title: "Insurance Claims", url: "/insurance-claims", icon: ShieldCheck },
+  { title: "MOH Reports", url: "/moh-reports", icon: FileBarChart },
   { title: "Inventory", url: "/inventory", icon: Package },
   { title: "Staff", url: "/staff", icon: UserCog },
   { title: "Security Logs", url: "/security", icon: Shield },
