@@ -248,7 +248,7 @@ export function useGenerateMOHReport() {
         .from("moh_reports")
         .insert({
           hospital_id: hospitalId!,
-          report_type: params.report_type,
+          report_type: params.report_type as any,
           reporting_period_start: start,
           reporting_period_end: end,
           report_data: reportData,
