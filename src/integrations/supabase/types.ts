@@ -588,6 +588,90 @@ export type Database = {
           },
         ]
       }
+      insurance_claims: {
+        Row: {
+          approved_amount: number | null
+          claim_amount: number
+          claim_number: string
+          claim_status: Database["public"]["Enums"]["claim_status"]
+          created_at: string
+          diagnosis_codes: string[] | null
+          hospital_id: string
+          id: string
+          invoice_id: string | null
+          notes: string | null
+          patient_id: string
+          rejection_reason: string | null
+          response_date: string | null
+          scheme_name: string | null
+          sha_member_number: string | null
+          submission_date: string | null
+          submitted_by: string | null
+          supporting_documents: string[] | null
+          treatment_description: string | null
+          updated_at: string
+        }
+        Insert: {
+          approved_amount?: number | null
+          claim_amount: number
+          claim_number?: string
+          claim_status?: Database["public"]["Enums"]["claim_status"]
+          created_at?: string
+          diagnosis_codes?: string[] | null
+          hospital_id: string
+          id?: string
+          invoice_id?: string | null
+          notes?: string | null
+          patient_id: string
+          rejection_reason?: string | null
+          response_date?: string | null
+          scheme_name?: string | null
+          sha_member_number?: string | null
+          submission_date?: string | null
+          submitted_by?: string | null
+          supporting_documents?: string[] | null
+          treatment_description?: string | null
+          updated_at?: string
+        }
+        Update: {
+          approved_amount?: number | null
+          claim_amount?: number
+          claim_number?: string
+          claim_status?: Database["public"]["Enums"]["claim_status"]
+          created_at?: string
+          diagnosis_codes?: string[] | null
+          hospital_id?: string
+          id?: string
+          invoice_id?: string | null
+          notes?: string | null
+          patient_id?: string
+          rejection_reason?: string | null
+          response_date?: string | null
+          scheme_name?: string | null
+          sha_member_number?: string | null
+          submission_date?: string | null
+          submitted_by?: string | null
+          supporting_documents?: string[] | null
+          treatment_description?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "insurance_claims_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "insurance_claims_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       invoices: {
         Row: {
           amount: number
@@ -871,6 +955,54 @@ export type Database = {
           },
         ]
       }
+      moh_reports: {
+        Row: {
+          approved_by: string | null
+          created_at: string
+          hospital_id: string
+          id: string
+          notes: string | null
+          report_data: Json
+          report_type: Database["public"]["Enums"]["moh_report_type"]
+          reporting_period_end: string
+          reporting_period_start: string
+          submission_status: string
+          submitted_at: string | null
+          submitted_by: string | null
+          updated_at: string
+        }
+        Insert: {
+          approved_by?: string | null
+          created_at?: string
+          hospital_id: string
+          id?: string
+          notes?: string | null
+          report_data?: Json
+          report_type: Database["public"]["Enums"]["moh_report_type"]
+          reporting_period_end: string
+          reporting_period_start: string
+          submission_status?: string
+          submitted_at?: string | null
+          submitted_by?: string | null
+          updated_at?: string
+        }
+        Update: {
+          approved_by?: string | null
+          created_at?: string
+          hospital_id?: string
+          id?: string
+          notes?: string | null
+          report_data?: Json
+          report_type?: Database["public"]["Enums"]["moh_report_type"]
+          reporting_period_end?: string
+          reporting_period_start?: string
+          submission_status?: string
+          submitted_at?: string | null
+          submitted_by?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       nurse_notes: {
         Row: {
           admission_id: string
@@ -1023,6 +1155,78 @@ export type Database = {
             columns: ["hospital_id"]
             isOneToOne: false
             referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payments: {
+        Row: {
+          amount: number
+          created_at: string
+          created_by: string | null
+          hospital_id: string
+          id: string
+          invoice_id: string | null
+          mpesa_checkout_request_id: string | null
+          mpesa_receipt_number: string | null
+          notes: string | null
+          paid_at: string | null
+          patient_id: string
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          payment_status: Database["public"]["Enums"]["payment_status"]
+          phone_number: string | null
+          transaction_reference: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          created_by?: string | null
+          hospital_id: string
+          id?: string
+          invoice_id?: string | null
+          mpesa_checkout_request_id?: string | null
+          mpesa_receipt_number?: string | null
+          notes?: string | null
+          paid_at?: string | null
+          patient_id: string
+          payment_method?: Database["public"]["Enums"]["payment_method"]
+          payment_status?: Database["public"]["Enums"]["payment_status"]
+          phone_number?: string | null
+          transaction_reference?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          created_by?: string | null
+          hospital_id?: string
+          id?: string
+          invoice_id?: string | null
+          mpesa_checkout_request_id?: string | null
+          mpesa_receipt_number?: string | null
+          notes?: string | null
+          paid_at?: string | null
+          patient_id?: string
+          payment_method?: Database["public"]["Enums"]["payment_method"]
+          payment_status?: Database["public"]["Enums"]["payment_status"]
+          phone_number?: string | null
+          transaction_reference?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
             referencedColumns: ["id"]
           },
         ]
@@ -1520,6 +1724,15 @@ export type Database = {
         | "completed"
         | "cancelled"
         | "no_show"
+      claim_status:
+        | "draft"
+        | "submitted"
+        | "under_review"
+        | "approved"
+        | "partially_approved"
+        | "rejected"
+        | "paid"
+        | "appealed"
       invoice_status: "pending" | "paid" | "overdue" | "cancelled"
       lab_order_status:
         | "pending"
@@ -1527,6 +1740,20 @@ export type Database = {
         | "processing"
         | "completed"
         | "cancelled"
+      moh_report_type:
+        | "moh_705a"
+        | "moh_705b"
+        | "moh_711"
+        | "moh_333"
+        | "moh_406"
+      payment_method: "cash" | "mpesa" | "card" | "insurance" | "bank_transfer"
+      payment_status:
+        | "pending"
+        | "processing"
+        | "completed"
+        | "failed"
+        | "cancelled"
+        | "refunded"
       prescription_status:
         | "pending"
         | "dispensed"
@@ -1689,6 +1916,16 @@ export const Constants = {
         "cancelled",
         "no_show",
       ],
+      claim_status: [
+        "draft",
+        "submitted",
+        "under_review",
+        "approved",
+        "partially_approved",
+        "rejected",
+        "paid",
+        "appealed",
+      ],
       invoice_status: ["pending", "paid", "overdue", "cancelled"],
       lab_order_status: [
         "pending",
@@ -1696,6 +1933,22 @@ export const Constants = {
         "processing",
         "completed",
         "cancelled",
+      ],
+      moh_report_type: [
+        "moh_705a",
+        "moh_705b",
+        "moh_711",
+        "moh_333",
+        "moh_406",
+      ],
+      payment_method: ["cash", "mpesa", "card", "insurance", "bank_transfer"],
+      payment_status: [
+        "pending",
+        "processing",
+        "completed",
+        "failed",
+        "cancelled",
+        "refunded",
       ],
       prescription_status: [
         "pending",

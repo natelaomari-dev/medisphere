@@ -24,6 +24,8 @@ import Telemedicine from "./pages/Telemedicine";
 import Billing from "./pages/Billing";
 import MedicalRecords from "./pages/MedicalRecords";
 import InpatientManagement from "./pages/InpatientManagement";
+import InsuranceClaims from "./pages/InsuranceClaims";
+import MOHReports from "./pages/MOHReports";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import NotFound from "./pages/NotFound";
 
@@ -78,6 +80,8 @@ const AppRoutes = () => (
         <Route path="/telemedicine" element={<Telemedicine />} />
         <Route path="/analytics" element={<PlaceholderPage />} />
         <Route path="/billing" element={<Billing />} />
+        <Route path="/insurance-claims" element={<InsuranceClaims />} />
+        <Route path="/moh-reports" element={<MOHReports />} />
         <Route path="/inventory" element={<PlaceholderPage />} />
         <Route path="/staff" element={<StaffManagement />} />
         <Route path="/security" element={<PlaceholderPage />} />
