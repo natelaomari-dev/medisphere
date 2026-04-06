@@ -49,6 +49,10 @@ const adminModules = [
   { title: "Settings", url: "/settings", icon: Settings },
 ];
 
+const platformModules = [
+  { title: "Platform Admin", url: "/super-admin", icon: Crown },
+];
+
 function NavSection({ label, items, collapsed }: { label: string; items: typeof mainModules; collapsed: boolean }) {
   const location = useLocation();
   return (
