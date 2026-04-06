@@ -443,6 +443,62 @@ export type Database = {
           },
         ]
       }
+      hospital_subscriptions: {
+        Row: {
+          created_at: string
+          current_period_end: string | null
+          current_period_start: string | null
+          features: Json | null
+          hospital_id: string
+          id: string
+          max_patients: number | null
+          max_users: number | null
+          monthly_fee: number
+          plan: Database["public"]["Enums"]["subscription_plan"]
+          status: Database["public"]["Enums"]["subscription_status"]
+          trial_ends_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          current_period_end?: string | null
+          current_period_start?: string | null
+          features?: Json | null
+          hospital_id: string
+          id?: string
+          max_patients?: number | null
+          max_users?: number | null
+          monthly_fee?: number
+          plan?: Database["public"]["Enums"]["subscription_plan"]
+          status?: Database["public"]["Enums"]["subscription_status"]
+          trial_ends_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          current_period_end?: string | null
+          current_period_start?: string | null
+          features?: Json | null
+          hospital_id?: string
+          id?: string
+          max_patients?: number | null
+          max_users?: number | null
+          monthly_fee?: number
+          plan?: Database["public"]["Enums"]["subscription_plan"]
+          status?: Database["public"]["Enums"]["subscription_status"]
+          trial_ends_at?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hospital_subscriptions_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: true
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       hospitals: {
         Row: {
           address: string | null
@@ -1231,6 +1287,57 @@ export type Database = {
           },
         ]
       }
+      platform_admins: {
+        Row: {
+          created_at: string
+          granted_by: string | null
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          granted_by?: string | null
+          id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          granted_by?: string | null
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      platform_audit_logs: {
+        Row: {
+          action: string
+          actor_id: string
+          created_at: string
+          details: Json | null
+          id: string
+          target_id: string | null
+          target_type: string | null
+        }
+        Insert: {
+          action: string
+          actor_id: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          target_id?: string | null
+          target_type?: string | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          target_id?: string | null
+          target_type?: string | null
+        }
+        Relationships: []
+      }
       prescriptions: {
         Row: {
           created_at: string
@@ -1707,6 +1814,7 @@ export type Database = {
         Args: { _hospital_id: string; _user_id: string }
         Returns: boolean
       }
+      is_platform_admin: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
       admission_status: "admitted" | "discharged" | "transferred" | "deceased"
@@ -1760,6 +1868,13 @@ export type Database = {
         | "partially_dispensed"
         | "cancelled"
       risk_level: "low" | "medium" | "high" | "critical"
+      subscription_plan: "free" | "basic" | "professional" | "enterprise"
+      subscription_status:
+        | "active"
+        | "trial"
+        | "suspended"
+        | "cancelled"
+        | "past_due"
       teleconsult_status:
         | "scheduled"
         | "in_progress"
@@ -1957,6 +2072,14 @@ export const Constants = {
         "cancelled",
       ],
       risk_level: ["low", "medium", "high", "critical"],
+      subscription_plan: ["free", "basic", "professional", "enterprise"],
+      subscription_status: [
+        "active",
+        "trial",
+        "suspended",
+        "cancelled",
+        "past_due",
+      ],
       teleconsult_status: [
         "scheduled",
         "in_progress",
