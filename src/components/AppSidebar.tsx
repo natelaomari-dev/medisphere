@@ -10,6 +10,7 @@ import { useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useHospital } from "@/hooks/useHospital";
 import { usePlatformAdmin } from "@/hooks/usePlatformAdmin";
+import { usePermissions } from "@/hooks/usePermissions";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
   SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem,
@@ -87,6 +88,7 @@ export function AppSidebar() {
   const { user, signOut } = useAuth();
   const { hospitalName } = useHospital();
   const { isPlatformAdmin } = usePlatformAdmin();
+  const { filterNavItems } = usePermissions();
 
   return (
     <Sidebar collapsible="icon" className="border-r border-sidebar-border">
