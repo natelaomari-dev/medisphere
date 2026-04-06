@@ -3,11 +3,13 @@ import {
   FlaskConical, Pill, Receipt, Package, BedDouble, Activity,
   Video, Brain, BarChart3, UserCog, Plug, Shield, Settings,
   Search, Bell, ChevronDown, Sparkles, LogOut, FileText, ShieldCheck, FileBarChart,
+  Crown,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useHospital } from "@/hooks/useHospital";
+import { usePlatformAdmin } from "@/hooks/usePlatformAdmin";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
   SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem,
