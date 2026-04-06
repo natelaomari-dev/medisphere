@@ -107,10 +107,10 @@ export function AppSidebar() {
       </SidebarHeader>
 
       <SidebarContent className="py-2">
-        <NavSection label="Overview" items={mainModules} collapsed={collapsed} />
-        <NavSection label="Clinical" items={clinicalModules} collapsed={collapsed} />
-        <NavSection label="Intelligence" items={intelligenceModules} collapsed={collapsed} />
-        <NavSection label="Administration" items={adminModules} collapsed={collapsed} />
+        <NavSection label="Overview" items={filterNavItems(mainModules)} collapsed={collapsed} />
+        <NavSection label="Clinical" items={filterNavItems(clinicalModules)} collapsed={collapsed} />
+        <NavSection label="Intelligence" items={filterNavItems(intelligenceModules)} collapsed={collapsed} />
+        <NavSection label="Administration" items={filterNavItems(adminModules)} collapsed={collapsed} />
         {isPlatformAdmin && <NavSection label="Platform" items={platformModules} collapsed={collapsed} />}
       </SidebarContent>
 
