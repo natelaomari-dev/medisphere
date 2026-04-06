@@ -3,11 +3,14 @@ import {
   FlaskConical, Pill, Receipt, Package, BedDouble, Activity,
   Video, Brain, BarChart3, UserCog, Plug, Shield, Settings,
   Search, Bell, ChevronDown, Sparkles, LogOut, FileText, ShieldCheck, FileBarChart,
+  Crown,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useHospital } from "@/hooks/useHospital";
+import { usePlatformAdmin } from "@/hooks/usePlatformAdmin";
+import { usePermissions } from "@/hooks/usePermissions";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
   SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem,
@@ -47,6 +50,10 @@ const adminModules = [
   { title: "Settings", url: "/settings", icon: Settings },
 ];
 
+const platformModules = [
+  { title: "Platform Admin", url: "/super-admin", icon: Crown },
+];
+
 function NavSection({ label, items, collapsed }: { label: string; items: typeof mainModules; collapsed: boolean }) {
   const location = useLocation();
   return (
@@ -80,6 +87,8 @@ export function AppSidebar() {
   const collapsed = state === "collapsed";
   const { user, signOut } = useAuth();
   const { hospitalName } = useHospital();
+  const { isPlatformAdmin } = usePlatformAdmin();
+  const { filterNavItems } = usePermissions();
 
   return (
     <Sidebar collapsible="icon" className="border-r border-sidebar-border">
@@ -98,10 +107,11 @@ export function AppSidebar() {
       </SidebarHeader>
 
       <SidebarContent className="py-2">
-        <NavSection label="Overview" items={mainModules} collapsed={collapsed} />
-        <NavSection label="Clinical" items={clinicalModules} collapsed={collapsed} />
-        <NavSection label="Intelligence" items={intelligenceModules} collapsed={collapsed} />
-        <NavSection label="Administration" items={adminModules} collapsed={collapsed} />
+        <NavSection label="Overview" items={filterNavItems(mainModules)} collapsed={collapsed} />
+        <NavSection label="Clinical" items={filterNavItems(clinicalModules)} collapsed={collapsed} />
+        <NavSection label="Intelligence" items={filterNavItems(intelligenceModules)} collapsed={collapsed} />
+        <NavSection label="Administration" items={filterNavItems(adminModules)} collapsed={collapsed} />
+        {isPlatformAdmin && <NavSection label="Platform" items={platformModules} collapsed={collapsed} />}
       </SidebarContent>
 
       <SidebarFooter className="px-4 py-3 border-t border-sidebar-border">

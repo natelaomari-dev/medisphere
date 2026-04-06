@@ -27,6 +27,7 @@ import InpatientManagement from "./pages/InpatientManagement";
 import InsuranceClaims from "./pages/InsuranceClaims";
 import MOHReports from "./pages/MOHReports";
 import PlaceholderPage from "./pages/PlaceholderPage";
+import SuperAdmin from "./pages/SuperAdmin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -86,6 +87,7 @@ const AppRoutes = () => (
         <Route path="/staff" element={<StaffManagement />} />
         <Route path="/security" element={<PlaceholderPage />} />
         <Route path="/settings" element={<PlaceholderPage />} />
+        <Route path="/super-admin" element={<SuperAdmin />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
