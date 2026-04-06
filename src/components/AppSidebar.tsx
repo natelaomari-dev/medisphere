@@ -109,6 +109,7 @@ export function AppSidebar() {
         <NavSection label="Clinical" items={clinicalModules} collapsed={collapsed} />
         <NavSection label="Intelligence" items={intelligenceModules} collapsed={collapsed} />
         <NavSection label="Administration" items={adminModules} collapsed={collapsed} />
+        {isPlatformAdmin && <NavSection label="Platform" items={platformModules} collapsed={collapsed} />}
       </SidebarContent>
 
       <SidebarFooter className="px-4 py-3 border-t border-sidebar-border">
