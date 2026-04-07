@@ -126,7 +126,7 @@ export function useUpdateClaimStatus() {
       approved_amount?: number;
       rejection_reason?: string;
     }) => {
-      const update: Record<string, any> = { claim_status };
+      const update: any = { claim_status };
       if (claim_status === "submitted") update.submission_date = new Date().toISOString();
       if (approved_amount !== undefined) update.approved_amount = approved_amount;
       if (rejection_reason) update.rejection_reason = rejection_reason;
