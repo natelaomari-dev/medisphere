@@ -1,4 +1,4 @@
-import { Brain, ArrowRight, Shield, Zap, Activity, Users, BarChart3, Sparkles, Globe, Heart, Building2, ChevronRight } from "lucide-react";
+import { Brain, ArrowRight, Shield, Zap, Activity, Users, BarChart3, Sparkles, Globe, Heart, Building2, ChevronRight, Check, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import heroDashboard from "@/assets/hero-dashboard.jpg";
@@ -24,7 +24,78 @@ const stats = [
 const modules = [
   "Dashboard", "Patients", "Appointments", "Doctors", "Nurses", "Laboratory",
   "Pharmacy", "Billing", "Inventory", "Inpatients", "ICU Monitoring", "Telemedicine",
-  "AI Insights", "Analytics", "Staff", "Security Logs",
+  "AI Insights", "Smart Triage", "MOH Reports", "Insurance Claims",
+];
+
+const pricingPlans = [
+  {
+    name: "Free",
+    price: "0",
+    period: "forever",
+    desc: "For small clinics getting started",
+    highlight: false,
+    features: [
+      { text: "Up to 5 staff users", included: true },
+      { text: "100 patient records", included: true },
+      { text: "Basic dashboard", included: true },
+      { text: "Appointments & scheduling", included: true },
+      { text: "AI Insights", included: false },
+      { text: "Smart Triage", included: false },
+      { text: "ICU Monitoring", included: false },
+      { text: "MOH Reports", included: false },
+    ],
+  },
+  {
+    name: "Basic",
+    price: "4,999",
+    period: "/month",
+    desc: "For growing clinics and dispensaries",
+    highlight: false,
+    features: [
+      { text: "Up to 15 staff users", included: true },
+      { text: "1,000 patient records", included: true },
+      { text: "Full EMR & billing", included: true },
+      { text: "Laboratory & pharmacy", included: true },
+      { text: "Basic AI Insights", included: true },
+      { text: "Smart Triage", included: false },
+      { text: "ICU Monitoring", included: false },
+      { text: "MOH Reports", included: false },
+    ],
+  },
+  {
+    name: "Professional",
+    price: "14,999",
+    period: "/month",
+    desc: "For sub-county and district hospitals",
+    highlight: true,
+    features: [
+      { text: "Up to 50 staff users", included: true },
+      { text: "Unlimited patients", included: true },
+      { text: "Full EMR, billing & inpatient", included: true },
+      { text: "AI Insights & Smart Triage", included: true },
+      { text: "ICU Monitoring", included: true },
+      { text: "Insurance claims (SHA)", included: true },
+      { text: "MOH Reports (705, 711)", included: true },
+      { text: "Telemedicine", included: true },
+    ],
+  },
+  {
+    name: "Enterprise",
+    price: "Custom",
+    period: "",
+    desc: "For county referral & teaching hospitals",
+    highlight: false,
+    features: [
+      { text: "Unlimited staff users", included: true },
+      { text: "Unlimited patients", included: true },
+      { text: "All modules included", included: true },
+      { text: "Advanced AI & analytics", included: true },
+      { text: "Multi-branch support", included: true },
+      { text: "Custom integrations", included: true },
+      { text: "Dedicated support & SLA", included: true },
+      { text: "On-premise option", included: true },
+    ],
+  },
 ];
 
 export default function LandingPage() {
@@ -42,6 +113,7 @@ export default function LandingPage() {
           <div className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
             <a href="#features" className="hover:text-foreground transition-colors">Features</a>
             <a href="#modules" className="hover:text-foreground transition-colors">Modules</a>
+            <a href="#pricing" className="hover:text-foreground transition-colors">Pricing</a>
             <a href="#stats" className="hover:text-foreground transition-colors">Impact</a>
           </div>
           <div className="flex items-center gap-3">
@@ -145,8 +217,83 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Pricing */}
+      <section id="pricing" className="py-24 px-6">
+        <div className="max-w-6xl mx-auto">
+          <motion.div {...fadeUp} className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight mb-4">
+              Simple, transparent pricing
+            </h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              From rural dispensaries to county referral hospitals. Pay only for what you need, scale as you grow.
+            </p>
+            <p className="text-xs text-muted-foreground mt-2">All prices in KES. 14-day free trial on all paid plans.</p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            {pricingPlans.map((plan, i) => (
+              <motion.div
+                key={plan.name}
+                {...fadeUp}
+                transition={{ delay: i * 0.05 }}
+                className={`relative rounded-xl border p-6 flex flex-col ${
+                  plan.highlight
+                    ? "border-primary bg-primary/5 shadow-lg shadow-primary/10"
+                    : "border-border bg-card"
+                }`}
+              >
+                {plan.highlight && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-primary text-primary-foreground text-[10px] font-semibold uppercase tracking-wider">
+                    Most Popular
+                  </div>
+                )}
+                <div className="mb-5">
+                  <h3 className="text-sm font-semibold text-foreground mb-1">{plan.name}</h3>
+                  <p className="text-xs text-muted-foreground mb-3">{plan.desc}</p>
+                  <div className="flex items-baseline gap-1">
+                    {plan.price === "Custom" ? (
+                      <span className="text-2xl font-bold text-foreground">Custom</span>
+                    ) : (
+                      <>
+                        <span className="text-xs text-muted-foreground">KES</span>
+                        <span className="text-3xl font-bold text-foreground">{plan.price}</span>
+                        <span className="text-xs text-muted-foreground">{plan.period}</span>
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                <ul className="space-y-2.5 flex-1 mb-6">
+                  {plan.features.map((f) => (
+                    <li key={f.text} className="flex items-start gap-2 text-xs">
+                      {f.included ? (
+                        <Check className="h-3.5 w-3.5 text-success shrink-0 mt-0.5" />
+                      ) : (
+                        <X className="h-3.5 w-3.5 text-muted-foreground/40 shrink-0 mt-0.5" />
+                      )}
+                      <span className={f.included ? "text-foreground" : "text-muted-foreground/60"}>{f.text}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <Link
+                  to="/auth"
+                  className={`w-full text-center py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                    plan.highlight
+                      ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                      : "border border-border text-foreground hover:bg-muted"
+                  }`}
+                >
+                  {plan.price === "Custom" ? "Contact Sales" : plan.price === "0" ? "Get Started Free" : "Start Free Trial"}
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Africa Section */}
-      <section className="py-24 px-6">
+      <section className="py-24 px-6 border-t border-border">
         <div className="max-w-6xl mx-auto">
           <motion.div {...fadeUp} className="rounded-2xl border border-border bg-gradient-to-br from-primary/5 to-background p-10 md:p-16 flex flex-col md:flex-row items-center gap-10">
             <div className="flex-1">
@@ -160,7 +307,7 @@ export default function LandingPage() {
                 Offline-first architecture, WhatsApp patient communication, M-Pesa payments, community health worker interfaces, and rural clinic support. Works even with low bandwidth.
               </p>
               <div className="space-y-3">
-                {["Offline-first functionality", "WhatsApp triage & reminders", "Mobile money payments", "Low-bandwidth optimized"].map(item => (
+                {["Offline-first functionality", "WhatsApp triage & reminders", "Mobile money payments (M-Pesa)", "Low-bandwidth optimized"].map(item => (
                   <div key={item} className="flex items-center gap-2 text-sm text-foreground">
                     <Heart className="h-4 w-4 text-success shrink-0" /> {item}
                   </div>
@@ -197,8 +344,9 @@ export default function LandingPage() {
               <Brain className="h-3 w-3 text-primary-foreground" />
             </div>
             <span className="text-xs font-semibold text-foreground">MediSphere AI</span>
+            <span className="text-[10px] text-muted-foreground">by Infera Tech Solutions</span>
           </div>
-          <p className="text-xs text-muted-foreground">© 2026 MediSphere AI. Built for the future of healthcare.</p>
+          <p className="text-xs text-muted-foreground">© 2026 Infera Tech Solutions. All rights reserved.</p>
         </div>
       </footer>
     </div>

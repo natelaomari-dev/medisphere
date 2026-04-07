@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { UserPlus, Users, Shield, Clock, Mail } from "lucide-react";
+import { UserPlus, Users, Clock, Mail, Search, XCircle, UserX } from "lucide-react";
 import { toast } from "sonner";
 import type { Database } from "@/integrations/supabase/types";
 
@@ -42,7 +42,7 @@ function useHospitalMembers(hospitalId: string | null) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("hospital_members")
-        .select("*, profiles(full_name, email:phone, avatar_url)")
+        .select("*, profiles(full_name, phone, avatar_url)")
         .eq("hospital_id", hospitalId!)
         .eq("is_active", true)
         .order("joined_at", { ascending: false });
@@ -92,6 +92,28 @@ function useUpdateMemberRole() {
   });
 }
 
+function useDeactivateMember() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("hospital_members").update({ is_active: false }).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["hospital_members"] }),
+  });
+}
+
+function useRevokeInvitation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("staff_invitations").update({ accepted_at: new Date().toISOString() }).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["staff_invitations"] }),
+  });
+}
+
 export default function StaffManagement() {
   const { hospitalId, userRole } = useHospital();
   const { user } = useAuth();
@@ -99,10 +121,14 @@ export default function StaffManagement() {
   const { data: invitations, isLoading: invitesLoading } = usePendingInvitations(hospitalId);
   const inviteStaff = useInviteStaff();
   const updateRole = useUpdateMemberRole();
+  const deactivateMember = useDeactivateMember();
+  const revokeInvitation = useRevokeInvitation();
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteRole, setInviteRole] = useState<AppRole>("doctor");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [roleFilter, setRoleFilter] = useState<string>("all");
 
   const isAdmin = userRole === "admin";
 
@@ -132,10 +158,38 @@ export default function StaffManagement() {
     }
   };
 
+  const handleDeactivate = async (memberId: string, name: string) => {
+    if (!confirm(`Deactivate ${name}? They will lose access to this hospital.`)) return;
+    try {
+      await deactivateMember.mutateAsync(memberId);
+      toast.success(`${name} has been deactivated`);
+    } catch {
+      toast.error("Failed to deactivate member");
+    }
+  };
+
+  const handleRevoke = async (invId: string, email: string) => {
+    if (!confirm(`Revoke invitation to ${email}?`)) return;
+    try {
+      await revokeInvitation.mutateAsync(invId);
+      toast.success(`Invitation to ${email} revoked`);
+    } catch {
+      toast.error("Failed to revoke invitation");
+    }
+  };
+
   const roleCounts = members?.reduce((acc, m) => {
     acc[m.role] = (acc[m.role] || 0) + 1;
     return acc;
   }, {} as Record<string, number>) ?? {};
+
+  const filteredMembers = members?.filter((m) => {
+    const profile = m.profiles as any;
+    const name = (profile?.full_name || "").toLowerCase();
+    const matchesSearch = !searchQuery || name.includes(searchQuery.toLowerCase());
+    const matchesRole = roleFilter === "all" || m.role === roleFilter;
+    return matchesSearch && matchesRole;
+  });
 
   return (
     <div className="space-y-6">
@@ -184,7 +238,7 @@ export default function StaffManagement() {
       {/* Role summary cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         {(Object.keys(ROLE_LABELS) as AppRole[]).map((role) => (
-          <Card key={role}>
+          <Card key={role} className={`cursor-pointer transition-all ${roleFilter === role ? "ring-2 ring-primary" : ""}`} onClick={() => setRoleFilter(roleFilter === role ? "all" : role)}>
             <CardContent className="p-4 text-center">
               <p className="text-2xl font-bold text-foreground">{roleCounts[role] || 0}</p>
               <p className="text-xs text-muted-foreground mt-0.5">{ROLE_LABELS[role]}s</p>
@@ -193,17 +247,33 @@ export default function StaffManagement() {
         ))}
       </div>
 
+      {/* Search */}
+      <div className="relative max-w-sm">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Input
+          placeholder="Search staff by name..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="pl-9"
+        />
+      </div>
+
       {/* Members Table */}
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
             <Users className="h-4 w-4" /> Active Members
+            {roleFilter !== "all" && (
+              <Badge variant="secondary" className="ml-2 text-xs cursor-pointer" onClick={() => setRoleFilter("all")}>
+                {ROLE_LABELS[roleFilter as AppRole]} <XCircle className="h-3 w-3 ml-1" />
+              </Badge>
+            )}
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
           {membersLoading ? (
             <div className="p-8 text-center text-sm text-muted-foreground">Loading members...</div>
-          ) : !members?.length ? (
+          ) : !filteredMembers?.length ? (
             <div className="p-8 text-center text-sm text-muted-foreground">No members found</div>
           ) : (
             <Table>
@@ -213,10 +283,11 @@ export default function StaffManagement() {
                   <TableHead>Role</TableHead>
                   <TableHead>Joined</TableHead>
                   {isAdmin && <TableHead className="w-[140px]">Change Role</TableHead>}
+                  {isAdmin && <TableHead className="w-[80px]"></TableHead>}
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {members.map((m) => {
+                {filteredMembers.map((m) => {
                   const profile = m.profiles as any;
                   return (
                     <TableRow key={m.id}>
@@ -252,6 +323,20 @@ export default function StaffManagement() {
                           )}
                         </TableCell>
                       )}
+                      {isAdmin && (
+                        <TableCell>
+                          {m.user_id !== user?.id && (
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 text-destructive hover:text-destructive"
+                              onClick={() => handleDeactivate(m.id, profile?.full_name || "this member")}
+                            >
+                              <UserX className="h-4 w-4" />
+                            </Button>
+                          )}
+                        </TableCell>
+                      )}
                     </TableRow>
                   );
                 })}
@@ -282,6 +367,7 @@ export default function StaffManagement() {
                     <TableHead>Role</TableHead>
                     <TableHead>Sent</TableHead>
                     <TableHead>Expires</TableHead>
+                    <TableHead className="w-[80px]"></TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -303,6 +389,16 @@ export default function StaffManagement() {
                       </TableCell>
                       <TableCell className="text-sm text-muted-foreground">
                         {new Date(inv.expires_at).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-7 text-xs text-destructive hover:text-destructive"
+                          onClick={() => handleRevoke(inv.id, inv.email)}
+                        >
+                          Revoke
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))}
