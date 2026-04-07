@@ -32,7 +32,7 @@ export function HospitalProvider({ children }: { children: ReactNode }) {
       .eq("user_id", user.id)
       .eq("is_active", true)
       .limit(1)
-      .single();
+      .maybeSingle();
 
     if (membership) {
       setHospitalId(membership.hospital_id);
