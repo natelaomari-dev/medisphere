@@ -28,6 +28,9 @@ import InsuranceClaims from "./pages/InsuranceClaims";
 import MOHReports from "./pages/MOHReports";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import SuperAdmin from "./pages/SuperAdmin";
+import Settings from "./pages/Settings";
+import Analytics from "./pages/Analytics";
+import Inventory from "./pages/Inventory";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
