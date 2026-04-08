@@ -82,14 +82,14 @@ const AppRoutes = () => (
         <Route path="/medical-records" element={<MedicalRecords />} />
         <Route path="/icu" element={<ICUMonitoring />} />
         <Route path="/telemedicine" element={<Telemedicine />} />
-        <Route path="/analytics" element={<PlaceholderPage />} />
+        <Route path="/analytics" element={<Analytics />} />
         <Route path="/billing" element={<Billing />} />
         <Route path="/insurance-claims" element={<InsuranceClaims />} />
         <Route path="/moh-reports" element={<MOHReports />} />
-        <Route path="/inventory" element={<PlaceholderPage />} />
+        <Route path="/inventory" element={<Inventory />} />
         <Route path="/staff" element={<StaffManagement />} />
         <Route path="/security" element={<PlaceholderPage />} />
-        <Route path="/settings" element={<PlaceholderPage />} />
+        <Route path="/settings" element={<Settings />} />
         <Route path="/super-admin" element={<SuperAdmin />} />
       </Route>
       <Route path="*" element={<NotFound />} />
