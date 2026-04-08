@@ -1,15 +1,205 @@
 import { useState } from "react";
-import { Search, Filter, Plus, ChevronRight, X } from "lucide-react";
+import { Search, Filter, Plus, ChevronRight, X, Phone, Mail, MapPin, Heart, AlertCircle, Calendar } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePatients, useAddPatient } from "@/hooks/useHospitalData";
 import { toast } from "sonner";
+import { format } from "date-fns";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
+import { useHospital } from "@/hooks/useHospital";
 
-const riskColors = { low: "bg-success/10 text-success", medium: "bg-warning/10 text-warning", high: "bg-critical/10 text-critical", critical: "bg-critical/10 text-critical" };
-const statusColors: Record<string, string> = { outpatient: "text-info", inpatient: "text-primary", icu: "text-critical", discharged: "text-success", deceased: "text-muted-foreground" };
+const riskColors = { low: "bg-green-500/10 text-green-600", medium: "bg-amber-500/10 text-amber-600", high: "bg-red-500/10 text-red-600", critical: "bg-red-500/10 text-red-600" };
+const statusColors: Record<string, string> = { outpatient: "text-blue-500", inpatient: "text-primary", icu: "text-red-500", discharged: "text-green-500", deceased: "text-muted-foreground" };
+
+interface PatientType {
+  id: string;
+  first_name: string;
+  last_name: string;
+  patient_id: string;
+  gender: string;
+  date_of_birth: string;
+  phone: string | null;
+  email: string | null;
+  address: string | null;
+  blood_type: string | null;
+  ward: string | null;
+  status: string | null;
+  risk_level: string | null;
+  ai_risk_score: number | null;
+  allergies: string[] | null;
+  chronic_conditions: string[] | null;
+  insurance_provider: string | null;
+  insurance_number: string | null;
+  emergency_contact_name: string | null;
+  emergency_contact_phone: string | null;
+  created_at: string;
+}
+
+function PatientDetail({ patient, onClose }: { patient: PatientType; onClose: () => void }) {
+  const { hospitalId } = useHospital();
+
+  const { data: vitals = [] } = useQuery({
+    queryKey: ["patient-vitals", patient.id],
+    queryFn: async () => {
+      const { data } = await supabase.from("vitals").select("*").eq("patient_id", patient.id).order("created_at", { ascending: false }).limit(5);
+      return data || [];
+    },
+  });
+
+  const { data: appointments = [] } = useQuery({
+    queryKey: ["patient-appointments", patient.id],
+    queryFn: async () => {
+      const { data } = await supabase.from("appointments").select("*, doctors(full_name)").eq("patient_id", patient.id).order("appointment_date", { ascending: false }).limit(10);
+      return data || [];
+    },
+  });
+
+  const { data: records = [] } = useQuery({
+    queryKey: ["patient-records", patient.id],
+    queryFn: async () => {
+      const { data } = await supabase.from("medical_records").select("*, doctors(full_name)").eq("patient_id", patient.id).order("created_at", { ascending: false }).limit(10);
+      return data || [];
+    },
+  });
+
+  const age = Math.floor((Date.now() - new Date(patient.date_of_birth).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+
+  return (
+    <Sheet open onOpenChange={() => onClose()}>
+      <SheetContent className="w-full sm:max-w-lg overflow-y-auto">
+        <SheetHeader className="pb-4">
+          <SheetTitle className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-sm font-semibold text-primary">
+              {patient.first_name[0]}{patient.last_name[0]}
+            </div>
+            <div>
+              <p className="text-base font-semibold">{patient.first_name} {patient.last_name}</p>
+              <p className="text-xs text-muted-foreground font-normal">{patient.patient_id} · {age}yrs · {patient.gender}</p>
+            </div>
+          </SheetTitle>
+        </SheetHeader>
+
+        {/* Status badges */}
+        <div className="flex flex-wrap gap-2 mb-4">
+          <Badge variant="outline" className="capitalize">{patient.status || "outpatient"}</Badge>
+          {patient.risk_level && (
+            <Badge className={`capitalize ${riskColors[patient.risk_level as keyof typeof riskColors] || ""}`}>
+              {patient.risk_level} risk
+            </Badge>
+          )}
+          {patient.blood_type && <Badge variant="outline">{patient.blood_type}</Badge>}
+        </div>
+
+        {/* Contact info */}
+        <div className="space-y-2 mb-5 text-sm">
+          {patient.phone && <div className="flex items-center gap-2 text-muted-foreground"><Phone className="h-3.5 w-3.5" /> {patient.phone}</div>}
+          {patient.email && <div className="flex items-center gap-2 text-muted-foreground"><Mail className="h-3.5 w-3.5" /> {patient.email}</div>}
+          {patient.address && <div className="flex items-center gap-2 text-muted-foreground"><MapPin className="h-3.5 w-3.5" /> {patient.address}</div>}
+          {patient.insurance_provider && (
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <AlertCircle className="h-3.5 w-3.5" /> {patient.insurance_provider} {patient.insurance_number && `(${patient.insurance_number})`}
+            </div>
+          )}
+        </div>
+
+        {/* Allergies & conditions */}
+        {((patient.allergies && patient.allergies.length > 0) || (patient.chronic_conditions && patient.chronic_conditions.length > 0)) && (
+          <div className="space-y-2 mb-5">
+            {patient.allergies && patient.allergies.length > 0 && (
+              <div>
+                <p className="text-xs font-medium text-muted-foreground mb-1">Allergies</p>
+                <div className="flex flex-wrap gap-1">
+                  {patient.allergies.map((a, i) => <Badge key={i} variant="destructive" className="text-xs">{a}</Badge>)}
+                </div>
+              </div>
+            )}
+            {patient.chronic_conditions && patient.chronic_conditions.length > 0 && (
+              <div>
+                <p className="text-xs font-medium text-muted-foreground mb-1">Chronic Conditions</p>
+                <div className="flex flex-wrap gap-1">
+                  {patient.chronic_conditions.map((c, i) => <Badge key={i} variant="outline" className="text-xs">{c}</Badge>)}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Emergency contact */}
+        {patient.emergency_contact_name && (
+          <div className="p-3 rounded-lg bg-muted/50 border border-border mb-5">
+            <p className="text-xs font-medium text-muted-foreground mb-1">Emergency Contact</p>
+            <p className="text-sm text-foreground">{patient.emergency_contact_name}</p>
+            {patient.emergency_contact_phone && <p className="text-xs text-muted-foreground">{patient.emergency_contact_phone}</p>}
+          </div>
+        )}
+
+        <Tabs defaultValue="vitals" className="mt-2">
+          <TabsList className="w-full">
+            <TabsTrigger value="vitals" className="flex-1 text-xs">Vitals</TabsTrigger>
+            <TabsTrigger value="appointments" className="flex-1 text-xs">Appointments</TabsTrigger>
+            <TabsTrigger value="records" className="flex-1 text-xs">Records</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="vitals" className="space-y-2 mt-3">
+            {vitals.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-6">No vitals recorded</p>
+            ) : vitals.map(v => (
+              <div key={v.id} className="p-3 rounded-lg border border-border text-xs space-y-1">
+                <p className="text-muted-foreground">{format(new Date(v.created_at), "MMM d, yyyy h:mm a")}</p>
+                <div className="grid grid-cols-3 gap-2">
+                  {v.blood_pressure_systolic && <div><span className="text-muted-foreground">BP:</span> <span className="text-foreground font-medium">{v.blood_pressure_systolic}/{v.blood_pressure_diastolic}</span></div>}
+                  {v.heart_rate && <div><span className="text-muted-foreground">HR:</span> <span className="text-foreground font-medium">{v.heart_rate}</span></div>}
+                  {v.temperature && <div><span className="text-muted-foreground">Temp:</span> <span className="text-foreground font-medium">{v.temperature}°C</span></div>}
+                  {v.spo2 && <div><span className="text-muted-foreground">SpO2:</span> <span className="text-foreground font-medium">{v.spo2}%</span></div>}
+                  {v.respiratory_rate && <div><span className="text-muted-foreground">RR:</span> <span className="text-foreground font-medium">{v.respiratory_rate}</span></div>}
+                  {v.weight && <div><span className="text-muted-foreground">Wt:</span> <span className="text-foreground font-medium">{v.weight}kg</span></div>}
+                </div>
+              </div>
+            ))}
+          </TabsContent>
+
+          <TabsContent value="appointments" className="space-y-2 mt-3">
+            {appointments.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-6">No appointments</p>
+            ) : appointments.map(a => (
+              <div key={a.id} className="p-3 rounded-lg border border-border text-xs flex items-center justify-between">
+                <div>
+                  <p className="text-foreground font-medium">{format(new Date(a.appointment_date), "MMM d, yyyy h:mm a")}</p>
+                  <p className="text-muted-foreground">Dr. {(a.doctors as any)?.full_name || "—"} · {a.type || "Consultation"}</p>
+                </div>
+                <Badge variant="outline" className="capitalize text-xs">{a.status}</Badge>
+              </div>
+            ))}
+          </TabsContent>
+
+          <TabsContent value="records" className="space-y-2 mt-3">
+            {records.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-6">No medical records</p>
+            ) : records.map(r => (
+              <div key={r.id} className="p-3 rounded-lg border border-border text-xs space-y-1">
+                <div className="flex items-center justify-between">
+                  <p className="text-foreground font-medium capitalize">{r.visit_type}</p>
+                  <p className="text-muted-foreground">{format(new Date(r.created_at), "MMM d, yyyy")}</p>
+                </div>
+                {r.chief_complaint && <p className="text-muted-foreground">CC: {r.chief_complaint}</p>}
+                {r.assessment && <p className="text-muted-foreground">Assessment: {r.assessment}</p>}
+                <p className="text-muted-foreground">Dr. {(r.doctors as any)?.full_name || "—"}</p>
+              </div>
+            ))}
+          </TabsContent>
+        </Tabs>
+      </SheetContent>
+    </Sheet>
+  );
+}
 
 export default function Patients() {
   const [search, setSearch] = useState("");
   const [showAdd, setShowAdd] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState<PatientType | null>(null);
   const { data: patients = [], isLoading } = usePatients();
   const addPatient = useAddPatient();
 
@@ -77,6 +267,9 @@ export default function Patients() {
         )}
       </AnimatePresence>
 
+      {/* Patient Detail Sheet */}
+      {selectedPatient && <PatientDetail patient={selectedPatient} onClose={() => setSelectedPatient(null)} />}
+
       <div className="flex items-center gap-3">
         <div className="flex-1 flex items-center gap-2 px-3 py-2 rounded-lg bg-muted/50 border border-border">
           <Search className="h-4 w-4 text-muted-foreground" />
@@ -108,7 +301,11 @@ export default function Patients() {
             </thead>
             <tbody>
               {filtered.map((patient) => (
-                <tr key={patient.id} className="border-b border-border/50 hover:bg-muted/30 transition-colors cursor-pointer group">
+                <tr
+                  key={patient.id}
+                  onClick={() => setSelectedPatient(patient as PatientType)}
+                  className="border-b border-border/50 hover:bg-muted/30 transition-colors cursor-pointer group"
+                >
                   <td className="px-5 py-3.5">
                     <div className="flex items-center gap-3">
                       <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-medium text-primary">
