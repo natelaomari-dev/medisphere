@@ -94,13 +94,15 @@ export function AppSidebar() {
     <Sidebar collapsible="icon" className="border-r border-sidebar-border">
       <SidebarHeader className="px-4 py-5 border-b border-sidebar-border">
         <div className="flex items-center gap-2.5">
-          <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-            <Brain className="h-4 w-4 text-primary-foreground" />
+          <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-primary to-[hsl(162,67%,28%)] flex items-center justify-center shadow-lg shadow-primary/20">
+            <Brain className="h-4.5 w-4.5 text-primary-foreground" />
           </div>
           {!collapsed && (
-            <div>
-              <h1 className="text-sm font-semibold text-sidebar-accent-foreground tracking-tight">MediSphere AI</h1>
-              <p className="text-[11px] text-sidebar-muted truncate max-w-[140px]">{hospitalName || "Hospital Intelligence"}</p>
+            <div className="min-w-0">
+              <h1 className="font-display text-base font-semibold text-sidebar-accent-foreground tracking-tight truncate">
+                {hospitalName || "MediSphere AI"}
+              </h1>
+              <p className="text-[10px] text-sidebar-muted uppercase tracking-wider">Hospital Intelligence</p>
             </div>
           )}
         </div>
