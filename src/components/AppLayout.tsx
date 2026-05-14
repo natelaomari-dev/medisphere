@@ -44,7 +44,6 @@ export function AppLayout() {
           </main>
         </div>
       </div>
-      </div>
     </SidebarProvider>
   );
 }
