@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Search, Filter, Plus, ChevronRight, X, Phone, Mail, MapPin, Heart, AlertCircle, Calendar } from "lucide-react";
+import { Search, Filter, Plus, ChevronRight, X, Phone, Mail, MapPin, Heart, AlertCircle, Calendar, Trash2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { usePatients, useAddPatient } from "@/hooks/useHospitalData";
+import { usePatients, useAddPatient, useDeletePatient } from "@/hooks/useHospitalData";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -40,6 +41,17 @@ interface PatientType {
 
 function PatientDetail({ patient, onClose }: { patient: PatientType; onClose: () => void }) {
   const { hospitalId } = useHospital();
+  const deletePatient = useDeletePatient();
+
+  const handleDelete = async () => {
+    try {
+      await deletePatient.mutateAsync(patient.id);
+      toast.success("Patient deleted");
+      onClose();
+    } catch (err: any) {
+      toast.error(err.message || "Failed to delete patient");
+    }
+  };
 
   const { data: vitals = [] } = useQuery({
     queryKey: ["patient-vitals", patient.id],
@@ -126,6 +138,31 @@ function PatientDetail({ patient, onClose }: { patient: PatientType; onClose: ()
             )}
           </div>
         )}
+
+        {/* Danger zone */}
+        <div className="mb-5">
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <button className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-destructive/30 text-destructive text-sm font-medium hover:bg-destructive/5 transition-colors">
+                <Trash2 className="h-4 w-4" /> Delete Patient
+              </button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Delete this patient?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This permanently removes {patient.first_name} {patient.last_name} ({patient.patient_id}) and cannot be undone. Related medical records may be retained for compliance.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDelete} disabled={deletePatient.isPending} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                  {deletePatient.isPending ? "Deleting..." : "Delete"}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
 
         {/* Emergency contact */}
         {patient.emergency_contact_name && (

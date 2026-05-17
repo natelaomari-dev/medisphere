@@ -34,6 +34,20 @@ export function useAddPatient() {
   });
 }
 
+export function useDeletePatient() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("patients").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["patients"] });
+      qc.invalidateQueries({ queryKey: ["patient_count"] });
+    },
+  });
+}
+
 type DoctorInsert = Database["public"]["Tables"]["doctors"]["Insert"];
 type DoctorUpdate = Database["public"]["Tables"]["doctors"]["Update"];
 

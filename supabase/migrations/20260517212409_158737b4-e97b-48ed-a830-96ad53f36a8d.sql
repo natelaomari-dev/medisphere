@@ -1,0 +1,1 @@
+CREATE POLICY "Hospital admins can delete patients" ON public.patients FOR DELETE TO authenticated USING (is_hospital_admin(auth.uid(), hospital_id));
