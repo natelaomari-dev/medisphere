@@ -70,7 +70,7 @@ export default function InsuranceClaims() {
   const handleSubmitClaim = async (id: string) => {
     try {
       await updateStatus.mutateAsync({ id, claim_status: "submitted" });
-      toast({ title: "Submitted", description: "Claim submitted to SHA" });
+      toast({ title: "Submitted", description: `Claim submitted to ${schemeName}` });
     } catch {
       toast({ title: "Error", description: "Failed to submit claim", variant: "destructive" });
     }
@@ -93,8 +93,8 @@ export default function InsuranceClaims() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">SHA Insurance Claims</h1>
-          <p className="text-muted-foreground">Manage Social Health Authority insurance claim submissions and tracking.</p>
+          <h1 className="text-3xl font-bold tracking-tight">Insurance Claims</h1>
+          <p className="text-muted-foreground">Manage {schemeName} and other health insurance claim submissions and tracking.</p>
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
