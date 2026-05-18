@@ -9,7 +9,7 @@ import { format, subDays, startOfDay } from "date-fns";
 const COLORS = ["hsl(var(--primary))", "hsl(var(--chart-2))", "hsl(var(--chart-3))", "hsl(var(--chart-4))", "hsl(var(--chart-5))"];
 
 export default function Analytics() {
-  const { hospitalId } = useHospital();
+  const { hospitalId, country, currency } = useHospital();
 
   const { data: patients } = useQuery({
     queryKey: ["analytics-patients", hospitalId],
@@ -104,7 +104,7 @@ export default function Analytics() {
         </CardContent></Card>
         <Card><CardContent className="p-4 flex items-center gap-3">
           <div className="h-10 w-10 rounded-lg bg-chart-3/10 flex items-center justify-center"><TrendingUp className="h-5 w-5 text-chart-3" /></div>
-          <div><p className="text-xs text-muted-foreground">Revenue (KES)</p><p className="text-xl font-bold text-foreground">{totalRevenue.toLocaleString()}</p></div>
+          <div><p className="text-xs text-muted-foreground">Revenue ({currency})</p><p className="text-xl font-bold text-foreground">{totalRevenue.toLocaleString()}</p></div>
         </CardContent></Card>
         <Card><CardContent className="p-4 flex items-center gap-3">
           <div className="h-10 w-10 rounded-lg bg-chart-4/10 flex items-center justify-center"><BedDouble className="h-5 w-5 text-chart-4" /></div>
@@ -137,7 +137,7 @@ export default function Analytics() {
                 <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
                 <XAxis dataKey="month" tick={{ fontSize: 10 }} />
                 <YAxis tick={{ fontSize: 10 }} />
-                <Tooltip formatter={(v: number) => `KES ${v.toLocaleString()}`} />
+                <Tooltip formatter={(v: number) => `${currency} ${v.toLocaleString()}`} />
                 <Bar dataKey="revenue" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>

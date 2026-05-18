@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useHospital } from "@/hooks/useHospital";
 import { toast } from "sonner";
+import { COUNTRY_LIST } from "@/lib/locale";
 
 type Step = "choice" | "create" | "invite" | "join" | "done";
 
@@ -15,7 +16,7 @@ export default function Onboarding() {
   const [creating, setCreating] = useState(false);
 
   const [hospital, setHospital] = useState({
-    name: "", city: "", address: "", phone: "", bed_capacity: 100,
+    name: "", city: "", address: "", phone: "", bed_capacity: 100, country: "Kenya",
   });
 
   const [inviteEmail, setInviteEmail] = useState("");
@@ -41,6 +42,7 @@ export default function Onboarding() {
         address: hospital.address,
         phone: hospital.phone,
         bed_capacity: hospital.bed_capacity,
+        country: hospital.country,
         created_by: user.id,
       })
       .select()
@@ -175,9 +177,14 @@ export default function Onboarding() {
               <form onSubmit={handleCreateHospital} className="space-y-3">
                 <input type="text" placeholder="Hospital name" value={hospital.name} onChange={e => setHospital({ ...hospital, name: e.target.value })} required className="w-full px-3 py-2 rounded-lg bg-muted/50 border border-border text-sm text-foreground placeholder:text-muted-foreground outline-none focus:ring-1 focus:ring-primary" />
                 <div className="grid grid-cols-2 gap-3">
+                  <select value={hospital.country} onChange={e => setHospital({ ...hospital, country: e.target.value })} className="px-3 py-2 rounded-lg bg-muted/50 border border-border text-sm text-foreground outline-none focus:ring-1 focus:ring-primary">
+                    {COUNTRY_LIST.map(c => (
+                      <option key={c.code} value={c.name}>{c.name} ({c.currency})</option>
+                    ))}
+                  </select>
                   <input type="text" placeholder="City" value={hospital.city} onChange={e => setHospital({ ...hospital, city: e.target.value })} className="px-3 py-2 rounded-lg bg-muted/50 border border-border text-sm text-foreground placeholder:text-muted-foreground outline-none focus:ring-1 focus:ring-primary" />
-                  <input type="number" placeholder="Bed capacity" value={hospital.bed_capacity} onChange={e => setHospital({ ...hospital, bed_capacity: Number(e.target.value) })} className="px-3 py-2 rounded-lg bg-muted/50 border border-border text-sm text-foreground placeholder:text-muted-foreground outline-none focus:ring-1 focus:ring-primary" />
                 </div>
+                <input type="number" placeholder="Bed capacity" value={hospital.bed_capacity} onChange={e => setHospital({ ...hospital, bed_capacity: Number(e.target.value) })} className="w-full px-3 py-2 rounded-lg bg-muted/50 border border-border text-sm text-foreground placeholder:text-muted-foreground outline-none focus:ring-1 focus:ring-primary" />
                 <input type="text" placeholder="Address" value={hospital.address} onChange={e => setHospital({ ...hospital, address: e.target.value })} className="w-full px-3 py-2 rounded-lg bg-muted/50 border border-border text-sm text-foreground placeholder:text-muted-foreground outline-none focus:ring-1 focus:ring-primary" />
                 <input type="tel" placeholder="Phone" value={hospital.phone} onChange={e => setHospital({ ...hospital, phone: e.target.value })} className="w-full px-3 py-2 rounded-lg bg-muted/50 border border-border text-sm text-foreground placeholder:text-muted-foreground outline-none focus:ring-1 focus:ring-primary" />
 

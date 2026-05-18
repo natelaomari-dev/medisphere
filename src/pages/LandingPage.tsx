@@ -225,9 +225,9 @@ export default function LandingPage() {
               Simple, transparent pricing
             </h2>
             <p className="text-muted-foreground max-w-xl mx-auto">
-              From rural dispensaries to county referral hospitals. Pay only for what you need, scale as you grow.
+              From rural dispensaries to national referral hospitals. Pay only for what you need, scale as you grow.
             </p>
-            <p className="text-xs text-muted-foreground mt-2">All prices in KES. 14-day free trial on all paid plans.</p>
+            <p className="text-xs text-muted-foreground mt-2">Prices shown in KES. Equivalent pricing available in UGX, TZS, RWF and other East African currencies. 14-day free trial on all paid plans.</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -301,13 +301,13 @@ export default function LandingPage() {
                 <Globe className="h-3.5 w-3.5" /> Africa-First Innovation
               </div>
               <h2 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight mb-4">
-                Built for African healthcare
+                Built for East African healthcare
               </h2>
               <p className="text-muted-foreground leading-relaxed mb-6">
-                Offline-first architecture, WhatsApp patient communication, M-Pesa payments, community health worker interfaces, and rural clinic support. Works even with low bandwidth.
+                Offline-first architecture, WhatsApp patient communication, mobile money payments (M-Pesa, MTN MoMo, Airtel Money, Tigo Pesa), community health worker interfaces, and rural clinic support across Kenya, Uganda, Tanzania, Rwanda and beyond. Works even with low bandwidth.
               </p>
               <div className="space-y-3">
-                {["Offline-first functionality", "WhatsApp triage & reminders", "Mobile money payments (M-Pesa)", "Low-bandwidth optimized"].map(item => (
+                {["Multi-country & multi-currency (KES, UGX, TZS, RWF…)", "Offline-first functionality", "WhatsApp triage & reminders", "Mobile money (M-Pesa, MTN MoMo, Airtel Money)", "Low-bandwidth optimized"].map(item => (
                   <div key={item} className="flex items-center gap-2 text-sm text-foreground">
                     <Heart className="h-4 w-4 text-success shrink-0" /> {item}
                   </div>

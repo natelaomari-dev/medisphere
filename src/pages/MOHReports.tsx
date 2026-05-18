@@ -56,8 +56,8 @@ export default function MOHReports() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">MOH Reports</h1>
-          <p className="text-muted-foreground">Generate Kenya Ministry of Health facility reports for KHIS/DHIS2 submission.</p>
+          <h1 className="text-3xl font-bold tracking-tight">Ministry of Health Reports</h1>
+          <p className="text-muted-foreground">Generate Ministry of Health facility reports for national health information systems (DHIS2 and equivalents across East Africa).</p>
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>

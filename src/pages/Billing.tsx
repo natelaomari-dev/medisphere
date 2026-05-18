@@ -13,6 +13,8 @@ import { useInvoices, useCreateInvoice, useUpdateInvoiceStatus, InvoiceStatus } 
 import { usePayments, useInitiateMpesa, useRecordPayment } from "@/hooks/usePayments";
 import { usePatients } from "@/hooks/useHospitalData";
 import { useToast } from "@/components/ui/use-toast";
+import { useHospital } from "@/hooks/useHospital";
+import { formatMoney } from "@/lib/locale";
 
 const statusColors: Record<string, string> = {
   pending: "bg-yellow-100 text-yellow-800",
@@ -123,20 +125,23 @@ export default function Billing() {
   const pendingAmount = invoices?.filter(i => i.status === 'pending').reduce((sum, i) => sum + Number(i.amount), 0) || 0;
   const overdueAmount = invoices?.filter(i => i.status === 'overdue').reduce((sum, i) => sum + Number(i.amount), 0) || 0;
 
+  const { country, currency } = useHospital();
+  const mobileMoneyLabel = country.mobileMoney[0] || "Mobile Money";
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Billing & Revenue</h1>
-          <p className="text-muted-foreground">Manage invoices, payments, and M-Pesa transactions.</p>
+          <p className="text-muted-foreground">Manage invoices, payments, and mobile money transactions.</p>
         </div>
         <div className="flex gap-2">
           <Dialog open={isMpesaDialogOpen} onOpenChange={setIsMpesaDialogOpen}>
             <DialogTrigger asChild>
-              <Button variant="outline"><Smartphone className="mr-2 h-4 w-4" /> M-Pesa Payment</Button>
+              <Button variant="outline"><Smartphone className="mr-2 h-4 w-4" /> {mobileMoneyLabel} Payment</Button>
             </DialogTrigger>
             <DialogContent>
-              <DialogHeader><DialogTitle>Initiate M-Pesa Payment</DialogTitle></DialogHeader>
+              <DialogHeader><DialogTitle>Initiate {mobileMoneyLabel} Payment</DialogTitle></DialogHeader>
               <form onSubmit={handleMpesaPayment} className="space-y-4">
                 <div className="space-y-2">
                   <Label>Patient</Label>
@@ -151,14 +156,14 @@ export default function Billing() {
                 </div>
                 <div className="space-y-2">
                   <Label>Phone Number</Label>
-                  <Input value={mpesaPayment.phone_number} onChange={(e) => setMpesaPayment({ ...mpesaPayment, phone_number: e.target.value })} placeholder="0712345678 or 254712345678" required />
+                  <Input value={mpesaPayment.phone_number} onChange={(e) => setMpesaPayment({ ...mpesaPayment, phone_number: e.target.value })} placeholder={`e.g. ${country.dialCode}712345678`} required />
                 </div>
                 <div className="space-y-2">
-                  <Label>Amount (KES)</Label>
+                  <Label>Amount ({currency})</Label>
                   <Input type="number" min="1" value={mpesaPayment.amount} onChange={(e) => setMpesaPayment({ ...mpesaPayment, amount: e.target.value })} required />
                 </div>
                 <Button type="submit" className="w-full" disabled={initiateMpesa.isPending}>
-                  {initiateMpesa.isPending ? "Sending STK Push..." : "Send M-Pesa STK Push"}
+                  {initiateMpesa.isPending ? "Sending request..." : `Send ${mobileMoneyLabel} request`}
                 </Button>
               </form>
             </DialogContent>
@@ -182,7 +187,7 @@ export default function Billing() {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label>Amount (KES)</Label>
+                  <Label>Amount ({currency})</Label>
                   <Input type="number" min="0" step="0.01" value={newInvoice.amount} onChange={(e) => setNewInvoice({ ...newInvoice, amount: e.target.value })} required />
                 </div>
                 <div className="space-y-2">
@@ -209,7 +214,7 @@ export default function Billing() {
             <CheckCircle className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">KES {totalRevenue.toLocaleString()}</div>
+            <div className="text-2xl font-bold">{formatMoney(totalRevenue, country.code)}</div>
             <p className="text-xs text-muted-foreground">Paid invoices</p>
           </CardContent>
         </Card>
@@ -219,7 +224,7 @@ export default function Billing() {
             <Clock className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">KES {pendingAmount.toLocaleString()}</div>
+            <div className="text-2xl font-bold">{formatMoney(pendingAmount, country.code)}</div>
             <p className="text-xs text-muted-foreground">Awaiting payment</p>
           </CardContent>
         </Card>
@@ -229,7 +234,7 @@ export default function Billing() {
             <AlertCircle className="h-4 w-4 text-destructive" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">KES {overdueAmount.toLocaleString()}</div>
+            <div className="text-2xl font-bold">{formatMoney(overdueAmount, country.code)}</div>
             <p className="text-xs text-muted-foreground">Past due date</p>
           </CardContent>
         </Card>
@@ -288,7 +293,7 @@ export default function Billing() {
                             </div>
                           </TableCell>
                           <TableCell>{invoice.patients?.first_name} {invoice.patients?.last_name}</TableCell>
-                          <TableCell>KES {Number(invoice.amount).toLocaleString()}</TableCell>
+                          <TableCell>{formatMoney(invoice.amount, country.code)}</TableCell>
                           <TableCell>{new Date(invoice.due_date).toLocaleDateString()}</TableCell>
                           <TableCell>
                             <Badge className={statusColors[invoice.status]} variant="outline">
@@ -341,7 +346,7 @@ export default function Billing() {
                       payments?.map((payment: any) => (
                         <TableRow key={payment.id}>
                           <TableCell>{payment.patients?.first_name} {payment.patients?.last_name}</TableCell>
-                          <TableCell>KES {Number(payment.amount).toLocaleString()}</TableCell>
+                          <TableCell>{formatMoney(payment.amount, country.code)}</TableCell>
                           <TableCell>
                             <div className="flex items-center gap-1">
                               {payment.payment_method === "mpesa" && <Smartphone className="h-3 w-3" />}

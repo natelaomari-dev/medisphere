@@ -8,9 +8,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Package, AlertTriangle, Clock, Search } from "lucide-react";
 import { useState } from "react";
 import { format, differenceInDays } from "date-fns";
+import { formatMoney } from "@/lib/locale";
 
 export default function Inventory() {
-  const { hospitalId } = useHospital();
+  const { hospitalId, country } = useHospital();
   const [search, setSearch] = useState("");
 
   const { data: medications = [] } = useQuery({
@@ -78,7 +79,7 @@ export default function Inventory() {
         </CardContent></Card>
         <Card><CardContent className="p-4 flex items-center gap-3">
           <div className="h-10 w-10 rounded-lg bg-chart-3/10 flex items-center justify-center"><Package className="h-5 w-5 text-chart-3" /></div>
-          <div><p className="text-xs text-muted-foreground">Stock Value</p><p className="text-xl font-bold text-foreground">KES {totalValue.toLocaleString()}</p></div>
+          <div><p className="text-xs text-muted-foreground">Stock Value</p><p className="text-xl font-bold text-foreground">{formatMoney(totalValue, country.code)}</p></div>
         </CardContent></Card>
       </div>
 
@@ -137,7 +138,7 @@ export default function Inventory() {
                     <TableCell className="text-right font-mono text-sm text-muted-foreground">{med.reorder_level}</TableCell>
                     <TableCell>{getStockBadge(med)}</TableCell>
                     <TableCell>{getExpiryBadge(med.expiry_date)}</TableCell>
-                    <TableCell className="text-right text-sm">KES {Number(med.unit_price || 0).toLocaleString()}</TableCell>
+                    <TableCell className="text-right text-sm">{formatMoney(med.unit_price || 0, country.code)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
