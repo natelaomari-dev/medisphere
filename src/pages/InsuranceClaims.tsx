@@ -12,6 +12,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { useInsuranceClaims, useCreateClaim, useUpdateClaimStatus } from "@/hooks/usePayments";
 import { usePatients } from "@/hooks/useHospitalData";
 import { useToast } from "@/components/ui/use-toast";
+import { useHospital } from "@/hooks/useHospital";
+import { formatMoney } from "@/lib/locale";
 
 const statusColors: Record<string, string> = {
   draft: "bg-muted text-muted-foreground",
@@ -30,6 +32,8 @@ export default function InsuranceClaims() {
   const createClaim = useCreateClaim();
   const updateStatus = useUpdateClaimStatus();
   const { toast } = useToast();
+  const { country, currency } = useHospital();
+  const schemeName = country.healthInsurance;
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -111,8 +115,8 @@ export default function InsuranceClaims() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>SHA Member Number</Label>
-                <Input value={newClaim.sha_member_number} onChange={(e) => setNewClaim({ ...newClaim, sha_member_number: e.target.value })} placeholder="e.g., SHA-12345678" required />
+                <Label>{schemeName} Member Number</Label>
+                <Input value={newClaim.sha_member_number} onChange={(e) => setNewClaim({ ...newClaim, sha_member_number: e.target.value })} placeholder={`e.g., ${schemeName}-12345678`} required />
               </div>
               <div className="space-y-2">
                 <Label>ICD-10 Diagnosis Codes (comma-separated)</Label>
@@ -123,7 +127,7 @@ export default function InsuranceClaims() {
                 <Textarea value={newClaim.treatment_description} onChange={(e) => setNewClaim({ ...newClaim, treatment_description: e.target.value })} placeholder="Describe treatment provided" />
               </div>
               <div className="space-y-2">
-                <Label>Claim Amount (KES)</Label>
+                <Label>Claim Amount ({currency})</Label>
                 <Input type="number" min="0" step="0.01" value={newClaim.claim_amount} onChange={(e) => setNewClaim({ ...newClaim, claim_amount: e.target.value })} required />
               </div>
               <Button type="submit" className="w-full" disabled={createClaim.isPending}>
@@ -141,7 +145,7 @@ export default function InsuranceClaims() {
             <Shield className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">KES {totalClaims.toLocaleString()}</div>
+            <div className="text-2xl font-bold">{formatMoney(totalClaims, country.code)}</div>
           </CardContent>
         </Card>
         <Card>
@@ -150,7 +154,7 @@ export default function InsuranceClaims() {
             <CheckCircle className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">KES {approvedTotal.toLocaleString()}</div>
+            <div className="text-2xl font-bold">{formatMoney(approvedTotal, country.code)}</div>
           </CardContent>
         </Card>
         <Card>
@@ -192,8 +196,8 @@ export default function InsuranceClaims() {
                 <TableRow>
                   <TableHead>Claim #</TableHead>
                   <TableHead>Patient</TableHead>
-                  <TableHead>SHA Member</TableHead>
-                  <TableHead>Amount (KES)</TableHead>
+                  <TableHead>{schemeName} Member</TableHead>
+                  <TableHead>Amount ({currency})</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
@@ -209,7 +213,7 @@ export default function InsuranceClaims() {
                       <TableCell className="font-medium">{claim.claim_number}</TableCell>
                       <TableCell>{claim.patients?.first_name} {claim.patients?.last_name}</TableCell>
                       <TableCell>{claim.sha_member_number}</TableCell>
-                      <TableCell>KES {Number(claim.claim_amount).toLocaleString()}</TableCell>
+                      <TableCell>{formatMoney(claim.claim_amount, country.code)}</TableCell>
                       <TableCell>
                         <Badge className={statusColors[claim.claim_status] || ""} variant="outline">
                           {claim.claim_status.replace(/_/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase())}
