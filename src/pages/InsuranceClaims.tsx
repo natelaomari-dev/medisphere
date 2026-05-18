@@ -222,7 +222,7 @@ export default function InsuranceClaims() {
                       <TableCell>
                         {claim.claim_status === "draft" && (
                           <Button size="sm" variant="outline" onClick={() => handleSubmitClaim(claim.id)}>
-                            <Send className="h-3 w-3 mr-1" /> Submit to SHA
+                            <Send className="h-3 w-3 mr-1" /> Submit to {schemeName}
                           </Button>
                         )}
                       </TableCell>
