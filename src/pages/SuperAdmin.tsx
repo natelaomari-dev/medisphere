@@ -246,7 +246,7 @@ export default function SuperAdmin() {
           <CardContent className="pt-5 pb-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-muted-foreground">MRR (KES)</p>
+                <p className="text-xs text-muted-foreground">MRR (local currency)</p>
                 <p className="text-2xl font-bold text-foreground">{monthlyRevenue.toLocaleString()}</p>
               </div>
               <DollarSign className="h-8 w-8 text-amber-500/30" />
@@ -297,7 +297,7 @@ export default function SuperAdmin() {
                     <TableHead>Status</TableHead>
                     <TableHead>Users</TableHead>
                     <TableHead>Patients</TableHead>
-                    <TableHead>MRR (KES)</TableHead>
+                    <TableHead>MRR</TableHead>
                     <TableHead>Created</TableHead>
                     <TableHead>Actions</TableHead>
                   </TableRow>
