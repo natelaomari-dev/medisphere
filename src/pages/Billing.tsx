@@ -13,6 +13,8 @@ import { useInvoices, useCreateInvoice, useUpdateInvoiceStatus, InvoiceStatus } 
 import { usePayments, useInitiateMpesa, useRecordPayment } from "@/hooks/usePayments";
 import { usePatients } from "@/hooks/useHospitalData";
 import { useToast } from "@/components/ui/use-toast";
+import { useHospital } from "@/hooks/useHospital";
+import { formatMoney } from "@/lib/locale";
 
 const statusColors: Record<string, string> = {
   pending: "bg-yellow-100 text-yellow-800",
