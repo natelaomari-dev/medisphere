@@ -250,7 +250,7 @@ export default function Patients() {
   const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await addPatient.mutateAsync(form);
+      await addPatient.mutateAsync(form as any);
       setShowAdd(false);
       setForm({ first_name: "", last_name: "", date_of_birth: "", gender: "M", phone: "", ward: "" });
       toast.success("Patient added successfully");

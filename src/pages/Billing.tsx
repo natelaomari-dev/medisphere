@@ -73,7 +73,7 @@ export default function Billing() {
         notes: newInvoice.notes,
         invoice_number: `INV-${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`,
         status: "pending",
-      });
+      } as any);
       setIsDialogOpen(false);
       setNewInvoice({ patient_id: "", amount: "", due_date: "", notes: "" });
       toast({ title: "Success", description: "Invoice created successfully" });
