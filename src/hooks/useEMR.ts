@@ -31,7 +31,7 @@ export function useCreateMedicalRecord() {
       assessment?: string;
       treatment_plan?: string;
     }) => {
-      const { data, error } = await supabase.from("medical_records").insert(record).select().single();
+      const { data, error } = await supabase.from("medical_records").insert(record as any).select().single();
       if (error) throw error;
       return data;
     },
@@ -76,7 +76,7 @@ export function useAddDiagnosis() {
       diagnosis_type: string;
       notes?: string;
     }) => {
-      const { data, error } = await supabase.from("diagnoses").insert(diagnosis).select().single();
+      const { data, error } = await supabase.from("diagnoses").insert(diagnosis as any).select().single();
       if (error) throw error;
       return data;
     },
@@ -117,7 +117,7 @@ export function useRecordVitals() {
       notes?: string;
     }) => {
       const bmi = vitals.weight && vitals.height ? +(vitals.weight / ((vitals.height / 100) ** 2)).toFixed(1) : undefined;
-      const { data, error } = await supabase.from("vitals").insert({ ...vitals, bmi }).select().single();
+      const { data, error } = await supabase.from("vitals").insert({ ...vitals, bmi } as any).select().single();
       if (error) throw error;
       return data;
     },
