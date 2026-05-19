@@ -22,6 +22,41 @@ export function usePatients() {
   });
 }
 
+/**
+ * Fire-and-forget audit log for single-record clinical reads.
+ * Invokes the audit-record-access edge function which writes to clinical_audit_log.
+ */
+export async function logRecordAccess(params: {
+  table_name: string;
+  record_id?: string;
+  patient_id?: string;
+  accessed_columns?: string[];
+  justification?: string;
+}) {
+  try {
+    await supabase.functions.invoke("audit-record-access", { body: params });
+  } catch (e) {
+    console.warn("audit log failed", e);
+  }
+}
+
+export function usePatient(id?: string) {
+  return useQuery({
+    queryKey: ["patient", id],
+    enabled: !!id,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("patients")
+        .select("*")
+        .eq("id", id!)
+        .single();
+      if (error) throw error;
+      // KDPA audit log: record this PHI access
+      logRecordAccess({ table_name: "patients", record_id: data.id, patient_id: data.id });
+      return data as Patient;
+    },
+  });
+
 export function useAddPatient() {
   const qc = useQueryClient();
   return useMutation({
