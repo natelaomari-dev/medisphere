@@ -56,12 +56,13 @@ export function usePatient(id?: string) {
       return data as Patient;
     },
   });
+}
 
 export function useAddPatient() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (patient: PatientInsert) => {
-      const { data, error } = await supabase.from("patients").insert(patient).select().single();
+      const { data, error } = await supabase.from("patients").insert(patient as any).select().single();
       if (error) throw error;
       return data;
     },
