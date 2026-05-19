@@ -54,7 +54,7 @@ export default function Appointments() {
       duration_minutes: form.duration_minutes,
       type: form.type,
       reason: form.reason,
-    });
+    } as any);
     if (error) { toast.error(error.message); return; }
     toast.success("Appointment scheduled");
     setShowAdd(false);

@@ -60,7 +60,7 @@ function useCreateLabOrder() {
       ordered_by: string;
       hospital_id?: string;
     }) => {
-      const { data, error } = await supabase.from("lab_orders").insert(order).select().single();
+      const { data, error } = await supabase.from("lab_orders").insert(order as any).select().single();
       if (error) throw error;
       return data;
     },
