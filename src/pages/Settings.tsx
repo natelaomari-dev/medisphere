@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { Building2, User, Shield } from "lucide-react";
+import { MfaSettings } from "@/components/MfaSettings";
 
 export default function Settings() {
   const { user } = useAuth();
@@ -143,11 +144,11 @@ export default function Settings() {
           </TabsContent>
         )}
 
-        <TabsContent value="security">
+        <TabsContent value="security" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">Security</CardTitle>
-              <CardDescription>Manage your account security</CardDescription>
+              <CardTitle className="text-base">Account</CardTitle>
+              <CardDescription>Your account security overview</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-1.5">
@@ -159,6 +160,7 @@ export default function Settings() {
               </p>
             </CardContent>
           </Card>
+          <MfaSettings />
         </TabsContent>
       </Tabs>
     </div>
