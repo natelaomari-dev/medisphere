@@ -511,6 +511,8 @@ export type Database = {
           invited_by: string | null
           is_active: boolean | null
           joined_at: string
+          mfa_grace_period_end: string | null
+          mfa_required: boolean
           role: Database["public"]["Enums"]["app_role"]
           user_id: string
         }
@@ -520,6 +522,8 @@ export type Database = {
           invited_by?: string | null
           is_active?: boolean | null
           joined_at?: string
+          mfa_grace_period_end?: string | null
+          mfa_required?: boolean
           role?: Database["public"]["Enums"]["app_role"]
           user_id: string
         }
@@ -529,6 +533,8 @@ export type Database = {
           invited_by?: string | null
           is_active?: boolean | null
           joined_at?: string
+          mfa_grace_period_end?: string | null
+          mfa_required?: boolean
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
         }
@@ -1212,6 +1218,72 @@ export type Database = {
           },
           {
             foreignKeyName: "nurse_notes_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      patient_consents: {
+        Row: {
+          consent_form_version: string | null
+          consent_type: string
+          created_at: string
+          document_url: string | null
+          expires_at: string | null
+          granted_at: string
+          hospital_id: string
+          id: string
+          notes: string | null
+          patient_id: string
+          revoked_at: string | null
+          status: string
+          updated_at: string
+          witnessed_by: string | null
+        }
+        Insert: {
+          consent_form_version?: string | null
+          consent_type: string
+          created_at?: string
+          document_url?: string | null
+          expires_at?: string | null
+          granted_at?: string
+          hospital_id: string
+          id?: string
+          notes?: string | null
+          patient_id: string
+          revoked_at?: string | null
+          status?: string
+          updated_at?: string
+          witnessed_by?: string | null
+        }
+        Update: {
+          consent_form_version?: string | null
+          consent_type?: string
+          created_at?: string
+          document_url?: string | null
+          expires_at?: string | null
+          granted_at?: string
+          hospital_id?: string
+          id?: string
+          notes?: string | null
+          patient_id?: string
+          revoked_at?: string | null
+          status?: string
+          updated_at?: string
+          witnessed_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "patient_consents_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "patient_consents_patient_id_fkey"
             columns: ["patient_id"]
             isOneToOne: false
             referencedRelation: "patients"
