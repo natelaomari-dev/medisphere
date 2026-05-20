@@ -152,6 +152,8 @@ export default function AuthPage() {
               {isSignUp ? "Sign in" : "Sign up"}
             </button>
           </p>
+            </>
+          )}
         </div>
       </motion.div>
     </div>
