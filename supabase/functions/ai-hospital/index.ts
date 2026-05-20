@@ -70,6 +70,26 @@ serve(async (req) => {
     }
 
     const { type, data } = await req.json();
+
+    // Consent gate: if patient-identifiable data is present, require active ai_processing consent
+    if (data?.patient_id && (type === "triage" || type === "doctor_assist")) {
+      const { data: consent } = await admin
+        .from("patient_consents")
+        .select("status, expires_at")
+        .eq("patient_id", data.patient_id)
+        .eq("consent_type", "ai_processing")
+        .eq("status", "granted")
+        .order("granted_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      const valid = consent && (!consent.expires_at || new Date(consent.expires_at) > new Date());
+      if (!valid) {
+        return new Response(JSON.stringify({
+          error: "Patient has not granted AI processing consent. Please record consent before using AI features for this patient.",
+        }), { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
+    }
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 

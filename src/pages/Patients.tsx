@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { useHospital } from "@/hooks/useHospital";
+import { PatientConsents } from "@/components/PatientConsents";
 
 const riskColors = { low: "bg-green-500/10 text-green-600", medium: "bg-amber-500/10 text-amber-600", high: "bg-red-500/10 text-red-600", critical: "bg-red-500/10 text-red-600" };
 const statusColors: Record<string, string> = { outpatient: "text-blue-500", inpatient: "text-primary", icu: "text-red-500", discharged: "text-green-500", deceased: "text-muted-foreground" };
@@ -178,6 +179,7 @@ function PatientDetail({ patient, onClose }: { patient: PatientType; onClose: ()
             <TabsTrigger value="vitals" className="flex-1 text-xs">Vitals</TabsTrigger>
             <TabsTrigger value="appointments" className="flex-1 text-xs">Appointments</TabsTrigger>
             <TabsTrigger value="records" className="flex-1 text-xs">Records</TabsTrigger>
+            <TabsTrigger value="consents" className="flex-1 text-xs">Consents</TabsTrigger>
           </TabsList>
 
           <TabsContent value="vitals" className="space-y-2 mt-3">
@@ -226,6 +228,10 @@ function PatientDetail({ patient, onClose }: { patient: PatientType; onClose: ()
                 <p className="text-muted-foreground">Dr. {(r.doctors as any)?.full_name || "—"}</p>
               </div>
             ))}
+          </TabsContent>
+
+          <TabsContent value="consents" className="mt-3">
+            <PatientConsents patientId={patient.id} />
           </TabsContent>
         </Tabs>
       </SheetContent>
