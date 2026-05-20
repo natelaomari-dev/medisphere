@@ -4,9 +4,11 @@ import { Navigate } from "react-router-dom";
 import { Brain, Eye, EyeOff } from "lucide-react";
 import { motion } from "framer-motion";
 import { lovable } from "@/integrations/lovable/index";
+import { supabase } from "@/integrations/supabase/client";
+import { MfaChallenge } from "@/components/MfaChallenge";
 
 export default function AuthPage() {
-  const { user, signIn, signUp, loading } = useAuth();
+  const { user, signIn, signUp, loading, signOut } = useAuth();
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -15,9 +17,10 @@ export default function AuthPage() {
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState("");
+  const [needMfa, setNeedMfa] = useState(false);
 
   if (loading) return null;
-  if (user) return <Navigate to="/" replace />;
+  if (user && !needMfa) return <Navigate to="/" replace />;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,7 +34,12 @@ export default function AuthPage() {
       else setSuccess("Account created! Check your email to confirm.");
     } else {
       const { error } = await signIn(email, password);
-      if (error) setError(error.message);
+      if (error) { setError(error.message); setSubmitting(false); return; }
+      // After password sign-in, check whether MFA challenge is required
+      const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+      if (aal?.currentLevel === "aal1" && aal?.nextLevel === "aal2") {
+        setNeedMfa(true);
+      }
     }
     setSubmitting(false);
   };
