@@ -72,6 +72,13 @@ export default function AuthPage() {
         </div>
 
         <div className="glass-card p-6">
+          {needMfa ? (
+            <MfaChallenge
+              onSuccess={() => { setNeedMfa(false); window.location.href = "/"; }}
+              onCancel={async () => { await signOut(); setNeedMfa(false); }}
+            />
+          ) : (
+            <>
           <h2 className="text-base font-semibold text-foreground mb-1">
             {isSignUp ? "Create your account" : "Welcome back"}
           </h2>
