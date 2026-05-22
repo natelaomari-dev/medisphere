@@ -504,6 +504,44 @@ export type Database = {
           },
         ]
       }
+      geographic_areas: {
+        Row: {
+          code: string | null
+          country_code: string | null
+          created_at: string
+          id: string
+          level: string
+          name: string
+          parent_id: string | null
+        }
+        Insert: {
+          code?: string | null
+          country_code?: string | null
+          created_at?: string
+          id?: string
+          level: string
+          name: string
+          parent_id?: string | null
+        }
+        Update: {
+          code?: string | null
+          country_code?: string | null
+          created_at?: string
+          id?: string
+          level?: string
+          name?: string
+          parent_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "geographic_areas_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "geographic_areas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       hospital_members: {
         Row: {
           hospital_id: string
@@ -1225,6 +1263,201 @@ export type Database = {
           },
         ]
       }
+      patient_addresses: {
+        Row: {
+          address_type: string | null
+          building: string | null
+          country: string
+          county: string | null
+          created_at: string
+          geocoded_lat: number | null
+          geocoded_lng: number | null
+          hospital_id: string
+          id: string
+          is_current: boolean | null
+          patient_id: string
+          postal_code: string | null
+          region: string | null
+          street: string | null
+          sub_county: string | null
+          updated_at: string
+          village: string | null
+          ward: string | null
+        }
+        Insert: {
+          address_type?: string | null
+          building?: string | null
+          country: string
+          county?: string | null
+          created_at?: string
+          geocoded_lat?: number | null
+          geocoded_lng?: number | null
+          hospital_id: string
+          id?: string
+          is_current?: boolean | null
+          patient_id: string
+          postal_code?: string | null
+          region?: string | null
+          street?: string | null
+          sub_county?: string | null
+          updated_at?: string
+          village?: string | null
+          ward?: string | null
+        }
+        Update: {
+          address_type?: string | null
+          building?: string | null
+          country?: string
+          county?: string | null
+          created_at?: string
+          geocoded_lat?: number | null
+          geocoded_lng?: number | null
+          hospital_id?: string
+          id?: string
+          is_current?: boolean | null
+          patient_id?: string
+          postal_code?: string | null
+          region?: string | null
+          street?: string | null
+          sub_county?: string | null
+          updated_at?: string
+          village?: string | null
+          ward?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "patient_addresses_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      patient_allergies: {
+        Row: {
+          created_at: string
+          hospital_id: string
+          id: string
+          notes: string | null
+          onset_date: string | null
+          patient_id: string
+          reaction: string | null
+          severity: string | null
+          status: string | null
+          substance: string
+          substance_code: string | null
+          substance_code_system: string | null
+          updated_at: string
+          verification_date: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          hospital_id: string
+          id?: string
+          notes?: string | null
+          onset_date?: string | null
+          patient_id: string
+          reaction?: string | null
+          severity?: string | null
+          status?: string | null
+          substance: string
+          substance_code?: string | null
+          substance_code_system?: string | null
+          updated_at?: string
+          verification_date?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          hospital_id?: string
+          id?: string
+          notes?: string | null
+          onset_date?: string | null
+          patient_id?: string
+          reaction?: string | null
+          severity?: string | null
+          status?: string | null
+          substance?: string
+          substance_code?: string | null
+          substance_code_system?: string | null
+          updated_at?: string
+          verification_date?: string | null
+          verified_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "patient_allergies_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      patient_conditions: {
+        Row: {
+          created_at: string
+          hospital_id: string
+          icd_code: string
+          icd_description: string
+          icd_version: string | null
+          id: string
+          notes: string | null
+          onset_date: string | null
+          patient_id: string
+          recorded_by: string | null
+          recorded_date: string | null
+          resolved_date: string | null
+          severity: string | null
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          hospital_id: string
+          icd_code: string
+          icd_description: string
+          icd_version?: string | null
+          id?: string
+          notes?: string | null
+          onset_date?: string | null
+          patient_id: string
+          recorded_by?: string | null
+          recorded_date?: string | null
+          resolved_date?: string | null
+          severity?: string | null
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          hospital_id?: string
+          icd_code?: string
+          icd_description?: string
+          icd_version?: string | null
+          id?: string
+          notes?: string | null
+          onset_date?: string | null
+          patient_id?: string
+          recorded_by?: string | null
+          recorded_date?: string | null
+          resolved_date?: string | null
+          severity?: string | null
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "patient_conditions_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       patient_consents: {
         Row: {
           consent_form_version: string | null
@@ -1291,32 +1524,352 @@ export type Database = {
           },
         ]
       }
+      patient_contacts: {
+        Row: {
+          contact_type: string
+          created_at: string
+          hospital_id: string
+          id: string
+          is_primary: boolean | null
+          is_verified: boolean | null
+          opt_in_email: boolean | null
+          opt_in_sms: boolean | null
+          opt_in_whatsapp: boolean | null
+          patient_id: string
+          updated_at: string
+          value: string
+        }
+        Insert: {
+          contact_type: string
+          created_at?: string
+          hospital_id: string
+          id?: string
+          is_primary?: boolean | null
+          is_verified?: boolean | null
+          opt_in_email?: boolean | null
+          opt_in_sms?: boolean | null
+          opt_in_whatsapp?: boolean | null
+          patient_id: string
+          updated_at?: string
+          value: string
+        }
+        Update: {
+          contact_type?: string
+          created_at?: string
+          hospital_id?: string
+          id?: string
+          is_primary?: boolean | null
+          is_verified?: boolean | null
+          opt_in_email?: boolean | null
+          opt_in_sms?: boolean | null
+          opt_in_whatsapp?: boolean | null
+          patient_id?: string
+          updated_at?: string
+          value?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "patient_contacts_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      patient_identifiers: {
+        Row: {
+          created_at: string
+          expiry_date: string | null
+          hospital_id: string
+          id: string
+          identifier_country: string | null
+          identifier_type: string
+          identifier_value: string
+          is_primary: boolean | null
+          issued_date: string | null
+          issuing_authority: string | null
+          patient_id: string
+          updated_at: string
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          expiry_date?: string | null
+          hospital_id: string
+          id?: string
+          identifier_country?: string | null
+          identifier_type: string
+          identifier_value: string
+          is_primary?: boolean | null
+          issued_date?: string | null
+          issuing_authority?: string | null
+          patient_id: string
+          updated_at?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          expiry_date?: string | null
+          hospital_id?: string
+          id?: string
+          identifier_country?: string | null
+          identifier_type?: string
+          identifier_value?: string
+          is_primary?: boolean | null
+          issued_date?: string | null
+          issuing_authority?: string | null
+          patient_id?: string
+          updated_at?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "patient_identifiers_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      patient_relationships: {
+        Row: {
+          address: string | null
+          created_at: string
+          email: string | null
+          hospital_id: string
+          id: string
+          is_emergency_contact: boolean | null
+          is_legal_decision_maker: boolean | null
+          notes: string | null
+          patient_id: string
+          phone: string | null
+          related_person_name: string
+          relationship: string | null
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          email?: string | null
+          hospital_id: string
+          id?: string
+          is_emergency_contact?: boolean | null
+          is_legal_decision_maker?: boolean | null
+          notes?: string | null
+          patient_id: string
+          phone?: string | null
+          related_person_name: string
+          relationship?: string | null
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          email?: string | null
+          hospital_id?: string
+          id?: string
+          is_emergency_contact?: boolean | null
+          is_legal_decision_maker?: boolean | null
+          notes?: string | null
+          patient_id?: string
+          phone?: string | null
+          related_person_name?: string
+          relationship?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "patient_relationships_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      patient_social_history: {
+        Row: {
+          alcohol_use: string | null
+          created_at: string
+          distance_to_facility_km: number | null
+          electricity_access: boolean | null
+          hospital_id: string
+          household_size: number | null
+          id: string
+          pack_years: number | null
+          patient_id: string
+          recorded_by: string | null
+          recorded_date: string | null
+          smoking_status: string | null
+          substance_use: string | null
+          updated_at: string
+          water_source: string | null
+        }
+        Insert: {
+          alcohol_use?: string | null
+          created_at?: string
+          distance_to_facility_km?: number | null
+          electricity_access?: boolean | null
+          hospital_id: string
+          household_size?: number | null
+          id?: string
+          pack_years?: number | null
+          patient_id: string
+          recorded_by?: string | null
+          recorded_date?: string | null
+          smoking_status?: string | null
+          substance_use?: string | null
+          updated_at?: string
+          water_source?: string | null
+        }
+        Update: {
+          alcohol_use?: string | null
+          created_at?: string
+          distance_to_facility_km?: number | null
+          electricity_access?: boolean | null
+          hospital_id?: string
+          household_size?: number | null
+          id?: string
+          pack_years?: number | null
+          patient_id?: string
+          recorded_by?: string | null
+          recorded_date?: string | null
+          smoking_status?: string | null
+          substance_use?: string | null
+          updated_at?: string
+          water_source?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "patient_social_history_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      patient_women_health: {
+        Row: {
+          abortions: number | null
+          contraception_method: string | null
+          created_at: string
+          gestational_age_weeks: number | null
+          gravida: number | null
+          hospital_id: string
+          id: string
+          is_breastfeeding: boolean | null
+          is_pregnant: boolean | null
+          last_menstrual_period: string | null
+          last_updated_at: string | null
+          last_updated_by: string | null
+          menarche_age: number | null
+          menopause_age: number | null
+          parity: number | null
+          patient_id: string
+        }
+        Insert: {
+          abortions?: number | null
+          contraception_method?: string | null
+          created_at?: string
+          gestational_age_weeks?: number | null
+          gravida?: number | null
+          hospital_id: string
+          id?: string
+          is_breastfeeding?: boolean | null
+          is_pregnant?: boolean | null
+          last_menstrual_period?: string | null
+          last_updated_at?: string | null
+          last_updated_by?: string | null
+          menarche_age?: number | null
+          menopause_age?: number | null
+          parity?: number | null
+          patient_id: string
+        }
+        Update: {
+          abortions?: number | null
+          contraception_method?: string | null
+          created_at?: string
+          gestational_age_weeks?: number | null
+          gravida?: number | null
+          hospital_id?: string
+          id?: string
+          is_breastfeeding?: boolean | null
+          is_pregnant?: boolean | null
+          last_menstrual_period?: string | null
+          last_updated_at?: string | null
+          last_updated_by?: string | null
+          menarche_age?: number | null
+          menopause_age?: number | null
+          parity?: number | null
+          patient_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "patient_women_health_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: true
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       patients: {
         Row: {
           address: string | null
           ai_risk_score: number | null
           allergies: string[] | null
           blood_type: string | null
+          cause_of_death_contributing: string | null
+          cause_of_death_immediate: string | null
+          cause_of_death_underlying: string | null
+          certifying_doctor_id: string | null
           chronic_conditions: string[] | null
+          country_of_origin: string | null
           created_at: string
           created_by: string | null
           current_medications: Json | null
           date_of_birth: string
+          date_of_death: string | null
+          education_level: string | null
           email: string | null
           emergency_contact_name: string | null
           emergency_contact_phone: string | null
+          family_name: string
           first_name: string
           gender: string
+          gender_identity: string | null
+          given_names: string[]
           hospital_id: string
           id: string
           insurance_number: string | null
           insurance_provider: string | null
+          is_deceased: boolean | null
           last_name: string
+          manner_of_death: string | null
+          marital_status: string | null
+          name_script: string | null
           notes: string | null
+          occupation: string | null
+          occupation_code: string | null
+          other_names: string[] | null
           patient_id: string
           phone: string | null
+          photo_url: string | null
+          place_of_death: string | null
+          preferred_language: string | null
+          preferred_name: string | null
+          pronouns: string | null
+          refugee_status: string | null
           risk_level: Database["public"]["Enums"]["risk_level"] | null
+          sex_at_birth: string
           status: string | null
+          time_of_death: string | null
           updated_at: string
           ward: string | null
         }
@@ -1325,26 +1878,51 @@ export type Database = {
           ai_risk_score?: number | null
           allergies?: string[] | null
           blood_type?: string | null
+          cause_of_death_contributing?: string | null
+          cause_of_death_immediate?: string | null
+          cause_of_death_underlying?: string | null
+          certifying_doctor_id?: string | null
           chronic_conditions?: string[] | null
+          country_of_origin?: string | null
           created_at?: string
           created_by?: string | null
           current_medications?: Json | null
           date_of_birth: string
+          date_of_death?: string | null
+          education_level?: string | null
           email?: string | null
           emergency_contact_name?: string | null
           emergency_contact_phone?: string | null
+          family_name: string
           first_name: string
           gender: string
+          gender_identity?: string | null
+          given_names?: string[]
           hospital_id: string
           id?: string
           insurance_number?: string | null
           insurance_provider?: string | null
+          is_deceased?: boolean | null
           last_name: string
+          manner_of_death?: string | null
+          marital_status?: string | null
+          name_script?: string | null
           notes?: string | null
+          occupation?: string | null
+          occupation_code?: string | null
+          other_names?: string[] | null
           patient_id?: string
           phone?: string | null
+          photo_url?: string | null
+          place_of_death?: string | null
+          preferred_language?: string | null
+          preferred_name?: string | null
+          pronouns?: string | null
+          refugee_status?: string | null
           risk_level?: Database["public"]["Enums"]["risk_level"] | null
+          sex_at_birth?: string
           status?: string | null
+          time_of_death?: string | null
           updated_at?: string
           ward?: string | null
         }
@@ -1353,30 +1931,62 @@ export type Database = {
           ai_risk_score?: number | null
           allergies?: string[] | null
           blood_type?: string | null
+          cause_of_death_contributing?: string | null
+          cause_of_death_immediate?: string | null
+          cause_of_death_underlying?: string | null
+          certifying_doctor_id?: string | null
           chronic_conditions?: string[] | null
+          country_of_origin?: string | null
           created_at?: string
           created_by?: string | null
           current_medications?: Json | null
           date_of_birth?: string
+          date_of_death?: string | null
+          education_level?: string | null
           email?: string | null
           emergency_contact_name?: string | null
           emergency_contact_phone?: string | null
+          family_name?: string
           first_name?: string
           gender?: string
+          gender_identity?: string | null
+          given_names?: string[]
           hospital_id?: string
           id?: string
           insurance_number?: string | null
           insurance_provider?: string | null
+          is_deceased?: boolean | null
           last_name?: string
+          manner_of_death?: string | null
+          marital_status?: string | null
+          name_script?: string | null
           notes?: string | null
+          occupation?: string | null
+          occupation_code?: string | null
+          other_names?: string[] | null
           patient_id?: string
           phone?: string | null
+          photo_url?: string | null
+          place_of_death?: string | null
+          preferred_language?: string | null
+          preferred_name?: string | null
+          pronouns?: string | null
+          refugee_status?: string | null
           risk_level?: Database["public"]["Enums"]["risk_level"] | null
+          sex_at_birth?: string
           status?: string | null
+          time_of_death?: string | null
           updated_at?: string
           ward?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "patients_certifying_doctor_id_fkey"
+            columns: ["certifying_doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "patients_hospital_id_fkey"
             columns: ["hospital_id"]
