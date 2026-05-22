@@ -245,26 +245,11 @@ export default function Patients() {
   const [showAdd, setShowAdd] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState<PatientType | null>(null);
   const { data: patients = [], isLoading } = usePatients();
-  const addPatient = useAddPatient();
-
-  const [form, setForm] = useState({ first_name: "", last_name: "", date_of_birth: "", gender: "M" as string, phone: "", ward: "" });
 
   const filtered = patients.filter(p =>
     `${p.first_name} ${p.last_name}`.toLowerCase().includes(search.toLowerCase()) ||
     p.patient_id.toLowerCase().includes(search.toLowerCase())
   );
-
-  const handleAdd = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await addPatient.mutateAsync(form as any);
-      setShowAdd(false);
-      setForm({ first_name: "", last_name: "", date_of_birth: "", gender: "M", phone: "", ward: "" });
-      toast.success("Patient added successfully");
-    } catch (err: any) {
-      toast.error(err.message);
-    }
-  };
 
   return (
     <div className="p-6 space-y-5 max-w-[1600px] mx-auto">
