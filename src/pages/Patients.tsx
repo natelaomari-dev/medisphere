@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Search, Filter, Plus, ChevronRight, X, Phone, Mail, MapPin, Heart, AlertCircle, Calendar, Trash2 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import { usePatients, useAddPatient, useDeletePatient } from "@/hooks/useHospitalData";
+import { motion } from "framer-motion";
+import { usePatients, useDeletePatient } from "@/hooks/useHospitalData";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 import { format } from "date-fns";
@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { useHospital } from "@/hooks/useHospital";
 import { PatientConsents } from "@/components/PatientConsents";
+import { PatientRegistrationWizard } from "@/components/PatientRegistrationWizard";
 
 const riskColors = { low: "bg-green-500/10 text-green-600", medium: "bg-amber-500/10 text-amber-600", high: "bg-red-500/10 text-red-600", critical: "bg-red-500/10 text-red-600" };
 const statusColors: Record<string, string> = { outpatient: "text-blue-500", inpatient: "text-primary", icu: "text-red-500", discharged: "text-green-500", deceased: "text-muted-foreground" };
@@ -244,26 +245,11 @@ export default function Patients() {
   const [showAdd, setShowAdd] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState<PatientType | null>(null);
   const { data: patients = [], isLoading } = usePatients();
-  const addPatient = useAddPatient();
-
-  const [form, setForm] = useState({ first_name: "", last_name: "", date_of_birth: "", gender: "M" as string, phone: "", ward: "" });
 
   const filtered = patients.filter(p =>
     `${p.first_name} ${p.last_name}`.toLowerCase().includes(search.toLowerCase()) ||
     p.patient_id.toLowerCase().includes(search.toLowerCase())
   );
-
-  const handleAdd = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await addPatient.mutateAsync(form as any);
-      setShowAdd(false);
-      setForm({ first_name: "", last_name: "", date_of_birth: "", gender: "M", phone: "", ward: "" });
-      toast.success("Patient added successfully");
-    } catch (err: any) {
-      toast.error(err.message);
-    }
-  };
 
   return (
     <div className="p-6 space-y-5 max-w-[1600px] mx-auto">
@@ -277,38 +263,8 @@ export default function Patients() {
         </button>
       </div>
 
-      {/* Add Patient Modal */}
-      <AnimatePresence>
-        {showAdd && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 bg-foreground/20 backdrop-blur-sm flex items-center justify-center p-4">
-            <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }} className="bg-card border border-border rounded-xl p-6 w-full max-w-md shadow-xl">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-base font-semibold text-foreground">Add New Patient</h3>
-                <button onClick={() => setShowAdd(false)} className="text-muted-foreground hover:text-foreground"><X className="h-4 w-4" /></button>
-              </div>
-              <form onSubmit={handleAdd} className="space-y-3">
-                <div className="grid grid-cols-2 gap-3">
-                  <input type="text" placeholder="First name" value={form.first_name} onChange={e => setForm({ ...form, first_name: e.target.value })} required className="px-3 py-2 rounded-lg bg-muted/50 border border-border text-sm text-foreground placeholder:text-muted-foreground outline-none focus:ring-1 focus:ring-primary" />
-                  <input type="text" placeholder="Last name" value={form.last_name} onChange={e => setForm({ ...form, last_name: e.target.value })} required className="px-3 py-2 rounded-lg bg-muted/50 border border-border text-sm text-foreground placeholder:text-muted-foreground outline-none focus:ring-1 focus:ring-primary" />
-                </div>
-                <input type="date" value={form.date_of_birth} onChange={e => setForm({ ...form, date_of_birth: e.target.value })} required className="w-full px-3 py-2 rounded-lg bg-muted/50 border border-border text-sm text-foreground outline-none focus:ring-1 focus:ring-primary" />
-                <div className="grid grid-cols-2 gap-3">
-                  <select value={form.gender} onChange={e => setForm({ ...form, gender: e.target.value })} className="px-3 py-2 rounded-lg bg-muted/50 border border-border text-sm text-foreground outline-none focus:ring-1 focus:ring-primary">
-                    <option value="M">Male</option>
-                    <option value="F">Female</option>
-                    <option value="Other">Other</option>
-                  </select>
-                  <input type="text" placeholder="Ward" value={form.ward} onChange={e => setForm({ ...form, ward: e.target.value })} className="px-3 py-2 rounded-lg bg-muted/50 border border-border text-sm text-foreground placeholder:text-muted-foreground outline-none focus:ring-1 focus:ring-primary" />
-                </div>
-                <input type="tel" placeholder="Phone" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} className="w-full px-3 py-2 rounded-lg bg-muted/50 border border-border text-sm text-foreground placeholder:text-muted-foreground outline-none focus:ring-1 focus:ring-primary" />
-                <button type="submit" disabled={addPatient.isPending} className="w-full py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors disabled:opacity-50">
-                  {addPatient.isPending ? "Adding..." : "Add Patient"}
-                </button>
-              </form>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Add Patient Wizard */}
+      {showAdd && <PatientRegistrationWizard onClose={() => setShowAdd(false)} />}
 
       {/* Patient Detail Sheet */}
       {selectedPatient && <PatientDetail patient={selectedPatient} onClose={() => setSelectedPatient(null)} />}
