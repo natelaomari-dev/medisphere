@@ -542,7 +542,7 @@ function useRegisterPatient() {
       const rollback = async () => { try { await supabase.from("patients").delete().eq("id", pid); } catch {} };
 
       try {
-        const ops: Promise<any>[] = [];
+        const ops: any[] = [];
         const allIdents = [...v.identifiers, ...v.insurance].filter(x => x.identifier_value);
         if (allIdents.length)
           ops.push(supabase.from("patient_identifiers").insert(allIdents.map(x => ({ ...x, patient_id: pid, identifier_country: x.identifier_country || null, issuing_authority: x.issuing_authority || null })) as any));
