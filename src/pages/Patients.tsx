@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Search, Filter, Plus, ChevronRight, X, Phone, Mail, MapPin, Heart, AlertCircle, Calendar, Trash2 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import { usePatients, useAddPatient, useDeletePatient } from "@/hooks/useHospitalData";
+import { motion } from "framer-motion";
+import { usePatients, useDeletePatient } from "@/hooks/useHospitalData";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 import { format } from "date-fns";
