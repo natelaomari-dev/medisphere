@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { useHospital } from "@/hooks/useHospital";
 import { PatientConsents } from "@/components/PatientConsents";
+import { PatientRegistrationWizard } from "@/components/PatientRegistrationWizard";
 
 const riskColors = { low: "bg-green-500/10 text-green-600", medium: "bg-amber-500/10 text-amber-600", high: "bg-red-500/10 text-red-600", critical: "bg-red-500/10 text-red-600" };
 const statusColors: Record<string, string> = { outpatient: "text-blue-500", inpatient: "text-primary", icu: "text-red-500", discharged: "text-green-500", deceased: "text-muted-foreground" };
