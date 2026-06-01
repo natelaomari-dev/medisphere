@@ -1,71 +1,86 @@
-# FHIR R4 Patient Model Refactor
+# Kenyan Public-Sector Clinical Modules
 
-A significant refactor adding FHIR R4-aligned demographics, child tables, and a 9-tab registration wizard. Existing `patients` table is preserved — new columns added, legacy data migrated into child tables.
+This is a large, multi-domain build. I'll deliver it in **5 sequential migrations + 5 pages**, each scoped to one clinical domain. All tables follow existing patterns: `hospital_id` scoped, `is_hospital_member` RLS, GRANTs to `authenticated` + `service_role`, `set_hospital_id_from_patient` triggers where relevant.
 
-## Phase 1 — Database migration (single migration file)
+## Phase 1 — Maternal & Child Health (MCH)
 
-### 1a. Extend `patients` table
-Add columns (existing `last_name`, `gender`, `allergies`, `chronic_conditions`, `emergency_contact_*` remain for backward compatibility during transition):
-- Names: `given_names text[]`, `family_name text`, `other_names text[]`, `preferred_name`, `name_script` (default `'Latn'`)
-- Identity: `sex_at_birth` (check), `gender_identity`, `pronouns`, `marital_status` (check), `occupation`, `occupation_code`, `education_level` (check)
-- Locale: `preferred_language` (default `'en'`), `country_of_origin`, `refugee_status` (check)
-- Other: `photo_url`
-- Mortality: `is_deceased` (default false), `date_of_death`, `time_of_death`, `place_of_death`, three `cause_of_death_*`, `manner_of_death` (check), `certifying_doctor_id` → doctors
+**Migration 1a — MCH tables**
+- `mch_anc_visits` — antenatal visit data (gestational age, BP, fundal height, FHR, urinalysis, Hb, HIV/syphilis/malaria status, TT dose, IFAS, mosquito net, complications, next visit)
+- `mch_deliveries` — delivery record (mode, outcome, APGAR, birth weight, place) with CHECK constraints via triggers (not CHECK, since CHECK must be immutable — actually plain enum-style CHECKs are fine, they're immutable)
+- `mch_postnatal_visits` — PNC schedule (6hr/6day/6wk visits, mother + baby exam, breastfeeding, family planning counseling)
+- `child_immunizations` — child vaccine doses (links to patient as `child_patient_id`)
+- `growth_monitoring` — anthropometry with `wfa_z`, `hfa_z`, `wfh_z` calculated by trigger using simplified WHO LMS (we'll implement a `calculate_who_zscore` function using a seeded `who_growth_standards` lookup table for boys/girls 0–60 months, or a simplified linear approximation noting this is a simplification)
+- `kepi_schedule` (reference table) — seed BCG, OPV0/1/2/3, Penta1/2/3, PCV1/2/3, Rota1/2, IPV, Measles-Rubella 1/2, Yellow Fever, etc.
 
-Backfill: split existing `first_name` → `given_names[]`; copy `last_name` → `family_name`; map `gender` ('M'/'F'/'Other') → `sex_at_birth`. After backfill, set `family_name NOT NULL`, `given_names NOT NULL DEFAULT '{}'`, `sex_at_birth NOT NULL DEFAULT 'unknown'`.
+**Page** `src/pages/MCH.tsx` — three tabs: ANC visits, Deliveries, PNC visits. Each tab: list view + "Add visit" dialog. Patient selector at top.
 
-Note: "rename last_name to family_name with generated column for backcompat" — Postgres can't make `last_name` a generated column without dropping it first, and code still writes to it. Approach: keep both columns, add a trigger that syncs `family_name` ↔ `last_name` on insert/update so legacy code keeps working.
+**Page** `src/pages/Pediatrics.tsx` — child selector → two tabs: Immunization schedule (table of KEPI doses, scheduled vs given with date pickers) + Growth chart (Recharts line chart of weight-for-age, height-for-age, with WHO z-score reference bands).
 
-### 1b. Child tables (all with RLS via `is_hospital_member(auth.uid(), hospital_id)`)
-- `patient_identifiers` + unique partial index `(patient_id) WHERE is_primary`
-- `patient_contacts`
-- `patient_addresses`
-- `patient_relationships` — migrate existing `emergency_contact_name/phone` rows
-- `patient_allergies` — migrate `patients.allergies[]`
-- `patient_conditions` — migrate `patients.chronic_conditions[]`
-- `patient_social_history`
-- `patient_women_health` — UNIQUE on `patient_id`
+**MOH 333 update**: Update `MOHReports.tsx` 333 generator to query `mch_deliveries`, `mch_anc_visits` for actual counts.
 
-Each child table gets a `hospital_id` (denormalized for RLS) populated by trigger from the parent patient row; `set_hospital_id_default` reused or a child-specific trigger that copies from `patients`.
+## Phase 2 — HIV Care
 
-RLS pattern on every table:
-- SELECT/INSERT/UPDATE: `is_hospital_member(auth.uid(), hospital_id)`
-- DELETE: admins only or omit
+**Migration 2** — `hiv_enrollments`, `art_regimens`, `viral_load_results`, `art_dispenses`.
 
-### 1c. `geographic_areas` table
-Hierarchical: `id, parent_id, level (country|region|county|sub_county|ward), code, name, country_code`. Seed Kenya: 47 counties + sub-counties (top-level only initially; full ward seed deferred). Public-read RLS (no hospital scoping — reference data).
+**Page** `src/pages/HIVCare.tsx` — patient selector → tabs: Enrollment summary (CCC#, WHO stage, baseline CD4/VL), Regimen history (timeline), VL trend (Recharts line), ART adherence dashboard (computed: pills dispensed vs expected based on days_supplied gaps).
 
-## Phase 2 — Frontend wizard
+**MOH 731 update**: query these tables for ART cohort, VL suppression %, retention.
 
-Replace the current "Add Patient" modal in `src/pages/Patients.tsx` with a 9-tab wizard component (`PatientRegistrationWizard.tsx`) using:
-- `react-hook-form` + `zod` resolver
-- `@/components/ui/tabs` for navigation, with Prev/Next + final Save
-- Single submit handler runs a transactional sequence: insert `patients` row → use returned id to insert all child rows in parallel; on any failure, delete the patient row to roll back (Supabase JS has no client-side tx, so this compensation pattern is standard).
+## Phase 3 — TB Care
 
-Tabs:
-1. **Identity** — names array, sex at birth, DOB, gender identity, marital status, language, country (ISO list), refugee status, photo upload to existing storage
-2. **Identifiers** — dynamic field array, "mark primary" radio
-3. **Contacts** — dynamic field array, per-channel opt-ins
-4. **Addresses** — country/region/county/sub-county cascading selects fed from `geographic_areas`
-5. **Relationships** — dynamic field array
-6. **Clinical baseline** — allergies, conditions, current meds, blood type, social history
-7. **Women's health** — conditionally rendered when `sex_at_birth==='female'` AND age > 10
-8. **Insurance** — multiple schemes (writes to `patient_identifiers` with type `sha_number`/`nhif_number`/`private_insurance`)
-9. **Consents** — uses existing `patient_consents` table; insert one row per consent type granted
+**Migration 3** — `tb_cases`, `tb_dot_visits`, `tb_contacts`.
 
-Existing modal/list/detail UI in `Patients.tsx` stays functional; only the add-patient flow is replaced.
+**Page** `src/pages/TBCare.tsx` — registry list, case detail with DOT calendar + contact tracing tab.
 
-## Phase 3 — Out of scope (callouts, not implemented)
-- Full sub-county/ward seed for Kenya (only counties seeded; structure ready for later expansion)
-- Edit flow for existing patients via the wizard (registration only this pass)
-- Other pages (`Billing.tsx`, `Appointments.tsx`, etc.) continue to read legacy `first_name`/`last_name` via the sync trigger — no changes needed there
+**MOH 711 update**: integrate TB notification counts.
 
-## Files changed
-- New migration: `supabase/migrations/<ts>_fhir_patient_model.sql`
-- New: `src/components/PatientRegistrationWizard.tsx` (+ small sub-components per tab if file grows)
-- New: `src/lib/fhirPatientSchema.ts` (zod schemas + types)
-- Edited: `src/pages/Patients.tsx` (swap add-patient modal for wizard)
-- Edited: `src/hooks/useHospitalData.ts` (new `useRegisterPatient` mutation that does the multi-table insert)
+## Phase 4 — IDSR (Notifiable Disease Surveillance)
 
-## Approval needed
-This will require approving one large database migration before frontend code lands.
+**Migration 4**
+- `notifiable_conditions_registry` (text PK, condition_name, icd_codes text[], window hours, immediate bool) — seed 14 conditions with ICD-10 codes
+- `idsr_notifications` (with status workflow)
+- Trigger `idsr_check_diagnosis` on `diagnoses` INSERT: scans ICD code against registry; if match → INSERT `idsr_notifications` (status='pending') + INSERT `ai_alerts` (type='notifiable_disease', severity='critical' if immediate else 'high')
+
+IDSR notifications appear in existing `AIInsights` alerts feed; no new page (small registry view added to MOHReports if time permits).
+
+## Phase 5 — Clinical Decision Support (EWS) + Order Sets
+
+**Migration 5a — EWS**
+- Functions: `calculate_news2`, `calculate_qsofa`, `calculate_pews`, `calculate_mews`, `calculate_gcs` — pure SQL functions returning int + jsonb components
+- Table `clinical_scores` (id, patient_id, encounter_id, score_type, score_value int, components jsonb, action_recommended text, calculated_at)
+- Trigger on `vitals` INSERT: compute NEWS2 (always), and conditionally PEWS/MEWS based on patient age/pregnancy → insert into `clinical_scores`. If NEWS2 ≥ 7 → INSERT `ai_alerts` type='deterioration' severity='critical'.
+
+**Migration 5b — Order Sets**
+- `order_sets` (hospital_id scoped)
+- `order_set_items` (item_type, item_data jsonb, sequence)
+- Seed 10 order sets (sepsis bundle, DKA, severe malaria, normal labor, post-op cholecystectomy, acute MI, peds pneumonia, pre-eclampsia, snakebite, SAM)
+
+**MedicalRecords.tsx update**: Add "Apply order set" button per record → dialog lists hospital's order sets → on apply, iterates items and INSERTs to `lab_orders`, `prescriptions` (if exists; else medication notes), `nurse_notes`.
+
+## Sidebar/Routing
+
+Add four new nav items in `AppSidebar.tsx`: MCH, Pediatrics, HIV Care, TB Care. Add routes in `App.tsx`.
+
+## Technical notes
+
+- **CHECK constraints**: Per project rules, time-based validations must use triggers. Static enum-style CHECKs (e.g. `mode in ('svd',...)`) are immutable and allowed.
+- **WHO z-scores**: Full LMS tables are large. I'll seed a compact reference table for ages 0/3/6/12/24/36/48/60 months for both sexes (median + SD per age) and interpolate linearly. The trigger documents this as a clinical estimate; production deployment should swap in full WHO LMS data.
+- **Realtime alerts**: IDSR + NEWS2 critical → `ai_alerts` row which existing alert subscriptions surface.
+- **No edits** to `supabase/integrations/types.ts`, `client.ts`, `.env` (auto-generated).
+
+## Files
+
+**New migrations** (5 sequential):
+- MCH tables + KEPI seed + WHO standards seed
+- HIV care tables
+- TB care tables
+- IDSR registry + trigger
+- EWS functions/trigger + Order Sets + seeds
+
+**New pages**: `MCH.tsx`, `Pediatrics.tsx`, `HIVCare.tsx`, `TBCare.tsx`
+
+**Edited**: `AppSidebar.tsx`, `App.tsx`, `MOHReports.tsx`, `MedicalRecords.tsx` (Apply order set)
+
+## Scope confirmation
+
+Given the size (~5 migrations, 4 new pages, ~2000 LOC), I'll proceed in order and deliver each phase as a coherent unit. If you'd rather stage delivery (e.g. ship MCH first, review, then continue), say so before approving — otherwise I'll execute all five phases sequentially in this loop.
