@@ -301,6 +301,84 @@ export type Database = {
           },
         ]
       }
+      art_dispenses: {
+        Row: {
+          created_at: string
+          days_supplied: number | null
+          dispense_date: string
+          dispensed_by: string | null
+          hospital_id: string
+          id: string
+          next_appointment: string | null
+          notes: string | null
+          patient_id: string
+          pills_dispensed: number | null
+          regimen_code: string | null
+        }
+        Insert: {
+          created_at?: string
+          days_supplied?: number | null
+          dispense_date?: string
+          dispensed_by?: string | null
+          hospital_id: string
+          id?: string
+          next_appointment?: string | null
+          notes?: string | null
+          patient_id: string
+          pills_dispensed?: number | null
+          regimen_code?: string | null
+        }
+        Update: {
+          created_at?: string
+          days_supplied?: number | null
+          dispense_date?: string
+          dispensed_by?: string | null
+          hospital_id?: string
+          id?: string
+          next_appointment?: string | null
+          notes?: string | null
+          patient_id?: string
+          pills_dispensed?: number | null
+          regimen_code?: string | null
+        }
+        Relationships: []
+      }
+      art_regimens: {
+        Row: {
+          created_at: string
+          end_date: string | null
+          hospital_id: string
+          id: string
+          patient_id: string
+          prescribed_by: string | null
+          reason_for_change: string | null
+          regimen_code: string
+          start_date: string
+        }
+        Insert: {
+          created_at?: string
+          end_date?: string | null
+          hospital_id: string
+          id?: string
+          patient_id: string
+          prescribed_by?: string | null
+          reason_for_change?: string | null
+          regimen_code: string
+          start_date: string
+        }
+        Update: {
+          created_at?: string
+          end_date?: string | null
+          hospital_id?: string
+          id?: string
+          patient_id?: string
+          prescribed_by?: string | null
+          reason_for_change?: string | null
+          regimen_code?: string
+          start_date?: string
+        }
+        Relationships: []
+      }
       beds: {
         Row: {
           bed_number: string
@@ -646,6 +724,54 @@ export type Database = {
           weight_kg?: number | null
           wfa_z?: number | null
           wfh_z?: number | null
+        }
+        Relationships: []
+      }
+      hiv_enrollments: {
+        Row: {
+          art_eligible: boolean | null
+          baseline_cd4: number | null
+          baseline_vl: number | null
+          ccc_number: string | null
+          created_at: string
+          enrollment_date: string
+          hospital_id: string
+          id: string
+          notes: string | null
+          partner_testing_done: boolean | null
+          patient_id: string
+          updated_at: string
+          who_stage: number | null
+        }
+        Insert: {
+          art_eligible?: boolean | null
+          baseline_cd4?: number | null
+          baseline_vl?: number | null
+          ccc_number?: string | null
+          created_at?: string
+          enrollment_date?: string
+          hospital_id: string
+          id?: string
+          notes?: string | null
+          partner_testing_done?: boolean | null
+          patient_id: string
+          updated_at?: string
+          who_stage?: number | null
+        }
+        Update: {
+          art_eligible?: boolean | null
+          baseline_cd4?: number | null
+          baseline_vl?: number | null
+          ccc_number?: string | null
+          created_at?: string
+          enrollment_date?: string
+          hospital_id?: string
+          id?: string
+          notes?: string | null
+          partner_testing_done?: boolean | null
+          patient_id?: string
+          updated_at?: string
+          who_stage?: number | null
         }
         Relationships: []
       }
@@ -2813,6 +2939,48 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      viral_load_results: {
+        Row: {
+          copies_per_ml: number | null
+          created_at: string
+          hospital_id: string
+          id: string
+          lab_facility: string | null
+          notes: string | null
+          patient_id: string
+          result_date: string | null
+          sample_date: string
+          suppressed: boolean | null
+          undetectable: boolean | null
+        }
+        Insert: {
+          copies_per_ml?: number | null
+          created_at?: string
+          hospital_id: string
+          id?: string
+          lab_facility?: string | null
+          notes?: string | null
+          patient_id: string
+          result_date?: string | null
+          sample_date: string
+          suppressed?: boolean | null
+          undetectable?: boolean | null
+        }
+        Update: {
+          copies_per_ml?: number | null
+          created_at?: string
+          hospital_id?: string
+          id?: string
+          lab_facility?: string | null
+          notes?: string | null
+          patient_id?: string
+          result_date?: string | null
+          sample_date?: string
+          suppressed?: boolean | null
+          undetectable?: boolean | null
         }
         Relationships: []
       }
