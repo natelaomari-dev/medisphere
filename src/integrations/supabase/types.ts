@@ -352,6 +352,62 @@ export type Database = {
           },
         ]
       }
+      child_immunizations: {
+        Row: {
+          batch_number: string | null
+          child_patient_id: string
+          created_at: string
+          dose_number: number
+          given_by: string | null
+          given_date: string | null
+          hospital_id: string
+          id: string
+          kepi_id: string | null
+          notes: string | null
+          scheduled_date: string | null
+          updated_at: string
+          vaccine: string
+        }
+        Insert: {
+          batch_number?: string | null
+          child_patient_id: string
+          created_at?: string
+          dose_number: number
+          given_by?: string | null
+          given_date?: string | null
+          hospital_id: string
+          id?: string
+          kepi_id?: string | null
+          notes?: string | null
+          scheduled_date?: string | null
+          updated_at?: string
+          vaccine: string
+        }
+        Update: {
+          batch_number?: string | null
+          child_patient_id?: string
+          created_at?: string
+          dose_number?: number
+          given_by?: string | null
+          given_date?: string | null
+          hospital_id?: string
+          id?: string
+          kepi_id?: string | null
+          notes?: string | null
+          scheduled_date?: string | null
+          updated_at?: string
+          vaccine?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "child_immunizations_kepi_id_fkey"
+            columns: ["kepi_id"]
+            isOneToOne: false
+            referencedRelation: "kepi_schedule"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       clinical_audit_log: {
         Row: {
           accessed_columns: string[] | null
@@ -541,6 +597,57 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      growth_monitoring: {
+        Row: {
+          age_months: number | null
+          child_patient_id: string
+          created_at: string
+          height_cm: number | null
+          hfa_z: number | null
+          hospital_id: string
+          id: string
+          muac_cm: number | null
+          nutrition_status: string | null
+          recorded_by: string | null
+          visit_date: string
+          weight_kg: number | null
+          wfa_z: number | null
+          wfh_z: number | null
+        }
+        Insert: {
+          age_months?: number | null
+          child_patient_id: string
+          created_at?: string
+          height_cm?: number | null
+          hfa_z?: number | null
+          hospital_id: string
+          id?: string
+          muac_cm?: number | null
+          nutrition_status?: string | null
+          recorded_by?: string | null
+          visit_date?: string
+          weight_kg?: number | null
+          wfa_z?: number | null
+          wfh_z?: number | null
+        }
+        Update: {
+          age_months?: number | null
+          child_patient_id?: string
+          created_at?: string
+          height_cm?: number | null
+          hfa_z?: number | null
+          hospital_id?: string
+          id?: string
+          muac_cm?: number | null
+          nutrition_status?: string | null
+          recorded_by?: string | null
+          visit_date?: string
+          weight_kg?: number | null
+          wfa_z?: number | null
+          wfh_z?: number | null
+        }
+        Relationships: []
       }
       hospital_members: {
         Row: {
@@ -928,6 +1035,36 @@ export type Database = {
           },
         ]
       }
+      kepi_schedule: {
+        Row: {
+          age_weeks: number
+          dose_number: number
+          id: string
+          notes: string | null
+          route: string | null
+          site: string | null
+          vaccine: string
+        }
+        Insert: {
+          age_weeks: number
+          dose_number: number
+          id: string
+          notes?: string | null
+          route?: string | null
+          site?: string | null
+          vaccine: string
+        }
+        Update: {
+          age_weeks?: number
+          dose_number?: number
+          id?: string
+          notes?: string | null
+          route?: string | null
+          site?: string | null
+          vaccine?: string
+        }
+        Relationships: []
+      }
       lab_orders: {
         Row: {
           completed_at: string | null
@@ -1002,6 +1139,237 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      mch_anc_visits: {
+        Row: {
+          attended_by: string | null
+          blood_pressure_diastolic: number | null
+          blood_pressure_systolic: number | null
+          complications: string | null
+          created_at: string
+          fetal_heart_rate: number | null
+          fetal_movements: string | null
+          fundal_height_cm: number | null
+          gestational_age_weeks: number | null
+          hb_level: number | null
+          hiv_status: string | null
+          hospital_id: string
+          id: string
+          ifas_given: boolean | null
+          malaria_status: string | null
+          mosquito_net_given: boolean | null
+          next_visit_date: string | null
+          patient_id: string
+          plan: string | null
+          syphilis_status: string | null
+          tt_dose: number | null
+          updated_at: string
+          urine_glucose: string | null
+          urine_protein: string | null
+          visit_date: string
+          visit_number: number
+          weight: number | null
+        }
+        Insert: {
+          attended_by?: string | null
+          blood_pressure_diastolic?: number | null
+          blood_pressure_systolic?: number | null
+          complications?: string | null
+          created_at?: string
+          fetal_heart_rate?: number | null
+          fetal_movements?: string | null
+          fundal_height_cm?: number | null
+          gestational_age_weeks?: number | null
+          hb_level?: number | null
+          hiv_status?: string | null
+          hospital_id: string
+          id?: string
+          ifas_given?: boolean | null
+          malaria_status?: string | null
+          mosquito_net_given?: boolean | null
+          next_visit_date?: string | null
+          patient_id: string
+          plan?: string | null
+          syphilis_status?: string | null
+          tt_dose?: number | null
+          updated_at?: string
+          urine_glucose?: string | null
+          urine_protein?: string | null
+          visit_date?: string
+          visit_number?: number
+          weight?: number | null
+        }
+        Update: {
+          attended_by?: string | null
+          blood_pressure_diastolic?: number | null
+          blood_pressure_systolic?: number | null
+          complications?: string | null
+          created_at?: string
+          fetal_heart_rate?: number | null
+          fetal_movements?: string | null
+          fundal_height_cm?: number | null
+          gestational_age_weeks?: number | null
+          hb_level?: number | null
+          hiv_status?: string | null
+          hospital_id?: string
+          id?: string
+          ifas_given?: boolean | null
+          malaria_status?: string | null
+          mosquito_net_given?: boolean | null
+          next_visit_date?: string | null
+          patient_id?: string
+          plan?: string | null
+          syphilis_status?: string | null
+          tt_dose?: number | null
+          updated_at?: string
+          urine_glucose?: string | null
+          urine_protein?: string | null
+          visit_date?: string
+          visit_number?: number
+          weight?: number | null
+        }
+        Relationships: []
+      }
+      mch_deliveries: {
+        Row: {
+          apgar_1min: number | null
+          apgar_5min: number | null
+          attended_by: string | null
+          birth_weight_g: number | null
+          complications: string | null
+          created_at: string
+          delivery_date: string
+          delivery_time: string | null
+          gestational_age_weeks: number | null
+          hospital_id: string
+          id: string
+          mode: string | null
+          outcome: string | null
+          patient_id: string
+          place: string | null
+          sex: string | null
+          updated_at: string
+        }
+        Insert: {
+          apgar_1min?: number | null
+          apgar_5min?: number | null
+          attended_by?: string | null
+          birth_weight_g?: number | null
+          complications?: string | null
+          created_at?: string
+          delivery_date?: string
+          delivery_time?: string | null
+          gestational_age_weeks?: number | null
+          hospital_id: string
+          id?: string
+          mode?: string | null
+          outcome?: string | null
+          patient_id: string
+          place?: string | null
+          sex?: string | null
+          updated_at?: string
+        }
+        Update: {
+          apgar_1min?: number | null
+          apgar_5min?: number | null
+          attended_by?: string | null
+          birth_weight_g?: number | null
+          complications?: string | null
+          created_at?: string
+          delivery_date?: string
+          delivery_time?: string | null
+          gestational_age_weeks?: number | null
+          hospital_id?: string
+          id?: string
+          mode?: string | null
+          outcome?: string | null
+          patient_id?: string
+          place?: string | null
+          sex?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      mch_postnatal_visits: {
+        Row: {
+          attended_by: string | null
+          baby_cord_status: string | null
+          baby_feeding: string | null
+          baby_jaundice: boolean | null
+          baby_temperature: number | null
+          baby_weight_g: number | null
+          breastfeeding_status: string | null
+          complications: string | null
+          created_at: string
+          family_planning_counseled: boolean | null
+          family_planning_method: string | null
+          hospital_id: string
+          id: string
+          mother_bleeding: string | null
+          mother_bp_diastolic: number | null
+          mother_bp_systolic: number | null
+          mother_temperature: number | null
+          patient_id: string
+          perineum_status: string | null
+          plan: string | null
+          updated_at: string
+          uterine_involution: string | null
+          visit_date: string
+          visit_timepoint: string
+        }
+        Insert: {
+          attended_by?: string | null
+          baby_cord_status?: string | null
+          baby_feeding?: string | null
+          baby_jaundice?: boolean | null
+          baby_temperature?: number | null
+          baby_weight_g?: number | null
+          breastfeeding_status?: string | null
+          complications?: string | null
+          created_at?: string
+          family_planning_counseled?: boolean | null
+          family_planning_method?: string | null
+          hospital_id: string
+          id?: string
+          mother_bleeding?: string | null
+          mother_bp_diastolic?: number | null
+          mother_bp_systolic?: number | null
+          mother_temperature?: number | null
+          patient_id: string
+          perineum_status?: string | null
+          plan?: string | null
+          updated_at?: string
+          uterine_involution?: string | null
+          visit_date?: string
+          visit_timepoint: string
+        }
+        Update: {
+          attended_by?: string | null
+          baby_cord_status?: string | null
+          baby_feeding?: string | null
+          baby_jaundice?: boolean | null
+          baby_temperature?: number | null
+          baby_weight_g?: number | null
+          breastfeeding_status?: string | null
+          complications?: string | null
+          created_at?: string
+          family_planning_counseled?: boolean | null
+          family_planning_method?: string | null
+          hospital_id?: string
+          id?: string
+          mother_bleeding?: string | null
+          mother_bp_diastolic?: number | null
+          mother_bp_systolic?: number | null
+          mother_temperature?: number | null
+          patient_id?: string
+          perineum_status?: string | null
+          plan?: string | null
+          updated_at?: string
+          uterine_involution?: string | null
+          visit_date?: string
+          visit_timepoint?: string
+        }
+        Relationships: []
       }
       medical_records: {
         Row: {
@@ -2573,6 +2941,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      who_growth_standards: {
+        Row: {
+          age_months: number
+          height_median: number
+          height_sd: number
+          id: string
+          sex: string
+          weight_median: number
+          weight_sd: number
+        }
+        Insert: {
+          age_months: number
+          height_median: number
+          height_sd: number
+          id?: string
+          sex: string
+          weight_median: number
+          weight_sd: number
+        }
+        Update: {
+          age_months?: number
+          height_median?: number
+          height_sd?: number
+          id?: string
+          sex?: string
+          weight_median?: number
+          weight_sd?: number
+        }
+        Relationships: []
       }
     }
     Views: {
