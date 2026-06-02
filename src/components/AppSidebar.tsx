@@ -34,6 +34,13 @@ const clinicalModules = [
   { title: "Telemedicine", url: "/telemedicine", icon: Video },
 ];
 
+const programModules = [
+  { title: "MCH", url: "/mch", icon: Baby },
+  { title: "Pediatrics", url: "/pediatrics", icon: Syringe },
+  { title: "HIV Care", url: "/hiv-care", icon: Ribbon },
+  { title: "TB Care", url: "/tb-care", icon: Wind },
+];
+
 const intelligenceModules = [
   { title: "AI Insights", url: "/ai-insights", icon: Brain },
   { title: "Smart Triage", url: "/triage", icon: Sparkles },
