@@ -17,6 +17,7 @@ const reportTypeLabels: Record<string, string> = {
   moh_711: "MOH 711 — Integrated Report",
   moh_333: "MOH 333 — Maternity Register",
   moh_406: "MOH 406 — Laboratory Summary",
+  moh_731: "MOH 731 — HIV Comprehensive Care",
 };
 
 const statusColors: Record<string, string> = {
