@@ -3,7 +3,7 @@ import {
   FlaskConical, Pill, Receipt, Package, BedDouble, Activity,
   Video, Brain, BarChart3, UserCog, Plug, Shield, Settings,
   Search, Bell, ChevronDown, Sparkles, LogOut, FileText, ShieldCheck, FileBarChart,
-  Crown,
+  Crown, Baby, Syringe, Ribbon, Wind,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
