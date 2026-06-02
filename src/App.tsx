@@ -32,6 +32,10 @@ import Settings from "./pages/Settings";
 import Analytics from "./pages/Analytics";
 import Inventory from "./pages/Inventory";
 import NotFound from "./pages/NotFound";
+import MCH from "./pages/MCH";
+import Pediatrics from "./pages/Pediatrics";
+import HIVCare from "./pages/HIVCare";
+import TBCare from "./pages/TBCare";
 
 const queryClient = new QueryClient();
 
