@@ -90,6 +90,10 @@ const AppRoutes = () => (
         <Route path="/billing" element={<Billing />} />
         <Route path="/insurance-claims" element={<InsuranceClaims />} />
         <Route path="/moh-reports" element={<MOHReports />} />
+        <Route path="/mch" element={<MCH />} />
+        <Route path="/pediatrics" element={<Pediatrics />} />
+        <Route path="/hiv-care" element={<HIVCare />} />
+        <Route path="/tb-care" element={<TBCare />} />
         <Route path="/inventory" element={<Inventory />} />
         <Route path="/staff" element={<StaffManagement />} />
         <Route path="/security" element={<PlaceholderPage />} />
