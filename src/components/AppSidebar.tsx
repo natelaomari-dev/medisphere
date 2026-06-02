@@ -118,6 +118,7 @@ export function AppSidebar() {
       <SidebarContent className="py-2">
         <NavSection label="Overview" items={filterNavItems(mainModules)} collapsed={collapsed} />
         <NavSection label="Clinical" items={filterNavItems(clinicalModules)} collapsed={collapsed} />
+        <NavSection label="Programs" items={filterNavItems(programModules)} collapsed={collapsed} />
         <NavSection label="Intelligence" items={filterNavItems(intelligenceModules)} collapsed={collapsed} />
         <NavSection label="Administration" items={filterNavItems(adminModules)} collapsed={collapsed} />
         {isPlatformAdmin && <NavSection label="Platform" items={platformModules} collapsed={collapsed} />}
