@@ -2781,6 +2781,160 @@ export type Database = {
           },
         ]
       }
+      tb_cases: {
+        Row: {
+          bacteriological_status: string | null
+          created_at: string
+          disease_site: string | null
+          hiv_status: string | null
+          hospital_id: string
+          id: string
+          notes: string | null
+          outcome: string | null
+          patient_id: string
+          regimen: string | null
+          registration_date: string
+          registration_number: string | null
+          treatment_end_date: string | null
+          treatment_start_date: string | null
+          type: string | null
+          updated_at: string
+        }
+        Insert: {
+          bacteriological_status?: string | null
+          created_at?: string
+          disease_site?: string | null
+          hiv_status?: string | null
+          hospital_id: string
+          id?: string
+          notes?: string | null
+          outcome?: string | null
+          patient_id: string
+          regimen?: string | null
+          registration_date?: string
+          registration_number?: string | null
+          treatment_end_date?: string | null
+          treatment_start_date?: string | null
+          type?: string | null
+          updated_at?: string
+        }
+        Update: {
+          bacteriological_status?: string | null
+          created_at?: string
+          disease_site?: string | null
+          hiv_status?: string | null
+          hospital_id?: string
+          id?: string
+          notes?: string | null
+          outcome?: string | null
+          patient_id?: string
+          regimen?: string | null
+          registration_date?: string
+          registration_number?: string | null
+          treatment_end_date?: string | null
+          treatment_start_date?: string | null
+          type?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      tb_contacts: {
+        Row: {
+          age: number | null
+          contact_name: string
+          created_at: string
+          hospital_id: string
+          id: string
+          notes: string | null
+          relationship: string | null
+          screening_date: string | null
+          screening_result: string | null
+          tb_case_id: string
+          treatment_started: boolean | null
+        }
+        Insert: {
+          age?: number | null
+          contact_name: string
+          created_at?: string
+          hospital_id: string
+          id?: string
+          notes?: string | null
+          relationship?: string | null
+          screening_date?: string | null
+          screening_result?: string | null
+          tb_case_id: string
+          treatment_started?: boolean | null
+        }
+        Update: {
+          age?: number | null
+          contact_name?: string
+          created_at?: string
+          hospital_id?: string
+          id?: string
+          notes?: string | null
+          relationship?: string | null
+          screening_date?: string | null
+          screening_result?: string | null
+          tb_case_id?: string
+          treatment_started?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tb_contacts_tb_case_id_fkey"
+            columns: ["tb_case_id"]
+            isOneToOne: false
+            referencedRelation: "tb_cases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tb_dot_visits: {
+        Row: {
+          adverse_events: string | null
+          created_at: string
+          doses_missed: number | null
+          doses_taken: number | null
+          hospital_id: string
+          id: string
+          notes: string | null
+          tb_case_id: string
+          visit_date: string
+          visited_by: string | null
+        }
+        Insert: {
+          adverse_events?: string | null
+          created_at?: string
+          doses_missed?: number | null
+          doses_taken?: number | null
+          hospital_id: string
+          id?: string
+          notes?: string | null
+          tb_case_id: string
+          visit_date?: string
+          visited_by?: string | null
+        }
+        Update: {
+          adverse_events?: string | null
+          created_at?: string
+          doses_missed?: number | null
+          doses_taken?: number | null
+          hospital_id?: string
+          id?: string
+          notes?: string | null
+          tb_case_id?: string
+          visit_date?: string
+          visited_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tb_dot_visits_tb_case_id_fkey"
+            columns: ["tb_case_id"]
+            isOneToOne: false
+            referencedRelation: "tb_cases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       teleconsultations: {
         Row: {
           created_at: string
