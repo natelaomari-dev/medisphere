@@ -1020,6 +1020,68 @@ export type Database = {
           },
         ]
       }
+      idsr_notifications: {
+        Row: {
+          condition_id: string | null
+          created_at: string
+          diagnosed_date: string
+          hospital_id: string
+          id: string
+          notification_method: string | null
+          notified_by: string | null
+          notified_date: string | null
+          patient_id: string | null
+          recipient_authority: string | null
+          response_notes: string | null
+          response_received: boolean | null
+          source_diagnosis_id: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          condition_id?: string | null
+          created_at?: string
+          diagnosed_date?: string
+          hospital_id: string
+          id?: string
+          notification_method?: string | null
+          notified_by?: string | null
+          notified_date?: string | null
+          patient_id?: string | null
+          recipient_authority?: string | null
+          response_notes?: string | null
+          response_received?: boolean | null
+          source_diagnosis_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          condition_id?: string | null
+          created_at?: string
+          diagnosed_date?: string
+          hospital_id?: string
+          id?: string
+          notification_method?: string | null
+          notified_by?: string | null
+          notified_date?: string | null
+          patient_id?: string | null
+          recipient_authority?: string | null
+          response_notes?: string | null
+          response_received?: boolean | null
+          source_diagnosis_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "idsr_notifications_condition_id_fkey"
+            columns: ["condition_id"]
+            isOneToOne: false
+            referencedRelation: "notifiable_conditions_registry"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       insurance_claims: {
         Row: {
           approved_amount: number | null
@@ -1693,6 +1755,39 @@ export type Database = {
           submitted_at?: string | null
           submitted_by?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      notifiable_conditions_registry: {
+        Row: {
+          condition_name: string
+          created_at: string
+          icd_codes: string[]
+          id: string
+          notes: string | null
+          notification_window_hours: number
+          reporting_form: string | null
+          requires_immediate: boolean
+        }
+        Insert: {
+          condition_name: string
+          created_at?: string
+          icd_codes?: string[]
+          id: string
+          notes?: string | null
+          notification_window_hours?: number
+          reporting_form?: string | null
+          requires_immediate?: boolean
+        }
+        Update: {
+          condition_name?: string
+          created_at?: string
+          icd_codes?: string[]
+          id?: string
+          notes?: string | null
+          notification_window_hours?: number
+          reporting_form?: string | null
+          requires_immediate?: boolean
         }
         Relationships: []
       }
