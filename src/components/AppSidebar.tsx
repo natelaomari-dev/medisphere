@@ -3,7 +3,7 @@ import {
   FlaskConical, Pill, Receipt, Package, BedDouble, Activity,
   Video, Brain, BarChart3, UserCog, Plug, Shield, Settings,
   Search, Bell, ChevronDown, Sparkles, LogOut, FileText, ShieldCheck, FileBarChart,
-  Crown,
+  Crown, Baby, Syringe, Ribbon, Wind,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -32,6 +32,13 @@ const clinicalModules = [
   { title: "Inpatients", url: "/inpatients", icon: BedDouble },
   { title: "ICU Monitoring", url: "/icu", icon: Activity },
   { title: "Telemedicine", url: "/telemedicine", icon: Video },
+];
+
+const programModules = [
+  { title: "MCH", url: "/mch", icon: Baby },
+  { title: "Pediatrics", url: "/pediatrics", icon: Syringe },
+  { title: "HIV Care", url: "/hiv-care", icon: Ribbon },
+  { title: "TB Care", url: "/tb-care", icon: Wind },
 ];
 
 const intelligenceModules = [
@@ -111,6 +118,7 @@ export function AppSidebar() {
       <SidebarContent className="py-2">
         <NavSection label="Overview" items={filterNavItems(mainModules)} collapsed={collapsed} />
         <NavSection label="Clinical" items={filterNavItems(clinicalModules)} collapsed={collapsed} />
+        <NavSection label="Programs" items={filterNavItems(programModules)} collapsed={collapsed} />
         <NavSection label="Intelligence" items={filterNavItems(intelligenceModules)} collapsed={collapsed} />
         <NavSection label="Administration" items={filterNavItems(adminModules)} collapsed={collapsed} />
         {isPlatformAdmin && <NavSection label="Platform" items={platformModules} collapsed={collapsed} />}

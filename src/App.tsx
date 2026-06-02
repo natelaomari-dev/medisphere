@@ -32,6 +32,10 @@ import Settings from "./pages/Settings";
 import Analytics from "./pages/Analytics";
 import Inventory from "./pages/Inventory";
 import NotFound from "./pages/NotFound";
+import MCH from "./pages/MCH";
+import Pediatrics from "./pages/Pediatrics";
+import HIVCare from "./pages/HIVCare";
+import TBCare from "./pages/TBCare";
 
 const queryClient = new QueryClient();
 
@@ -86,6 +90,10 @@ const AppRoutes = () => (
         <Route path="/billing" element={<Billing />} />
         <Route path="/insurance-claims" element={<InsuranceClaims />} />
         <Route path="/moh-reports" element={<MOHReports />} />
+        <Route path="/mch" element={<MCH />} />
+        <Route path="/pediatrics" element={<Pediatrics />} />
+        <Route path="/hiv-care" element={<HIVCare />} />
+        <Route path="/tb-care" element={<TBCare />} />
         <Route path="/inventory" element={<Inventory />} />
         <Route path="/staff" element={<StaffManagement />} />
         <Route path="/security" element={<PlaceholderPage />} />

@@ -534,6 +534,42 @@ export type Database = {
         }
         Relationships: []
       }
+      clinical_scores: {
+        Row: {
+          action_recommended: string | null
+          calculated_at: string
+          components: Json | null
+          encounter_id: string | null
+          hospital_id: string
+          id: string
+          patient_id: string
+          score_type: string
+          score_value: number
+        }
+        Insert: {
+          action_recommended?: string | null
+          calculated_at?: string
+          components?: Json | null
+          encounter_id?: string | null
+          hospital_id: string
+          id?: string
+          patient_id: string
+          score_type: string
+          score_value: number
+        }
+        Update: {
+          action_recommended?: string | null
+          calculated_at?: string
+          components?: Json | null
+          encounter_id?: string | null
+          hospital_id?: string
+          id?: string
+          patient_id?: string
+          score_type?: string
+          score_value?: number
+        }
+        Relationships: []
+      }
       diagnoses: {
         Row: {
           created_at: string
@@ -1851,6 +1887,80 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      order_set_items: {
+        Row: {
+          created_at: string
+          id: string
+          item_data: Json
+          item_type: string
+          order_set_id: string
+          sequence: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          item_data: Json
+          item_type: string
+          order_set_id: string
+          sequence?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          item_data?: Json
+          item_type?: string
+          order_set_id?: string
+          sequence?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_set_items_order_set_id_fkey"
+            columns: ["order_set_id"]
+            isOneToOne: false
+            referencedRelation: "order_sets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      order_sets: {
+        Row: {
+          category: string | null
+          clinical_pathway: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          hospital_id: string | null
+          id: string
+          is_template: boolean
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string | null
+          clinical_pathway?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          hospital_id?: string | null
+          id?: string
+          is_template?: boolean
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string | null
+          clinical_pathway?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          hospital_id?: string | null
+          id?: string
+          is_template?: boolean
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       patient_addresses: {
         Row: {
@@ -3394,6 +3504,46 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      calculate_gcs: {
+        Args: { eye: number; motor: number; verbal: number }
+        Returns: Json
+      }
+      calculate_mews: {
+        Args: {
+          consciousness: string
+          hr: number
+          rr: number
+          sbp: number
+          temp: number
+        }
+        Returns: Json
+      }
+      calculate_news2: {
+        Args: {
+          consciousness: string
+          hr: number
+          on_oxygen: boolean
+          rr: number
+          sbp: number
+          spo2: number
+          temp: number
+        }
+        Returns: Json
+      }
+      calculate_pews: {
+        Args: {
+          age_months: number
+          consciousness: string
+          hr: number
+          rr: number
+          spo2: number
+        }
+        Returns: Json
+      }
+      calculate_qsofa: {
+        Args: { consciousness: string; rr: number; sbp: number }
+        Returns: Json
+      }
       get_user_hospital_id: { Args: { _user_id: string }; Returns: string }
       has_role: {
         Args: {
