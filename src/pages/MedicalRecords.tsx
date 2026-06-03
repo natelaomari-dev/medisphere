@@ -276,6 +276,60 @@ export default function MedicalRecords() {
           <Button onClick={handleRecordVitals} className="w-full mt-2">Save Vitals</Button>
         </DialogContent>
       </Dialog>
+
+      {/* Apply Order Set Dialog */}
+      <Dialog open={showOrderSet} onOpenChange={setShowOrderSet}>
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader><DialogTitle>Apply Order Set</DialogTitle></DialogHeader>
+          <div className="space-y-3">
+            <div>
+              <Label>Select order set</Label>
+              <Select value={chosenOrderSet} onValueChange={setChosenOrderSet}>
+                <SelectTrigger><SelectValue placeholder="Choose template..." /></SelectTrigger>
+                <SelectContent>
+                  {orderSets?.map((o: any) => <SelectItem key={o.id} value={o.id}>{o.name} {o.category ? `(${o.category})` : ""}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+            {chosenOrderSet && (() => {
+              const set = orderSets?.find((o: any) => o.id === chosenOrderSet);
+              if (!set) return null;
+              return (
+                <div className="border rounded-md p-3 bg-muted/30">
+                  <p className="text-sm font-medium">{set.name}</p>
+                  {set.description && <p className="text-xs text-muted-foreground mb-2">{set.description}</p>}
+                  <ul className="text-xs space-y-1">
+                    {(set.order_set_items || []).sort((a: any, b: any) => a.sequence - b.sequence).map((it: any) => (
+                      <li key={it.id}>
+                        <Badge variant="outline" className="mr-2">{it.item_type}</Badge>
+                        {it.item_data?.test_name || it.item_data?.name || it.item_data?.text || JSON.stringify(it.item_data)}
+                        {it.item_data?.dose && ` — ${it.item_data.dose}`}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })()}
+            <Button
+              className="w-full"
+              disabled={!chosenOrderSet || applyOrderSet.isPending}
+              onClick={async () => {
+                const rec = records?.find((r: any) => r.id === selectedRecord);
+                if (!rec) return;
+                try {
+                  const res = await applyOrderSet.mutateAsync({ order_set_id: chosenOrderSet, medical_record_id: rec.id, patient_id: rec.patient_id });
+                  toast({ title: "Order set applied", description: `${res.labCount} lab orders, ${res.noteCount} clinical orders created` });
+                  setShowOrderSet(false);
+                } catch (e: any) {
+                  toast({ title: "Error", description: e.message, variant: "destructive" });
+                }
+              }}
+            >
+              {applyOrderSet.isPending ? "Applying..." : "Apply to record"}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
