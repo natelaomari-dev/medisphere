@@ -47,6 +47,10 @@ export default function MedicalRecords() {
   const [selectedRecord, setSelectedRecord] = useState<string | null>(null);
   const [showDiagnosis, setShowDiagnosis] = useState(false);
   const [showVitals, setShowVitals] = useState(false);
+  const [showOrderSet, setShowOrderSet] = useState(false);
+  const [chosenOrderSet, setChosenOrderSet] = useState<string>("");
+  const { data: orderSets } = useOrderSets();
+  const applyOrderSet = useApplyOrderSet();
 
   const [form, setForm] = useState({
     patient_id: "", doctor_id: "", visit_type: "outpatient",
