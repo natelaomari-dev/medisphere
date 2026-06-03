@@ -15,8 +15,9 @@ import { usePatients } from "@/hooks/useHospitalData";
 import { useDoctors } from "@/hooks/useHospitalData";
 import { useMedicalRecords, useCreateMedicalRecord, useAddDiagnosis, useRecordVitals, useVitals, useDiagnoses, useUpdateMedicalRecord } from "@/hooks/useEMR";
 import { format } from "date-fns";
-import { FileText, Plus, Search, Stethoscope, Activity, ClipboardList, Heart, Thermometer } from "lucide-react";
+import { FileText, Plus, Search, Stethoscope, Activity, ClipboardList, Heart, Thermometer, ListChecks } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useOrderSets, useApplyOrderSet } from "@/hooks/useClinicalModules";
 
 const statusStyles: Record<string, string> = {
   in_progress: "bg-warning/10 text-warning border-warning/20",

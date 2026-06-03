@@ -3600,6 +3600,7 @@ export type Database = {
         | "moh_711"
         | "moh_333"
         | "moh_406"
+        | "moh_731"
       payment_method: "cash" | "mpesa" | "card" | "insurance" | "bank_transfer"
       payment_status:
         | "pending"
@@ -3801,6 +3802,7 @@ export const Constants = {
         "moh_711",
         "moh_333",
         "moh_406",
+        "moh_731",
       ],
       payment_method: ["cash", "mpesa", "card", "insurance", "bank_transfer"],
       payment_status: [
