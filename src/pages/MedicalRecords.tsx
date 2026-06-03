@@ -214,6 +214,9 @@ export default function MedicalRecords() {
                       <Button size="sm" variant="outline" onClick={() => { setSelectedRecord(r.id); setShowVitals(true); }}>
                         <Heart className="h-3 w-3 mr-1" />Vitals
                       </Button>
+                      <Button size="sm" variant="outline" onClick={() => { setSelectedRecord(r.id); setChosenOrderSet(""); setShowOrderSet(true); }}>
+                        <ListChecks className="h-3 w-3 mr-1" />Order Set
+                      </Button>
                       {r.status === "in_progress" && (
                         <Button size="sm" variant="outline" onClick={async () => {
                           await updateRecord.mutateAsync({ id: r.id, status: "completed" });
