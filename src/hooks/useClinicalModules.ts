@@ -328,6 +328,7 @@ export function useApplyOrderSet() {
       const { data: { user } } = await supabase.auth.getUser();
       const userId = user?.id;
       let labCount = 0, noteCount = 0;
+      const planLines: string[] = [];
       for (const it of items || []) {
         const d = it.item_data || {};
         if (it.item_type === "lab") {
@@ -339,15 +340,17 @@ export function useApplyOrderSet() {
             notes: d.notes || null,
           });
           labCount++;
-        } else if (it.item_type === "medication" || it.item_type === "nursing_instruction" || it.item_type === "diet" || it.item_type === "procedure" || it.item_type === "imaging") {
-          // Append to medical record as nurse note (no prescription table available generically)
-          await (supabase as any).from("nurse_notes").insert({
-            hospital_id: hospitalId, patient_id, admission_id: medical_record_id, nurse_id: userId,
-            note_type: it.item_type,
-            content: [it.item_type.toUpperCase(), d.name || d.text || "", d.dose, d.route, d.frequency].filter(Boolean).join(" — "),
-          });
+        } else {
+          const line = [it.item_type.toUpperCase(), d.name || d.text || d.test_name || "", d.dose, d.route, d.frequency].filter(Boolean).join(" — ");
+          planLines.push(`• ${line}`);
           noteCount++;
         }
+      }
+      if (planLines.length) {
+        const { data: rec } = await supabase.from("medical_records").select("treatment_plan").eq("id", medical_record_id).single();
+        const existing = rec?.treatment_plan || "";
+        const appended = (existing ? existing + "\n\n" : "") + `[Order set applied ${new Date().toLocaleDateString()}]\n` + planLines.join("\n");
+        await supabase.from("medical_records").update({ treatment_plan: appended }).eq("id", medical_record_id);
       }
       return { labCount, noteCount };
     },

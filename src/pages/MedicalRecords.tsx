@@ -15,8 +15,9 @@ import { usePatients } from "@/hooks/useHospitalData";
 import { useDoctors } from "@/hooks/useHospitalData";
 import { useMedicalRecords, useCreateMedicalRecord, useAddDiagnosis, useRecordVitals, useVitals, useDiagnoses, useUpdateMedicalRecord } from "@/hooks/useEMR";
 import { format } from "date-fns";
-import { FileText, Plus, Search, Stethoscope, Activity, ClipboardList, Heart, Thermometer } from "lucide-react";
+import { FileText, Plus, Search, Stethoscope, Activity, ClipboardList, Heart, Thermometer, ListChecks } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useOrderSets, useApplyOrderSet } from "@/hooks/useClinicalModules";
 
 const statusStyles: Record<string, string> = {
   in_progress: "bg-warning/10 text-warning border-warning/20",
@@ -46,6 +47,10 @@ export default function MedicalRecords() {
   const [selectedRecord, setSelectedRecord] = useState<string | null>(null);
   const [showDiagnosis, setShowDiagnosis] = useState(false);
   const [showVitals, setShowVitals] = useState(false);
+  const [showOrderSet, setShowOrderSet] = useState(false);
+  const [chosenOrderSet, setChosenOrderSet] = useState<string>("");
+  const { data: orderSets } = useOrderSets();
+  const applyOrderSet = useApplyOrderSet();
 
   const [form, setForm] = useState({
     patient_id: "", doctor_id: "", visit_type: "outpatient",
@@ -209,6 +214,9 @@ export default function MedicalRecords() {
                       <Button size="sm" variant="outline" onClick={() => { setSelectedRecord(r.id); setShowVitals(true); }}>
                         <Heart className="h-3 w-3 mr-1" />Vitals
                       </Button>
+                      <Button size="sm" variant="outline" onClick={() => { setSelectedRecord(r.id); setChosenOrderSet(""); setShowOrderSet(true); }}>
+                        <ListChecks className="h-3 w-3 mr-1" />Order Set
+                      </Button>
                       {r.status === "in_progress" && (
                         <Button size="sm" variant="outline" onClick={async () => {
                           await updateRecord.mutateAsync({ id: r.id, status: "completed" });
@@ -266,6 +274,60 @@ export default function MedicalRecords() {
             <div className="col-span-2"><Label>Pain Level (0-10)</Label><Input type="number" min="0" max="10" value={vitalsForm.pain_level} onChange={e => setVitalsForm(p => ({ ...p, pain_level: e.target.value }))} /></div>
           </div>
           <Button onClick={handleRecordVitals} className="w-full mt-2">Save Vitals</Button>
+        </DialogContent>
+      </Dialog>
+
+      {/* Apply Order Set Dialog */}
+      <Dialog open={showOrderSet} onOpenChange={setShowOrderSet}>
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader><DialogTitle>Apply Order Set</DialogTitle></DialogHeader>
+          <div className="space-y-3">
+            <div>
+              <Label>Select order set</Label>
+              <Select value={chosenOrderSet} onValueChange={setChosenOrderSet}>
+                <SelectTrigger><SelectValue placeholder="Choose template..." /></SelectTrigger>
+                <SelectContent>
+                  {orderSets?.map((o: any) => <SelectItem key={o.id} value={o.id}>{o.name} {o.category ? `(${o.category})` : ""}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+            {chosenOrderSet && (() => {
+              const set = orderSets?.find((o: any) => o.id === chosenOrderSet);
+              if (!set) return null;
+              return (
+                <div className="border rounded-md p-3 bg-muted/30">
+                  <p className="text-sm font-medium">{set.name}</p>
+                  {set.description && <p className="text-xs text-muted-foreground mb-2">{set.description}</p>}
+                  <ul className="text-xs space-y-1">
+                    {(set.order_set_items || []).sort((a: any, b: any) => a.sequence - b.sequence).map((it: any) => (
+                      <li key={it.id}>
+                        <Badge variant="outline" className="mr-2">{it.item_type}</Badge>
+                        {it.item_data?.test_name || it.item_data?.name || it.item_data?.text || JSON.stringify(it.item_data)}
+                        {it.item_data?.dose && ` — ${it.item_data.dose}`}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })()}
+            <Button
+              className="w-full"
+              disabled={!chosenOrderSet || applyOrderSet.isPending}
+              onClick={async () => {
+                const rec = records?.find((r: any) => r.id === selectedRecord);
+                if (!rec) return;
+                try {
+                  const res = await applyOrderSet.mutateAsync({ order_set_id: chosenOrderSet, medical_record_id: rec.id, patient_id: rec.patient_id });
+                  toast({ title: "Order set applied", description: `${res.labCount} lab orders, ${res.noteCount} clinical orders created` });
+                  setShowOrderSet(false);
+                } catch (e: any) {
+                  toast({ title: "Error", description: e.message, variant: "destructive" });
+                }
+              }}
+            >
+              {applyOrderSet.isPending ? "Applying..." : "Apply to record"}
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
