@@ -1,0 +1,1 @@
+ALTER VIEW public.medication_stock SET (security_invoker = true);

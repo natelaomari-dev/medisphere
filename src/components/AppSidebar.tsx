@@ -3,7 +3,7 @@ import {
   FlaskConical, Pill, Receipt, Package, BedDouble, Activity,
   Video, Brain, BarChart3, UserCog, Plug, Shield, Settings,
   Search, Bell, ChevronDown, Sparkles, LogOut, FileText, ShieldCheck, FileBarChart,
-  Crown, Baby, Syringe, Ribbon, Wind,
+  Crown, Baby, Syringe, Ribbon, Wind, Scissors, Droplet, Archive, ListOrdered,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -27,10 +27,14 @@ const mainModules = [
 
 const clinicalModules = [
   { title: "Medical Records", url: "/medical-records", icon: FileText },
+  { title: "Queue", url: "/queue", icon: ListOrdered },
   { title: "Laboratory", url: "/laboratory", icon: FlaskConical },
   { title: "Pharmacy", url: "/pharmacy", icon: Pill },
   { title: "Inpatients", url: "/inpatients", icon: BedDouble },
   { title: "ICU Monitoring", url: "/icu", icon: Activity },
+  { title: "Operating Theatre", url: "/operating-theatre", icon: Scissors },
+  { title: "Blood Bank", url: "/blood-bank", icon: Droplet },
+  { title: "Mortuary", url: "/mortuary", icon: Archive },
   { title: "Telemedicine", url: "/telemedicine", icon: Video },
 ];
 

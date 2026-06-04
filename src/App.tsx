@@ -36,6 +36,10 @@ import MCH from "./pages/MCH";
 import Pediatrics from "./pages/Pediatrics";
 import HIVCare from "./pages/HIVCare";
 import TBCare from "./pages/TBCare";
+import OperatingTheatre from "./pages/OperatingTheatre";
+import BloodBank from "./pages/BloodBank";
+import Mortuary from "./pages/Mortuary";
+import QueueDashboard from "./pages/QueueDashboard";
 
 const queryClient = new QueryClient();
 
@@ -94,6 +98,10 @@ const AppRoutes = () => (
         <Route path="/pediatrics" element={<Pediatrics />} />
         <Route path="/hiv-care" element={<HIVCare />} />
         <Route path="/tb-care" element={<TBCare />} />
+        <Route path="/operating-theatre" element={<OperatingTheatre />} />
+        <Route path="/blood-bank" element={<BloodBank />} />
+        <Route path="/mortuary" element={<Mortuary />} />
+        <Route path="/queue" element={<QueueDashboard />} />
         <Route path="/inventory" element={<Inventory />} />
         <Route path="/staff" element={<StaffManagement />} />
         <Route path="/security" element={<PlaceholderPage />} />
