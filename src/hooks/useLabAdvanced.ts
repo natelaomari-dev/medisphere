@@ -8,6 +8,7 @@ export function useLabPanels() {
   const { hospitalId } = useHospital();
   return useQuery({
     queryKey: ["lab_panels", hospitalId],
+    enabled: !!hospitalId,
     queryFn: async () => {
       const { data, error } = await sb.from("lab_panels").select("*")
         .or(`is_global.eq.true,hospital_id.eq.${hospitalId}`)
