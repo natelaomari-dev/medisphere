@@ -157,18 +157,23 @@ function prescriptionToFHIR(p: any): any {
 }
 
 function labResultToObservation(r: any): any {
+  const numeric = r.result_numeric ?? (r.result_value && !isNaN(Number(r.result_value)) ? Number(r.result_value) : null);
   return {
     resourceType: "Observation",
     id: r.id,
-    status: r.flag ? "final" : "registered",
+    status: r.result_status === "final" ? "final" : "registered",
     category: [{ coding: [{ system: "http://terminology.hl7.org/CodeSystem/observation-category", code: "laboratory" }] }],
     code: { coding: r.loinc_code ? [{ system: "http://loinc.org", code: r.loinc_code, display: r.test_name }] : [], text: r.test_name },
     subject: { reference: `Patient/${r.patient_id}` },
-    effectiveDateTime: r.resulted_at || r.created_at,
-    valueQuantity: r.result_value && !isNaN(Number(r.result_value)) ? { value: Number(r.result_value), unit: r.result_unit } : undefined,
-    valueString: r.result_value && isNaN(Number(r.result_value)) ? r.result_value : undefined,
+    effectiveDateTime: r.verified_at || r.created_at,
+    valueQuantity: numeric != null ? { value: numeric, unit: r.result_unit } : undefined,
+    valueString: numeric == null && r.result_value ? r.result_value : undefined,
     interpretation: r.flag ? [{ coding: [{ system: "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation", code: r.flag.replace("critical_", "").toUpperCase()[0] }] }] : undefined,
-    referenceRange: r.reference_range ? [{ text: r.reference_range }] : undefined,
+    referenceRange: (r.reference_range_text || r.reference_range_low != null) ? [{
+      low: r.reference_range_low != null ? { value: r.reference_range_low } : undefined,
+      high: r.reference_range_high != null ? { value: r.reference_range_high } : undefined,
+      text: r.reference_range_text,
+    }] : undefined,
   };
 }
 

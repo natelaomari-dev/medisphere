@@ -5,3 +5,15 @@ verify_jwt = true
 
 [functions.audit-record-access]
 verify_jwt = true
+
+[functions.fhir-api]
+verify_jwt = true
+
+[functions.dhis2-submit]
+verify_jwt = true
+
+[functions.webhook-dispatcher]
+verify_jwt = true
+
+[functions.hl7-inbound]
+verify_jwt = false

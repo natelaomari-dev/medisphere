@@ -108,18 +108,21 @@ Deno.serve(async (req) => {
       const flagMap: Record<string, string> = { "L": "low", "H": "high", "LL": "critical_low", "HH": "critical_high", "N": "normal", "A": "abnormal" };
       const flag = flagMap[flagCode] || null;
 
+      const numeric = Number(value);
       const { data: inserted, error } = await admin.from("lab_results").insert({
         hospital_id: hospitalId,
         patient_id: patient.id,
         lab_order_id: labOrderId,
         loinc_code: loinc,
+        test_code: loinc,
         test_name: testName,
         result_value: value,
+        result_numeric: isFinite(numeric) ? numeric : null,
         result_unit: unit,
-        reference_range: refRange,
+        reference_range_text: refRange,
         flag,
-        resulted_at: new Date().toISOString(),
-        source: "hl7_inbound",
+        result_status: "final",
+        notes: "Source: HL7 inbound",
       }).select("id").maybeSingle();
       if (error) {
         console.error("OBX insert failed", error);
