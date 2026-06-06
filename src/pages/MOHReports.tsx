@@ -149,9 +149,31 @@ export default function MOHReports() {
                             {report.submission_status.charAt(0).toUpperCase() + report.submission_status.slice(1)}
                           </Badge>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="space-x-1">
                           <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); setSelectedReport(report); }}>
                             View
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            disabled={submitDhis2.isPending}
+                            onClick={async (e) => {
+                              e.stopPropagation();
+                              try {
+                                const r: any = await submitDhis2.mutateAsync(report.id);
+                                toast({
+                                  title: r?.succeeded ? "Submitted to DHIS2" : "DHIS2 submission incomplete",
+                                  description: r?.succeeded
+                                    ? `Period ${r.period} • ${r.dataValueCount} data values${r.skipped?.length ? ` • ${r.skipped.length} mappings pending` : ""}`
+                                    : (r?.response?.message || "See report details"),
+                                  variant: r?.succeeded ? "default" : "destructive",
+                                });
+                              } catch (err: any) {
+                                toast({ title: "Submission failed", description: err.message, variant: "destructive" });
+                              }
+                            }}
+                          >
+                            <Send className="h-3 w-3 mr-1" />DHIS2
                           </Button>
                         </TableCell>
                       </TableRow>

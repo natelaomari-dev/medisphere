@@ -40,6 +40,8 @@ import OperatingTheatre from "./pages/OperatingTheatre";
 import BloodBank from "./pages/BloodBank";
 import Mortuary from "./pages/Mortuary";
 import QueueDashboard from "./pages/QueueDashboard";
+import Integrations from "./pages/Integrations";
+import SHAClaimsBatches from "./pages/SHAClaimsBatches";
 
 const queryClient = new QueryClient();
 
@@ -105,6 +107,8 @@ const AppRoutes = () => (
         <Route path="/inventory" element={<Inventory />} />
         <Route path="/staff" element={<StaffManagement />} />
         <Route path="/security" element={<PlaceholderPage />} />
+        <Route path="/integrations" element={<Integrations />} />
+        <Route path="/claim-batches" element={<SHAClaimsBatches />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/super-admin" element={<SuperAdmin />} />
       </Route>
