@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FileBarChart, Download, Clock, CheckCircle, Plus } from "lucide-react";
+import { FileBarChart, Download, Clock, CheckCircle, Plus, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useMOHReports, useGenerateMOHReport } from "@/hooks/usePayments";
+import { useSubmitDhis2 } from "@/hooks/useInterop";
 import { useToast } from "@/components/ui/use-toast";
 
 const reportTypeLabels: Record<string, string> = {
@@ -29,6 +30,7 @@ const statusColors: Record<string, string> = {
 export default function MOHReports() {
   const { data: reports, isLoading } = useMOHReports();
   const generateReport = useGenerateMOHReport();
+  const submitDhis2 = useSubmitDhis2();
   const { toast } = useToast();
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
