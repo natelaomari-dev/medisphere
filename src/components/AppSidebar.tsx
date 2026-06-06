@@ -54,9 +54,11 @@ const intelligenceModules = [
 const adminModules = [
   { title: "Billing", url: "/billing", icon: Receipt },
   { title: "Insurance Claims", url: "/insurance-claims", icon: ShieldCheck },
+  { title: "Claim Batches", url: "/claim-batches", icon: FileText },
   { title: "MOH Reports", url: "/moh-reports", icon: FileBarChart },
   { title: "Inventory", url: "/inventory", icon: Package },
   { title: "Staff", url: "/staff", icon: UserCog },
+  { title: "Integrations", url: "/integrations", icon: Plug },
   { title: "Security Logs", url: "/security", icon: Shield },
   { title: "Settings", url: "/settings", icon: Settings },
 ];

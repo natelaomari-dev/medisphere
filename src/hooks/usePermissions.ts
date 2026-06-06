@@ -29,6 +29,8 @@ const routePermissions: Record<string, AppRole[]> = {
   "/billing": ["admin", "receptionist"],
   "/insurance-claims": ["admin", "receptionist"],
   "/moh-reports": ["admin"],
+  "/claim-batches": ["admin", "receptionist"],
+  "/integrations": ["admin"],
   "/inventory": ["admin", "pharmacist"],
   "/staff": ["admin"],
   "/security": ["admin"],

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FileBarChart, Download, Clock, CheckCircle, Plus } from "lucide-react";
+import { FileBarChart, Download, Clock, CheckCircle, Plus, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useMOHReports, useGenerateMOHReport } from "@/hooks/usePayments";
+import { useSubmitDhis2 } from "@/hooks/useInterop";
 import { useToast } from "@/components/ui/use-toast";
 
 const reportTypeLabels: Record<string, string> = {
@@ -29,6 +30,7 @@ const statusColors: Record<string, string> = {
 export default function MOHReports() {
   const { data: reports, isLoading } = useMOHReports();
   const generateReport = useGenerateMOHReport();
+  const submitDhis2 = useSubmitDhis2();
   const { toast } = useToast();
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -147,9 +149,31 @@ export default function MOHReports() {
                             {report.submission_status.charAt(0).toUpperCase() + report.submission_status.slice(1)}
                           </Badge>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="space-x-1">
                           <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); setSelectedReport(report); }}>
                             View
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            disabled={submitDhis2.isPending}
+                            onClick={async (e) => {
+                              e.stopPropagation();
+                              try {
+                                const r: any = await submitDhis2.mutateAsync(report.id);
+                                toast({
+                                  title: r?.succeeded ? "Submitted to DHIS2" : "DHIS2 submission incomplete",
+                                  description: r?.succeeded
+                                    ? `Period ${r.period} • ${r.dataValueCount} data values${r.skipped?.length ? ` • ${r.skipped.length} mappings pending` : ""}`
+                                    : (r?.response?.message || "See report details"),
+                                  variant: r?.succeeded ? "default" : "destructive",
+                                });
+                              } catch (err: any) {
+                                toast({ title: "Submission failed", description: err.message, variant: "destructive" });
+                              }
+                            }}
+                          >
+                            <Send className="h-3 w-3 mr-1" />DHIS2
                           </Button>
                         </TableCell>
                       </TableRow>

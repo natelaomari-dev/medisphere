@@ -821,6 +821,84 @@ export type Database = {
         }
         Relationships: []
       }
+      dhis2_data_element_mappings: {
+        Row: {
+          country_code: string
+          created_at: string
+          description: string | null
+          dhis2_category_option_combo_uid: string | null
+          dhis2_data_element_uid: string
+          id: string
+          metric_key: string
+          report_type: string
+        }
+        Insert: {
+          country_code?: string
+          created_at?: string
+          description?: string | null
+          dhis2_category_option_combo_uid?: string | null
+          dhis2_data_element_uid: string
+          id?: string
+          metric_key: string
+          report_type: string
+        }
+        Update: {
+          country_code?: string
+          created_at?: string
+          description?: string | null
+          dhis2_category_option_combo_uid?: string | null
+          dhis2_data_element_uid?: string
+          id?: string
+          metric_key?: string
+          report_type?: string
+        }
+        Relationships: []
+      }
+      dhis2_facility_mappings: {
+        Row: {
+          created_at: string
+          dhis2_endpoint_url: string
+          dhis2_instance_name: string | null
+          dhis2_org_unit_uid: string
+          dhis2_password_secret_id: string | null
+          dhis2_username: string | null
+          hospital_id: string
+          id: string
+          is_active: boolean
+          last_submission_at: string | null
+          notes: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          dhis2_endpoint_url: string
+          dhis2_instance_name?: string | null
+          dhis2_org_unit_uid: string
+          dhis2_password_secret_id?: string | null
+          dhis2_username?: string | null
+          hospital_id: string
+          id?: string
+          is_active?: boolean
+          last_submission_at?: string | null
+          notes?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          dhis2_endpoint_url?: string
+          dhis2_instance_name?: string | null
+          dhis2_org_unit_uid?: string
+          dhis2_password_secret_id?: string | null
+          dhis2_username?: string | null
+          hospital_id?: string
+          id?: string
+          is_active?: boolean
+          last_submission_at?: string | null
+          notes?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       diagnoses: {
         Row: {
           created_at: string
@@ -1424,6 +1502,7 @@ export type Database = {
           rejection_reason: string | null
           response_date: string | null
           scheme_name: string | null
+          sha_batch_id: string | null
           sha_member_number: string | null
           submission_date: string | null
           submitted_by: string | null
@@ -1446,6 +1525,7 @@ export type Database = {
           rejection_reason?: string | null
           response_date?: string | null
           scheme_name?: string | null
+          sha_batch_id?: string | null
           sha_member_number?: string | null
           submission_date?: string | null
           submitted_by?: string | null
@@ -1468,6 +1548,7 @@ export type Database = {
           rejection_reason?: string | null
           response_date?: string | null
           scheme_name?: string | null
+          sha_batch_id?: string | null
           sha_member_number?: string | null
           submission_date?: string | null
           submitted_by?: string | null
@@ -1490,7 +1571,56 @@ export type Database = {
             referencedRelation: "patients"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "insurance_claims_sha_batch_id_fkey"
+            columns: ["sha_batch_id"]
+            isOneToOne: false
+            referencedRelation: "sha_claim_batches"
+            referencedColumns: ["id"]
+          },
         ]
+      }
+      insurance_schemes: {
+        Row: {
+          account_number: string | null
+          adapter_type: string
+          config: Json
+          contact_email: string | null
+          contact_phone: string | null
+          created_at: string
+          hospital_id: string
+          id: string
+          is_active: boolean
+          scheme_name: string
+          updated_at: string
+        }
+        Insert: {
+          account_number?: string | null
+          adapter_type: string
+          config?: Json
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          hospital_id: string
+          id?: string
+          is_active?: boolean
+          scheme_name: string
+          updated_at?: string
+        }
+        Update: {
+          account_number?: string | null
+          adapter_type?: string
+          config?: Json
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          hospital_id?: string
+          id?: string
+          is_active?: boolean
+          scheme_name?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       invoices: {
         Row: {
@@ -2368,6 +2498,9 @@ export type Database = {
         Row: {
           approved_by: string | null
           created_at: string
+          dhis2_attempt_count: number
+          dhis2_response: Json | null
+          dhis2_submitted_at: string | null
           hospital_id: string
           id: string
           notes: string | null
@@ -2383,6 +2516,9 @@ export type Database = {
         Insert: {
           approved_by?: string | null
           created_at?: string
+          dhis2_attempt_count?: number
+          dhis2_response?: Json | null
+          dhis2_submitted_at?: string | null
           hospital_id: string
           id?: string
           notes?: string | null
@@ -2398,6 +2534,9 @@ export type Database = {
         Update: {
           approved_by?: string | null
           created_at?: string
+          dhis2_attempt_count?: number
+          dhis2_response?: Json | null
+          dhis2_submitted_at?: string | null
           hospital_id?: string
           id?: string
           notes?: string | null
@@ -2748,6 +2887,98 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      outbound_webhook_deliveries: {
+        Row: {
+          attempt_count: number
+          delivered_at: string
+          error: string | null
+          event_type: string
+          hospital_id: string
+          id: string
+          payload: Json
+          response_body: string | null
+          response_status: number | null
+          succeeded: boolean
+          webhook_id: string
+        }
+        Insert: {
+          attempt_count?: number
+          delivered_at?: string
+          error?: string | null
+          event_type: string
+          hospital_id: string
+          id?: string
+          payload: Json
+          response_body?: string | null
+          response_status?: number | null
+          succeeded?: boolean
+          webhook_id: string
+        }
+        Update: {
+          attempt_count?: number
+          delivered_at?: string
+          error?: string | null
+          event_type?: string
+          hospital_id?: string
+          id?: string
+          payload?: Json
+          response_body?: string | null
+          response_status?: number | null
+          succeeded?: boolean
+          webhook_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "outbound_webhook_deliveries_webhook_id_fkey"
+            columns: ["webhook_id"]
+            isOneToOne: false
+            referencedRelation: "outbound_webhooks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      outbound_webhooks: {
+        Row: {
+          created_at: string
+          event_types: string[]
+          failure_count: number
+          hospital_id: string
+          id: string
+          is_active: boolean
+          last_delivery_at: string | null
+          name: string
+          secret: string
+          target_url: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          event_types?: string[]
+          failure_count?: number
+          hospital_id: string
+          id?: string
+          is_active?: boolean
+          last_delivery_at?: string | null
+          name: string
+          secret: string
+          target_url: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          event_types?: string[]
+          failure_count?: number
+          hospital_id?: string
+          id?: string
+          is_active?: boolean
+          last_delivery_at?: string | null
+          name?: string
+          secret?: string
+          target_url?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       patient_addresses: {
         Row: {
@@ -3874,6 +4105,83 @@ export type Database = {
             columns: ["hospital_id"]
             isOneToOne: false
             referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sha_claim_batches: {
+        Row: {
+          approved_amount: number | null
+          batch_number: string
+          created_at: string
+          exported_file_name: string | null
+          exported_file_url: string | null
+          generated_at: string
+          generated_by: string | null
+          hospital_id: string
+          id: string
+          notes: string | null
+          period_end: string
+          period_start: string
+          reconciled_at: string | null
+          scheme_id: string | null
+          sha_acknowledgement_number: string | null
+          sha_response_file_url: string | null
+          submission_status: string
+          total_amount: number
+          total_claims: number
+          updated_at: string
+        }
+        Insert: {
+          approved_amount?: number | null
+          batch_number: string
+          created_at?: string
+          exported_file_name?: string | null
+          exported_file_url?: string | null
+          generated_at?: string
+          generated_by?: string | null
+          hospital_id: string
+          id?: string
+          notes?: string | null
+          period_end: string
+          period_start: string
+          reconciled_at?: string | null
+          scheme_id?: string | null
+          sha_acknowledgement_number?: string | null
+          sha_response_file_url?: string | null
+          submission_status?: string
+          total_amount?: number
+          total_claims?: number
+          updated_at?: string
+        }
+        Update: {
+          approved_amount?: number | null
+          batch_number?: string
+          created_at?: string
+          exported_file_name?: string | null
+          exported_file_url?: string | null
+          generated_at?: string
+          generated_by?: string | null
+          hospital_id?: string
+          id?: string
+          notes?: string | null
+          period_end?: string
+          period_start?: string
+          reconciled_at?: string | null
+          scheme_id?: string | null
+          sha_acknowledgement_number?: string | null
+          sha_response_file_url?: string | null
+          submission_status?: string
+          total_amount?: number
+          total_claims?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sha_claim_batches_scheme_id_fkey"
+            columns: ["scheme_id"]
+            isOneToOne: false
+            referencedRelation: "insurance_schemes"
             referencedColumns: ["id"]
           },
         ]
