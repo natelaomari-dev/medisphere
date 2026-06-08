@@ -17,3 +17,19 @@ verify_jwt = true
 
 [functions.hl7-inbound]
 verify_jwt = false
+
+[functions.notifications-send]
+verify_jwt = false
+
+[functions.notifications-callback]
+verify_jwt = false
+
+[functions.ussd-handler]
+verify_jwt = false
+
+[functions.fx-refresh]
+verify_jwt = false
+
+[functions.kmhfl-lookup]
+verify_jwt = true
+

@@ -3,7 +3,7 @@ import {
   FlaskConical, Pill, Receipt, Package, BedDouble, Activity,
   Video, Brain, BarChart3, UserCog, Plug, Shield, Settings,
   Search, Bell, ChevronDown, Sparkles, LogOut, FileText, ShieldCheck, FileBarChart,
-  Crown, Baby, Syringe, Ribbon, Wind, Scissors, Droplet, Archive, ListOrdered,
+  Crown, Baby, Syringe, Ribbon, Wind, Scissors, Droplet, Archive, ListOrdered, MessageSquare,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -58,6 +58,7 @@ const adminModules = [
   { title: "MOH Reports", url: "/moh-reports", icon: FileBarChart },
   { title: "Inventory", url: "/inventory", icon: Package },
   { title: "Staff", url: "/staff", icon: UserCog },
+  { title: "Notifications", url: "/notifications", icon: MessageSquare },
   { title: "Integrations", url: "/integrations", icon: Plug },
   { title: "Security Logs", url: "/security", icon: Shield },
   { title: "Settings", url: "/settings", icon: Settings },

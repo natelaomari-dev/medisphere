@@ -4,6 +4,9 @@ import { Search, Bell, Command } from "lucide-react";
 import { Outlet } from "react-router-dom";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { LowBandwidthToggle } from "@/components/LowBandwidthToggle";
+import { OfflineBadge } from "@/components/OfflineBadge";
 
 export function AppLayout() {
   return (
@@ -29,6 +32,9 @@ export function AppLayout() {
                   <Command className="h-2.5 w-2.5 inline" />K
                 </kbd>
               </div>
+              <OfflineBadge />
+              <LanguageSwitcher />
+              <LowBandwidthToggle />
               <ThemeToggle />
               <button className="relative h-9 w-9 rounded-lg bg-card border border-border flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors">
                 <Bell className="h-4 w-4" />

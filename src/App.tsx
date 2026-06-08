@@ -5,6 +5,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
 import { HospitalProvider, useHospital } from "@/hooks/useHospital";
+import { AppPreferencesProvider } from "@/contexts/AppPreferences";
+import { useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { watchAndFlush } from "@/lib/offlineQueue";
+import Notifications from "./pages/Notifications";
 import { AppLayout } from "@/components/AppLayout";
 import LandingPage from "./pages/LandingPage";
 import Dashboard from "./pages/Dashboard";
@@ -109,6 +114,7 @@ const AppRoutes = () => (
         <Route path="/security" element={<PlaceholderPage />} />
         <Route path="/integrations" element={<Integrations />} />
         <Route path="/claim-batches" element={<SHAClaimsBatches />} />
+        <Route path="/notifications" element={<Notifications />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/super-admin" element={<SuperAdmin />} />
       </Route>
@@ -117,15 +123,23 @@ const AppRoutes = () => (
   </BrowserRouter>
 );
 
+function OfflineQueueWatcher() {
+  useEffect(() => { watchAndFlush(supabase); }, []);
+  return null;
+}
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <HospitalProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <AppRoutes />
-        </TooltipProvider>
+        <AppPreferencesProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <OfflineQueueWatcher />
+            <AppRoutes />
+          </TooltipProvider>
+        </AppPreferencesProvider>
       </HospitalProvider>
     </AuthProvider>
   </QueryClientProvider>
