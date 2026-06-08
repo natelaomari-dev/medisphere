@@ -79,7 +79,12 @@ export default function Onboarding() {
         bed_capacity: hospital.bed_capacity,
         country: hospital.country,
         created_by: user.id,
-      })
+        mfl_code: hospital.mfl_code || null,
+        facility_type: hospital.facility_type || null,
+        keph_level: hospital.keph_level || null,
+        ownership: hospital.ownership || null,
+        mfl_synced_at: hospital.mfl_code ? new Date().toISOString() : null,
+      } as any)
       .select()
       .single();
 
