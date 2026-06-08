@@ -110,6 +110,34 @@ export default function Settings() {
           </Card>
         </TabsContent>
 
+        <TabsContent value="preferences">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">{t("settings.language")} & display</CardTitle>
+              <CardDescription>App language, low-bandwidth mode, and other client-side preferences.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-5">
+              <div className="space-y-1.5 max-w-xs">
+                <Label>{t("settings.language")}</Label>
+                <Select value={language} onValueChange={setLanguage}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {SUPPORTED_LANGUAGES.map(l => <SelectItem key={l.code} value={l.code}>{l.label}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex items-start justify-between gap-4 p-3 rounded-lg border border-border">
+                <div>
+                  <p className="text-sm font-medium">{t("settings.low_bandwidth")}</p>
+                  <p className="text-xs text-muted-foreground">{t("settings.low_bandwidth_desc")}</p>
+                </div>
+                <Switch checked={lowBandwidth} onCheckedChange={setLowBandwidth} />
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+
         {isAdmin && (
           <TabsContent value="hospital">
             <Card>
