@@ -32,7 +32,7 @@ export default defineConfig(({ mode }) => ({
             options: { cacheName: "html-nav", networkTimeoutSeconds: 4 },
           },
           {
-            urlPattern: ({ url }) => url.origin === self.location.origin && /\.(?:js|css|woff2|svg|png|ico)$/.test(url.pathname),
+            urlPattern: /\.(?:js|css|woff2|svg|png|ico)$/,
             handler: "CacheFirst",
             options: { cacheName: "static-assets", expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 30 } },
           },
