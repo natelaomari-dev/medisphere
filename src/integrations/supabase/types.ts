@@ -821,6 +821,36 @@ export type Database = {
         }
         Relationships: []
       }
+      currency_rates: {
+        Row: {
+          base_currency: string
+          created_at: string
+          id: string
+          quote_currency: string
+          rate: number
+          rate_date: string
+          source: string | null
+        }
+        Insert: {
+          base_currency: string
+          created_at?: string
+          id?: string
+          quote_currency: string
+          rate: number
+          rate_date: string
+          source?: string | null
+        }
+        Update: {
+          base_currency?: string
+          created_at?: string
+          id?: string
+          quote_currency?: string
+          rate?: number
+          rate_date?: string
+          source?: string | null
+        }
+        Relationships: []
+      }
       dhis2_data_element_mappings: {
         Row: {
           country_code: string
@@ -950,6 +980,7 @@ export type Database = {
       doctors: {
         Row: {
           consultation_fee: number | null
+          consultation_fee_currency: string | null
           created_at: string
           department: string | null
           email: string | null
@@ -965,6 +996,7 @@ export type Database = {
         }
         Insert: {
           consultation_fee?: number | null
+          consultation_fee_currency?: string | null
           created_at?: string
           department?: string | null
           email?: string | null
@@ -980,6 +1012,7 @@ export type Database = {
         }
         Update: {
           consultation_fee?: number | null
+          consultation_fee_currency?: string | null
           created_at?: string
           department?: string | null
           email?: string | null
@@ -1223,6 +1256,65 @@ export type Database = {
           },
         ]
       }
+      hospital_messaging_config: {
+        Row: {
+          callback_secret: string | null
+          created_at: string
+          hospital_id: string
+          id: string
+          is_active: boolean | null
+          meta_access_token_secret_id: string | null
+          meta_phone_number_id: string | null
+          sms_provider: string | null
+          sms_sender_id: string | null
+          twilio_account_sid_secret_id: string | null
+          twilio_auth_token_secret_id: string | null
+          updated_at: string
+          whatsapp_from: string | null
+          whatsapp_provider: string | null
+        }
+        Insert: {
+          callback_secret?: string | null
+          created_at?: string
+          hospital_id: string
+          id?: string
+          is_active?: boolean | null
+          meta_access_token_secret_id?: string | null
+          meta_phone_number_id?: string | null
+          sms_provider?: string | null
+          sms_sender_id?: string | null
+          twilio_account_sid_secret_id?: string | null
+          twilio_auth_token_secret_id?: string | null
+          updated_at?: string
+          whatsapp_from?: string | null
+          whatsapp_provider?: string | null
+        }
+        Update: {
+          callback_secret?: string | null
+          created_at?: string
+          hospital_id?: string
+          id?: string
+          is_active?: boolean | null
+          meta_access_token_secret_id?: string | null
+          meta_phone_number_id?: string | null
+          sms_provider?: string | null
+          sms_sender_id?: string | null
+          twilio_account_sid_secret_id?: string | null
+          twilio_auth_token_secret_id?: string | null
+          updated_at?: string
+          whatsapp_from?: string | null
+          whatsapp_provider?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hospital_messaging_config_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: true
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       hospital_subscriptions: {
         Row: {
           created_at: string
@@ -1281,49 +1373,82 @@ export type Database = {
       }
       hospitals: {
         Row: {
+          accreditation_body: string | null
+          accreditation_status: string | null
           address: string | null
           bed_capacity: number | null
           city: string | null
           country: string | null
           created_at: string
           created_by: string | null
+          default_currency: string | null
           email: string | null
+          facility_type: string | null
           id: string
           is_active: boolean | null
+          keph_level: number | null
+          license_authority: string | null
+          license_expiry: string | null
+          license_number: string | null
           logo_url: string | null
+          mfl_code: string | null
+          mfl_synced_at: string | null
           name: string
+          ownership: string | null
           phone: string | null
           slug: string
           updated_at: string
         }
         Insert: {
+          accreditation_body?: string | null
+          accreditation_status?: string | null
           address?: string | null
           bed_capacity?: number | null
           city?: string | null
           country?: string | null
           created_at?: string
           created_by?: string | null
+          default_currency?: string | null
           email?: string | null
+          facility_type?: string | null
           id?: string
           is_active?: boolean | null
+          keph_level?: number | null
+          license_authority?: string | null
+          license_expiry?: string | null
+          license_number?: string | null
           logo_url?: string | null
+          mfl_code?: string | null
+          mfl_synced_at?: string | null
           name: string
+          ownership?: string | null
           phone?: string | null
           slug: string
           updated_at?: string
         }
         Update: {
+          accreditation_body?: string | null
+          accreditation_status?: string | null
           address?: string | null
           bed_capacity?: number | null
           city?: string | null
           country?: string | null
           created_at?: string
           created_by?: string | null
+          default_currency?: string | null
           email?: string | null
+          facility_type?: string | null
           id?: string
           is_active?: boolean | null
+          keph_level?: number | null
+          license_authority?: string | null
+          license_expiry?: string | null
+          license_number?: string | null
           logo_url?: string | null
+          mfl_code?: string | null
+          mfl_synced_at?: string | null
           name?: string
+          ownership?: string | null
           phone?: string | null
           slug?: string
           updated_at?: string
@@ -1493,6 +1618,7 @@ export type Database = {
           claim_number: string
           claim_status: Database["public"]["Enums"]["claim_status"]
           created_at: string
+          currency: string | null
           diagnosis_codes: string[] | null
           hospital_id: string
           id: string
@@ -1516,6 +1642,7 @@ export type Database = {
           claim_number?: string
           claim_status?: Database["public"]["Enums"]["claim_status"]
           created_at?: string
+          currency?: string | null
           diagnosis_codes?: string[] | null
           hospital_id: string
           id?: string
@@ -1539,6 +1666,7 @@ export type Database = {
           claim_number?: string
           claim_status?: Database["public"]["Enums"]["claim_status"]
           created_at?: string
+          currency?: string | null
           diagnosis_codes?: string[] | null
           hospital_id?: string
           id?: string
@@ -1626,6 +1754,7 @@ export type Database = {
         Row: {
           amount: number
           created_at: string
+          currency: string | null
           due_date: string
           hospital_id: string
           id: string
@@ -1639,6 +1768,7 @@ export type Database = {
         Insert: {
           amount: number
           created_at?: string
+          currency?: string | null
           due_date: string
           hospital_id: string
           id?: string
@@ -1652,6 +1782,7 @@ export type Database = {
         Update: {
           amount?: number
           created_at?: string
+          currency?: string | null
           due_date?: string
           hospital_id?: string
           id?: string
@@ -2718,6 +2849,140 @@ export type Database = {
         }
         Relationships: []
       }
+      notification_queue: {
+        Row: {
+          attempt_count: number
+          channel: string
+          created_at: string
+          delivered_at: string | null
+          error_message: string | null
+          hospital_id: string
+          id: string
+          language: string | null
+          patient_id: string | null
+          payload: Json
+          provider: string | null
+          provider_message_id: string | null
+          recipient: string
+          rendered_body: string | null
+          rendered_subject: string | null
+          scheduled_for: string
+          sent_at: string | null
+          status: string
+          template_key: string
+          updated_at: string
+        }
+        Insert: {
+          attempt_count?: number
+          channel: string
+          created_at?: string
+          delivered_at?: string | null
+          error_message?: string | null
+          hospital_id: string
+          id?: string
+          language?: string | null
+          patient_id?: string | null
+          payload?: Json
+          provider?: string | null
+          provider_message_id?: string | null
+          recipient: string
+          rendered_body?: string | null
+          rendered_subject?: string | null
+          scheduled_for?: string
+          sent_at?: string | null
+          status?: string
+          template_key: string
+          updated_at?: string
+        }
+        Update: {
+          attempt_count?: number
+          channel?: string
+          created_at?: string
+          delivered_at?: string | null
+          error_message?: string | null
+          hospital_id?: string
+          id?: string
+          language?: string | null
+          patient_id?: string | null
+          payload?: Json
+          provider?: string | null
+          provider_message_id?: string | null
+          recipient?: string
+          rendered_body?: string | null
+          rendered_subject?: string | null
+          scheduled_for?: string
+          sent_at?: string | null
+          status?: string
+          template_key?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_queue_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notification_queue_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notification_templates: {
+        Row: {
+          body: string
+          channel: string
+          created_at: string
+          hospital_id: string | null
+          id: string
+          is_system: boolean | null
+          language: string
+          subject: string | null
+          template_key: string
+          updated_at: string
+          variables: string[] | null
+        }
+        Insert: {
+          body: string
+          channel: string
+          created_at?: string
+          hospital_id?: string | null
+          id?: string
+          is_system?: boolean | null
+          language?: string
+          subject?: string | null
+          template_key: string
+          updated_at?: string
+          variables?: string[] | null
+        }
+        Update: {
+          body?: string
+          channel?: string
+          created_at?: string
+          hospital_id?: string | null
+          id?: string
+          is_system?: boolean | null
+          language?: string
+          subject?: string | null
+          template_key?: string
+          updated_at?: string
+          variables?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_templates_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       nurse_notes: {
         Row: {
           admission_id: string
@@ -3781,6 +4046,7 @@ export type Database = {
           amount: number
           created_at: string
           created_by: string | null
+          currency: string | null
           hospital_id: string
           id: string
           invoice_id: string | null
@@ -3799,6 +4065,7 @@ export type Database = {
           amount: number
           created_at?: string
           created_by?: string | null
+          currency?: string | null
           hospital_id: string
           id?: string
           invoice_id?: string | null
@@ -3817,6 +4084,7 @@ export type Database = {
           amount?: number
           created_at?: string
           created_by?: string | null
+          currency?: string | null
           hospital_id?: string
           id?: string
           invoice_id?: string | null
@@ -4038,7 +4306,9 @@ export type Database = {
           full_name: string
           hospital_id: string | null
           id: string
+          low_bandwidth_mode: boolean | null
           phone: string | null
+          preferred_language: string | null
           updated_at: string
           user_id: string
         }
@@ -4049,7 +4319,9 @@ export type Database = {
           full_name: string
           hospital_id?: string | null
           id?: string
+          low_bandwidth_mode?: boolean | null
           phone?: string | null
+          preferred_language?: string | null
           updated_at?: string
           user_id: string
         }
@@ -4060,7 +4332,9 @@ export type Database = {
           full_name?: string
           hospital_id?: string | null
           id?: string
+          low_bandwidth_mode?: boolean | null
           phone?: string | null
+          preferred_language?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -4714,6 +4988,57 @@ export type Database = {
         }
         Relationships: []
       }
+      ussd_sessions: {
+        Row: {
+          created_at: string
+          current_step: string | null
+          hospital_id: string | null
+          id: string
+          patient_id: string | null
+          phone_number: string
+          session_id: string
+          state: Json | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          current_step?: string | null
+          hospital_id?: string | null
+          id?: string
+          patient_id?: string | null
+          phone_number: string
+          session_id: string
+          state?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          current_step?: string | null
+          hospital_id?: string | null
+          id?: string
+          patient_id?: string | null
+          phone_number?: string
+          session_id?: string
+          state?: Json | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ussd_sessions_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ussd_sessions_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       viral_load_results: {
         Row: {
           copies_per_ml: number | null
@@ -5000,6 +5325,16 @@ export type Database = {
         Returns: boolean
       }
       is_platform_admin: { Args: { _user_id: string }; Returns: boolean }
+      render_notification: {
+        Args: {
+          _channel: string
+          _hospital_id: string
+          _language: string
+          _payload: Json
+          _template_key: string
+        }
+        Returns: Json
+      }
       sweep_expired_batches: { Args: never; Returns: Json }
     }
     Enums: {
