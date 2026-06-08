@@ -7,13 +7,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Switch } from "@/components/ui/switch";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Building2, User, Shield } from "lucide-react";
+import { Building2, User, Shield, Languages } from "lucide-react";
 import { MfaSettings } from "@/components/MfaSettings";
+import { useTranslation } from "react-i18next";
+import { useAppPreferences } from "@/contexts/AppPreferences";
+import { SUPPORTED_LANGUAGES } from "@/i18n";
 
 export default function Settings() {
   const { user } = useAuth();
   const { hospitalId, userRole } = useHospital();
+  const { t } = useTranslation();
+  const { language, setLanguage, lowBandwidth, setLowBandwidth } = useAppPreferences();
   const isAdmin = userRole === "admin";
 
   // Profile state
@@ -66,6 +73,7 @@ export default function Settings() {
       <Tabs defaultValue="profile" className="space-y-4">
         <TabsList>
           <TabsTrigger value="profile" className="gap-1.5"><User className="h-3.5 w-3.5" /> Profile</TabsTrigger>
+          <TabsTrigger value="preferences" className="gap-1.5"><Languages className="h-3.5 w-3.5" /> Preferences</TabsTrigger>
           {isAdmin && <TabsTrigger value="hospital" className="gap-1.5"><Building2 className="h-3.5 w-3.5" /> Hospital</TabsTrigger>}
           <TabsTrigger value="security" className="gap-1.5"><Shield className="h-3.5 w-3.5" /> Security</TabsTrigger>
         </TabsList>

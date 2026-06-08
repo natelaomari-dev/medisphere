@@ -25,10 +25,9 @@ export default function Onboarding() {
     if (!hospital.mfl_code) return;
     setMflLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke("kmhfl-lookup", { body: null, headers: {} } as any);
-      // Use direct fetch instead — invoke doesn't support query params well
+      const token = (await supabase.auth.getSession()).data.session?.access_token || "";
       const res = await fetch(`https://krldjnjuizmlmiwwzwpz.supabase.co/functions/v1/kmhfl-lookup?code=${encodeURIComponent(hospital.mfl_code)}`, {
-        headers: { Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token || ""}` },
+        headers: { Authorization: `Bearer ${token}`, apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY },
       });
       const json = await res.json();
       if (!res.ok || !json.found) {
