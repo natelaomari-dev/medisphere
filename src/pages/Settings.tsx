@@ -7,13 +7,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Switch } from "@/components/ui/switch";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Building2, User, Shield } from "lucide-react";
+import { Building2, User, Shield, Languages } from "lucide-react";
 import { MfaSettings } from "@/components/MfaSettings";
+import { useTranslation } from "react-i18next";
+import { useAppPreferences } from "@/contexts/AppPreferences";
+import { SUPPORTED_LANGUAGES } from "@/i18n";
 
 export default function Settings() {
   const { user } = useAuth();
   const { hospitalId, userRole } = useHospital();
+  const { t } = useTranslation();
+  const { language, setLanguage, lowBandwidth, setLowBandwidth } = useAppPreferences();
   const isAdmin = userRole === "admin";
 
   // Profile state
@@ -66,6 +73,7 @@ export default function Settings() {
       <Tabs defaultValue="profile" className="space-y-4">
         <TabsList>
           <TabsTrigger value="profile" className="gap-1.5"><User className="h-3.5 w-3.5" /> Profile</TabsTrigger>
+          <TabsTrigger value="preferences" className="gap-1.5"><Languages className="h-3.5 w-3.5" /> Preferences</TabsTrigger>
           {isAdmin && <TabsTrigger value="hospital" className="gap-1.5"><Building2 className="h-3.5 w-3.5" /> Hospital</TabsTrigger>}
           <TabsTrigger value="security" className="gap-1.5"><Shield className="h-3.5 w-3.5" /> Security</TabsTrigger>
         </TabsList>
@@ -101,6 +109,34 @@ export default function Settings() {
             </CardContent>
           </Card>
         </TabsContent>
+
+        <TabsContent value="preferences">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">{t("settings.language")} & display</CardTitle>
+              <CardDescription>App language, low-bandwidth mode, and other client-side preferences.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-5">
+              <div className="space-y-1.5 max-w-xs">
+                <Label>{t("settings.language")}</Label>
+                <Select value={language} onValueChange={setLanguage}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {SUPPORTED_LANGUAGES.map(l => <SelectItem key={l.code} value={l.code}>{l.label}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex items-start justify-between gap-4 p-3 rounded-lg border border-border">
+                <div>
+                  <p className="text-sm font-medium">{t("settings.low_bandwidth")}</p>
+                  <p className="text-xs text-muted-foreground">{t("settings.low_bandwidth_desc")}</p>
+                </div>
+                <Switch checked={lowBandwidth} onCheckedChange={setLowBandwidth} />
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
 
         {isAdmin && (
           <TabsContent value="hospital">

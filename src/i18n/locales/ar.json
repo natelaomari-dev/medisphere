@@ -1,0 +1,45 @@
+{
+  "nav": {
+    "dashboard": "لوحة التحكم", "patients": "المرضى", "appointments": "المواعيد",
+    "doctors": "الأطباء", "nurses": "الممرضون", "laboratory": "المختبر",
+    "pharmacy": "الصيدلية", "inpatients": "المرضى الداخليون", "medical_records": "السجلات الطبية",
+    "icu": "العناية المركزة", "telemedicine": "الطب عن بُعد", "analytics": "التحليلات",
+    "billing": "الفواتير", "insurance_claims": "مطالبات التأمين", "moh_reports": "تقارير الصحة",
+    "mch": "صحة الأم والطفل", "pediatrics": "طب الأطفال", "hiv_care": "رعاية الإيدز",
+    "tb_care": "رعاية السل", "operating_theatre": "غرفة العمليات", "blood_bank": "بنك الدم",
+    "mortuary": "المشرحة", "queue": "الطابور", "inventory": "المخزون", "staff": "الموظفون",
+    "integrations": "التكاملات", "claim_batches": "دفعات المطالبات", "settings": "الإعدادات",
+    "super_admin": "المسؤول الأعلى", "ai_insights": "رؤى الذكاء الاصطناعي",
+    "triage": "الفرز", "notifications": "الإشعارات"
+  },
+  "common": {
+    "save": "حفظ", "cancel": "إلغاء", "submit": "إرسال", "delete": "حذف", "edit": "تعديل",
+    "create": "إنشاء", "search": "بحث", "loading": "جارٍ التحميل...", "back": "رجوع",
+    "next": "التالي", "yes": "نعم", "no": "لا", "close": "إغلاق", "confirm": "تأكيد", "refresh": "تحديث"
+  },
+  "status": {
+    "active": "نشط", "inactive": "غير نشط", "pending": "قيد الانتظار", "completed": "مكتمل",
+    "cancelled": "ملغى", "scheduled": "مجدول", "in_progress": "قيد التنفيذ",
+    "approved": "موافق عليه", "rejected": "مرفوض", "draft": "مسودة", "sent": "مرسل",
+    "delivered": "تم التسليم", "failed": "فشل", "paid": "مدفوع", "unpaid": "غير مدفوع", "partial": "جزئي"
+  },
+  "patient": {
+    "registration": "تسجيل المريض",
+    "first_name": "الاسم الأول", "last_name": "اسم العائلة", "date_of_birth": "تاريخ الميلاد",
+    "gender": "الجنس", "male": "ذكر", "female": "أنثى", "other": "آخر",
+    "phone": "الهاتف", "email": "البريد الإلكتروني", "address": "العنوان",
+    "blood_type": "فصيلة الدم", "allergies": "الحساسية",
+    "chronic_conditions": "الأمراض المزمنة", "emergency_contact": "جهة اتصال الطوارئ",
+    "preferred_language": "اللغة المفضلة",
+    "notification_preferences": "تفضيلات الإشعارات",
+    "opt_in_sms": "استلام رسائل SMS", "opt_in_whatsapp": "استلام واتساب", "opt_in_email": "استلام بريد إلكتروني"
+  },
+  "settings": {
+    "language": "اللغة", "low_bandwidth": "وضع النطاق الترددي المنخفض",
+    "low_bandwidth_desc": "يعطل التحديث التلقائي ويخفي الصور."
+  },
+  "offline": {
+    "online": "متصل", "offline": "غير متصل — سيتم المزامنة لاحقًا",
+    "pending_sync": "{{count}} قيد المزامنة", "synced": "تمت المزامنة"
+  }
+}

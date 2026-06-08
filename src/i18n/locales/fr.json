@@ -1,0 +1,70 @@
+{
+  "nav": {
+    "dashboard": "Tableau de bord",
+    "patients": "Patients",
+    "appointments": "Rendez-vous",
+    "doctors": "Médecins",
+    "nurses": "Infirmiers",
+    "laboratory": "Laboratoire",
+    "pharmacy": "Pharmacie",
+    "inpatients": "Hospitalisés",
+    "medical_records": "Dossiers médicaux",
+    "icu": "USI",
+    "telemedicine": "Télémédecine",
+    "analytics": "Analytique",
+    "billing": "Facturation",
+    "insurance_claims": "Réclamations",
+    "moh_reports": "Rapports MS",
+    "mch": "SMI",
+    "pediatrics": "Pédiatrie",
+    "hiv_care": "Soins VIH",
+    "tb_care": "Soins TB",
+    "operating_theatre": "Bloc opératoire",
+    "blood_bank": "Banque de sang",
+    "mortuary": "Morgue",
+    "queue": "File d'attente",
+    "inventory": "Inventaire",
+    "staff": "Personnel",
+    "integrations": "Intégrations",
+    "claim_batches": "Lots de réclamations",
+    "settings": "Paramètres",
+    "super_admin": "Super Admin",
+    "ai_insights": "Aperçus IA",
+    "triage": "Triage",
+    "notifications": "Notifications"
+  },
+  "common": {
+    "save": "Enregistrer", "cancel": "Annuler", "submit": "Soumettre", "delete": "Supprimer",
+    "edit": "Modifier", "create": "Créer", "search": "Rechercher", "loading": "Chargement...",
+    "back": "Retour", "next": "Suivant", "yes": "Oui", "no": "Non", "close": "Fermer",
+    "confirm": "Confirmer", "refresh": "Actualiser"
+  },
+  "status": {
+    "active": "Actif", "inactive": "Inactif", "pending": "En attente", "completed": "Terminé",
+    "cancelled": "Annulé", "scheduled": "Planifié", "in_progress": "En cours",
+    "approved": "Approuvé", "rejected": "Rejeté", "draft": "Brouillon", "sent": "Envoyé",
+    "delivered": "Livré", "failed": "Échoué", "paid": "Payé", "unpaid": "Non payé", "partial": "Partiel"
+  },
+  "patient": {
+    "registration": "Inscription du patient",
+    "first_name": "Prénom", "last_name": "Nom", "date_of_birth": "Date de naissance",
+    "gender": "Sexe", "male": "Homme", "female": "Femme", "other": "Autre",
+    "phone": "Téléphone", "email": "E-mail", "address": "Adresse",
+    "blood_type": "Groupe sanguin", "allergies": "Allergies",
+    "chronic_conditions": "Maladies chroniques", "emergency_contact": "Contact d'urgence",
+    "preferred_language": "Langue préférée",
+    "notification_preferences": "Préférences de notification",
+    "opt_in_sms": "Recevoir des SMS",
+    "opt_in_whatsapp": "Recevoir des WhatsApp",
+    "opt_in_email": "Recevoir des e-mails"
+  },
+  "settings": {
+    "language": "Langue",
+    "low_bandwidth": "Mode bande passante faible",
+    "low_bandwidth_desc": "Désactive l'actualisation auto, masque les images, charge moins."
+  },
+  "offline": {
+    "online": "En ligne", "offline": "Hors ligne — synchronisation à la reconnexion",
+    "pending_sync": "{{count}} en attente", "synced": "Tout est synchronisé"
+  }
+}
