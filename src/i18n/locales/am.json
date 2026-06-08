@@ -1,0 +1,45 @@
+{
+  "nav": {
+    "dashboard": "ዳሽቦርድ", "patients": "ታካሚዎች", "appointments": "ቀጠሮዎች",
+    "doctors": "ዶክተሮች", "nurses": "ነርሶች", "laboratory": "ላቦራቶሪ",
+    "pharmacy": "ፋርማሲ", "inpatients": "ተኝተው የሚታከሙ", "medical_records": "የህክምና ሪከርዶች",
+    "icu": "ICU", "telemedicine": "ቴሌሜዲሲን", "analytics": "ትንታኔ",
+    "billing": "ሂሳብ", "insurance_claims": "የኢንሹራንስ ጥያቄዎች", "moh_reports": "የጤና ሪፖርቶች",
+    "mch": "MCH", "pediatrics": "የልጆች ሕክምና", "hiv_care": "የኤች.አይ.ቪ እንክብካቤ",
+    "tb_care": "የቲቢ እንክብካቤ", "operating_theatre": "የቀዶ ጥገና ክፍል", "blood_bank": "የደም ባንክ",
+    "mortuary": "የሬሳ ቤት", "queue": "ሰልፍ", "inventory": "ክምችት", "staff": "ሰራተኞች",
+    "integrations": "ውህደቶች", "claim_batches": "የጥያቄ ጥቅሎች", "settings": "ቅንብሮች",
+    "super_admin": "ሱፐር አስተዳዳሪ", "ai_insights": "AI ግንዛቤ",
+    "triage": "ትራያጅ", "notifications": "ማሳወቂያዎች"
+  },
+  "common": {
+    "save": "አስቀምጥ", "cancel": "ሰርዝ", "submit": "አስገባ", "delete": "ሰርዝ", "edit": "አርትዕ",
+    "create": "ፍጠር", "search": "ፈልግ", "loading": "በመጫን ላይ...", "back": "ተመለስ",
+    "next": "ቀጣይ", "yes": "አዎ", "no": "አይ", "close": "ዝጋ", "confirm": "አረጋግጥ", "refresh": "አድስ"
+  },
+  "status": {
+    "active": "ንቁ", "inactive": "ንቁ ያልሆነ", "pending": "በመጠባበቅ ላይ", "completed": "ተጠናቋል",
+    "cancelled": "ተሰርዟል", "scheduled": "ተይዟል", "in_progress": "በሂደት ላይ",
+    "approved": "ጸድቋል", "rejected": "ተቀባይነት የለውም", "draft": "ረቂቅ", "sent": "ተልኳል",
+    "delivered": "ደርሷል", "failed": "አልተሳካም", "paid": "ተከፍሏል", "unpaid": "አልተከፈለም", "partial": "ከፊል"
+  },
+  "patient": {
+    "registration": "የታካሚ ምዝገባ",
+    "first_name": "ስም", "last_name": "የአያት ስም", "date_of_birth": "የተወለደበት ቀን",
+    "gender": "ጾታ", "male": "ወንድ", "female": "ሴት", "other": "ሌላ",
+    "phone": "ስልክ", "email": "ኢሜይል", "address": "አድራሻ",
+    "blood_type": "የደም አይነት", "allergies": "የአለርጂ",
+    "chronic_conditions": "ሥር የሰደደ", "emergency_contact": "የአደጋ ጊዜ ግንኙነት",
+    "preferred_language": "ተመራጭ ቋንቋ",
+    "notification_preferences": "የማሳወቂያ ምርጫዎች",
+    "opt_in_sms": "SMS ተቀበል", "opt_in_whatsapp": "ዋትስአፕ ተቀበል", "opt_in_email": "ኢሜይል ተቀበል"
+  },
+  "settings": {
+    "language": "ቋንቋ", "low_bandwidth": "ዝቅተኛ ባንድዊድት ሁነታ",
+    "low_bandwidth_desc": "ራስ-መታደስ ያቆማል፣ ምስሎችን ይደብቃል።"
+  },
+  "offline": {
+    "online": "በመስመር ላይ", "offline": "ከመስመር ውጭ — በኋላ ይመሳሰላል",
+    "pending_sync": "{{count}} በመጠባበቅ ላይ", "synced": "ሁሉም ተመሳስሏል"
+  }
+}
