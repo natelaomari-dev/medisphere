@@ -228,6 +228,32 @@ export default function Onboarding() {
                 <input type="text" placeholder="Address" value={hospital.address} onChange={e => setHospital({ ...hospital, address: e.target.value })} className="w-full px-3 py-2 rounded-lg bg-muted/50 border border-border text-sm text-foreground placeholder:text-muted-foreground outline-none focus:ring-1 focus:ring-primary" />
                 <input type="tel" placeholder="Phone" value={hospital.phone} onChange={e => setHospital({ ...hospital, phone: e.target.value })} className="w-full px-3 py-2 rounded-lg bg-muted/50 border border-border text-sm text-foreground placeholder:text-muted-foreground outline-none focus:ring-1 focus:ring-primary" />
 
+                {hospital.country === "Kenya" && (
+                  <div className="space-y-2 pt-2 border-t border-border">
+                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">KMHFL Master Facility List</p>
+                    <div className="flex gap-2">
+                      <input type="text" placeholder="MFL code (e.g. 12345)" value={hospital.mfl_code} onChange={e => setHospital({ ...hospital, mfl_code: e.target.value })} className="flex-1 px-3 py-2 rounded-lg bg-muted/50 border border-border text-sm text-foreground placeholder:text-muted-foreground outline-none focus:ring-1 focus:ring-primary" />
+                      <button type="button" onClick={lookupMfl} disabled={mflLoading || !hospital.mfl_code} className="px-3 py-2 rounded-lg bg-secondary text-secondary-foreground text-sm font-medium hover:bg-secondary/80 transition-colors disabled:opacity-50">
+                        {mflLoading ? "Looking up..." : "Lookup"}
+                      </button>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <select value={hospital.facility_type} onChange={e => setHospital({ ...hospital, facility_type: e.target.value })} className="px-3 py-2 rounded-lg bg-muted/50 border border-border text-sm text-foreground outline-none focus:ring-1 focus:ring-primary">
+                        <option value="">Facility type</option>
+                        {["dispensary","health_centre","sub_county_hospital","county_hospital","national_hospital","clinic","medical_centre","nursing_home","maternity","rehab","specialized"].map(t => <option key={t} value={t}>{t.replace(/_/g," ")}</option>)}
+                      </select>
+                      <select value={String(hospital.keph_level || "")} onChange={e => setHospital({ ...hospital, keph_level: e.target.value ? Number(e.target.value) : "" })} className="px-3 py-2 rounded-lg bg-muted/50 border border-border text-sm text-foreground outline-none focus:ring-1 focus:ring-primary">
+                        <option value="">KEPH level</option>
+                        {[1,2,3,4,5,6].map(n => <option key={n} value={n}>Level {n}</option>)}
+                      </select>
+                    </div>
+                    <select value={hospital.ownership} onChange={e => setHospital({ ...hospital, ownership: e.target.value })} className="w-full px-3 py-2 rounded-lg bg-muted/50 border border-border text-sm text-foreground outline-none focus:ring-1 focus:ring-primary">
+                      <option value="">Ownership</option>
+                      {["moh","county_government","faith_based","private_for_profit","private_not_for_profit","ngo"].map(t => <option key={t} value={t}>{t.replace(/_/g," ")}</option>)}
+                    </select>
+                  </div>
+                )}
+
                 <div className="flex gap-3 pt-2">
                   <button type="button" onClick={() => setStep("choice")} className="px-4 py-2 rounded-lg border border-border text-sm text-muted-foreground hover:bg-muted transition-colors">Back</button>
                   <button type="submit" disabled={creating} className="flex-1 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors disabled:opacity-50">
