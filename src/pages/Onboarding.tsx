@@ -17,7 +17,42 @@ export default function Onboarding() {
 
   const [hospital, setHospital] = useState({
     name: "", city: "", address: "", phone: "", bed_capacity: 100, country: "Kenya",
+    mfl_code: "", facility_type: "", keph_level: "" as "" | number, ownership: "",
   });
+  const [mflLoading, setMflLoading] = useState(false);
+
+  const lookupMfl = async () => {
+    if (!hospital.mfl_code) return;
+    setMflLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("kmhfl-lookup", { body: null, headers: {} } as any);
+      // Use direct fetch instead — invoke doesn't support query params well
+      const res = await fetch(`https://krldjnjuizmlmiwwzwpz.supabase.co/functions/v1/kmhfl-lookup?code=${encodeURIComponent(hospital.mfl_code)}`, {
+        headers: { Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token || ""}` },
+      });
+      const json = await res.json();
+      if (!res.ok || !json.found) {
+        toast.error(json.message || json.error || "MFL code not found");
+        return;
+      }
+      const f = json.facility;
+      setHospital(h => ({
+        ...h,
+        name: f.name || h.name,
+        address: f.address || h.address,
+        city: f.county || h.city,
+        phone: f.phone || h.phone,
+        facility_type: f.facility_type || "",
+        keph_level: f.keph_level || "",
+        ownership: f.ownership || "",
+      }));
+      toast.success("Facility data loaded from KMHFL");
+    } catch (e) {
+      toast.error("KMHFL lookup unavailable. You can enter data manually.");
+    } finally {
+      setMflLoading(false);
+    }
+  };
 
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteRole, setInviteRole] = useState("doctor");
